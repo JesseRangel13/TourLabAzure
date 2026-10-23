@@ -1,0 +1,13 @@
+<Solution>
+  <Folder Name="/src/">
+    <Project Path="src/Gateway.Api/Gateway.Api.csproj" />
+    <Project Path="src/Catalog.Api/Catalog.Api.csproj" />
+    <Project Path="src/Reservations.Api/Reservations.Api.csproj" />
+    <Project Path="src/Payments.Api/Payments.Api.csproj" />
+    <Project Path="src/Notifications.Api/Notifications.Api.csproj" />
+    <Project Path="src/Receipts.Functions/Receipts.Functions.csproj" />
+    <Project Path="src/Shared.Contracts/Shared.Contracts.csproj" />
+    <Project Path="src/Shared.Infrastructure/Shared.Infrastructure.csproj" />
+  </Folder>
+  <Folder Name="/tests/"><Project Path="tests/Scaffold.Tests/Scaffold.Tests.csproj" /></Folder>
+</Solution>

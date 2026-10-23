@@ -1,0 +1,38 @@
+# Independent local resource map
+
+Source and target are distinct siblings. No source volumes, networks, containers, databases, keys,
+cookie names, .git directory or build output are reused. TCP bind checks passed on2026-10-23
+before host startup; ports can change externally and preflight must be rerun.
+
+| Target process/dependency | Loopback port(s) | Names / ownership |
+|---|---|---|
+| Gateway.Api | HTTPS9443 | identity schema planned; cookie __Host-tourlab-azure in002 |
+| Catalog.Api | HTTPS9444 | catalog schema planned |
+| Reservations.Api | HTTPS9445 | reservations schema planned |
+| Payments.Api | HTTPS9446 | payments schema planned |
+| Notifications.Api | HTTPS9447 | notifications schema planned |
+| Angular development | HTTPS4201 | proxy same-origin API topology |
+| Receipts.Functions | 7072 planned | Notifications-owned; host absent currently |
+| Application SQL Server | 14339 ->1433 | new tourlab_azure database in002; SQL Developer only |
+| Broker SQL Server | No host publication | separate engine/volume; no business tables |
+| Service Bus AMQP/health | 5673 ->5672;5301 ->5300 | independent broker namespace; queues/topic prefixed tourlab-azure- |
+| Azurite Blob/Queue/Table | 10010/10011/10012 ->10000/10001/10002 | fresh tourlabazure account/key; private tour-images/booking-receipts containers in006/008 |
+| Cosmos vNext | 8089 ->8081 | gateway HTTP local simulation only; no explorer; tourlab-azure database/bookings container in007 |
+
+Compose project tourlab-azure automatically scopes services, sql-data, broker-sql-data, blob-data,
+cosmos-data and application/broker networks. No fixed container_name or globally fixed volume name.
+AZURELAB_ configuration prefix; no cloud credential or endpoint override is selected by default.
+App containers use internal8080 without host publication when built; native HTTPS is the debugging profile.
+Dockerfile builds five separately named images; no AWS base image/state is imported.
+This scaffold is not cloud-ready; AZ-009 adds fail-closed cloud identity configuration.
+
+## Capacity and fidelity
+
+Two SQL Server engines plus Service Bus, Cosmos, Azurite, .NET and Angular can consume substantial RAM.
+Allocate at least12GiB to Docker as a starting study allowance and measure actual use; this is a planning
+assumption, not a measured requirement or guarantee. Run dependency profiles only when needed.
+SQL Developer licenses allow development/test, not production.
+Service Bus emulator restart can lose messages/entities despite its SQL dependency volume.
+No automatic republish of sent Outbox records is provided. Future reset/reseed/rebuild is explicit.
+Cosmos emulator is a gateway-only subset and does not enforce cloud authentication.
+The local HTTP emulator exceptions are loopback/private-network only; no TLS validation bypass exists.

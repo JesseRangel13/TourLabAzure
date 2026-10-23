@@ -1,0 +1,51 @@
+name: tourlab-azure
+services:
+  sql:
+    image: mcr.microsoft.com/mssql/server:2022-CU24-ubuntu-22.04@sha256:49b45a911dc535e9345fbfd7101a1bd8a1e190a5f29b877ef75387a061e5fcf0
+    environment:
+      ACCEPT_EULA: ${AZURELAB_ACCEPT_EULA:-N}
+      MSSQL_PID: Developer
+      MSSQL_SA_PASSWORD: ${AZURELAB_SQL_PASSWORD:?Generate .local/dependencies.env first}
+    ports: ["127.0.0.1:14339:1433"]
+    volumes: [sql-data:/var/opt/mssql]
+    networks: [application]
+  broker-sql:
+    image: mcr.microsoft.com/mssql/server:2022-CU24-ubuntu-22.04@sha256:49b45a911dc535e9345fbfd7101a1bd8a1e190a5f29b877ef75387a061e5fcf0
+    environment:
+      ACCEPT_EULA: ${AZURELAB_ACCEPT_EULA:-N}
+      MSSQL_PID: Developer
+      MSSQL_SA_PASSWORD: ${AZURELAB_BROKER_SQL_PASSWORD:?Generate .local/dependencies.env first}
+    volumes: [broker-sql-data:/var/opt/mssql]
+    networks: [broker]
+  servicebus:
+    image: mcr.microsoft.com/azure-messaging/servicebus-emulator:2.0.1@sha256:5a96d893b245031740f7d46e0fe5ff282d24b78c4b7d761dd57590f3f010a9b3
+    environment:
+      ACCEPT_EULA: ${AZURELAB_ACCEPT_EULA:-N}
+      SQL_SERVER: broker-sql
+      MSSQL_SA_PASSWORD: ${AZURELAB_BROKER_SQL_PASSWORD:?Generate .local/dependencies.env first}
+      SQL_WAIT_INTERVAL: 60
+    volumes: [./config/servicebus.json:/ServiceBus_Emulator/ConfigFiles/Config.json:ro]
+    ports: ["127.0.0.1:5673:5672", "127.0.0.1:5301:5300"]
+    depends_on: [broker-sql]
+    networks: [broker]
+  azurite:
+    image: mcr.microsoft.com/azure-storage/azurite:3.37.0@sha256:830430c1da1a2d537e08f3e6764dd1f5ae00cf0346bcaf625b968ec3f0971fd5
+    environment:
+      AZURITE_ACCOUNTS: ${AZURELAB_AZURITE_ACCOUNTS:?Generate .local/dependencies.env first}
+    ports: ["127.0.0.1:10010:10000", "127.0.0.1:10011:10001", "127.0.0.1:10012:10002"]
+    volumes: [blob-data:/data]
+    networks: [application]
+  cosmos:
+    image: mcr.microsoft.com/cosmosdb/linux/azure-cosmos-emulator:vnext-latest@sha256:db53613dae19d0a3d5ad50688d14aa6e957af082dafea56b52e1bd3a6b3f1406
+    command: ["--protocol", "http", "--enable-explorer", "false"]
+    ports: ["127.0.0.1:8089:8081"]
+    volumes: [cosmos-data:/data]
+    networks: [application]
+volumes:
+  sql-data:
+  broker-sql-data:
+  blob-data:
+  cosmos-data:
+networks:
+  application:
+  broker:

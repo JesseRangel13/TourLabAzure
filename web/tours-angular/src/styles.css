@@ -1,0 +1,5 @@
+body { margin: 0; background: #f4f7fa; color: #193449; font-family: system-ui, sans-serif; }
+main { max-width: 52rem; margin: 4rem auto; padding: 2rem; background: white; border-radius: .75rem; }
+button { padding: .6rem 1rem; background: #125e94; color: white; border: 0; border-radius: .3rem; cursor: pointer; }
+button:disabled { opacity: .6; }
+.status { padding: 1rem; border-left: 4px solid #125e94; background: #eef5fb; }

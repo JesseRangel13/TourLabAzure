@@ -1,0 +1,5 @@
+{
+  "/health/**": { "target": "https://localhost:9443", "secure": true },
+  "/auth/**": { "target": "https://localhost:9443", "secure": true },
+  "/api/**": { "target": "https://localhost:9443", "secure": true }
+}

@@ -1,0 +1,12 @@
+.git
+.local
+**/bin
+**/obj
+**/node_modules
+**/dist
+**/.angular
+**/TestResults
+**/*.pfx
+**/*.key
+**/*.pem
+.env

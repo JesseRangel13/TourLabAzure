@@ -1,0 +1,54 @@
+name: Azure companion foundation
+on:
+  pull_request:
+  push:
+    branches: [main]
+permissions:
+  contents: read
+concurrency:
+  group: azure-ci-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+jobs:
+  foundation:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5
+        with:
+          persist-credentials: false
+      - uses: actions/setup-dotnet@d4c94342e560b34958eacfc5d055d21461ed1c5d
+        with:
+          global-json-file: global.json
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020
+        with:
+          node-version-file: web/tours-angular/.nvmrc
+          cache: npm
+          cache-dependency-path: web/tours-angular/package-lock.json
+      - name: Locked .NET restore
+        run: |
+          dotnet restore TourLab.Azure.slnx --locked-mode
+          dotnet msbuild src/Receipts.Functions/Receipts.Functions.csproj -t:GenerateFunctionsExtensionProject
+      - name: Compile and test five hosts plus Functions scaffold
+        run: |
+          dotnet build TourLab.Azure.slnx -c Release --no-restore
+          dotnet test tests/Scaffold.Tests -c Release --no-build --logger trx
+      - name: Angular locked install and tests
+        working-directory: web/tours-angular
+        run: |
+          npm ci --ignore-scripts
+          npm test
+      - name: Build production SPA
+        shell: pwsh
+        run: ./scripts/Build-Web.ps1
+      - name: Verify dependency Compose structure only
+        shell: pwsh
+        run: |
+          ./scripts/New-LocalConfiguration.ps1
+          docker compose --env-file .local/dependencies.env config --quiet
+          if ($LASTEXITCODE -ne 0) { throw 'Compose validation failed' }
+      - name: Build five independent images; no publish
+        run: |
+          for service in Gateway Catalog Reservations Payments Notifications; do
+            docker build --build-arg SERVICE="$service" -t "tourlab-azure-${service,,}:ci" .
+          done
+      # AZ-010 adds actual SQL/emulator/Functions integration. No cloud credentials or CD.

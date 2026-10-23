@@ -1,0 +1,16 @@
+{
+  "version": 1,
+  "dependencies": {
+    "net10.0": {
+      "shared.contracts": {
+        "type": "Project"
+      },
+      "shared.infrastructure": {
+        "type": "Project",
+        "dependencies": {
+          "Shared.Contracts": "[1.0.0, )"
+        }
+      }
+    }
+  }
+}
