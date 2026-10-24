@@ -36,3 +36,14 @@ Service Bus emulator restart can lose messages/entities despite its SQL dependen
 No automatic republish of sent Outbox records is provided. Future reset/reseed/rebuild is explicit.
 Cosmos emulator is a gateway-only subset and does not enforce cloud authentication.
 The local HTTP emulator exceptions are loopback/private-network only; no TLS validation bypass exists.
+
+## AZ-006 image storage ownership
+
+Catalog uses private tourlab-azure-tour-images in the dedicated local tourlabazure Azurite account.
+Container binding is fixed; object keys are server-generated tours/<tour-guid>/<random-guid>.
+Azurite3.37.0 is digest-pinned in compose.yaml; loopback10010 Blob,10011 Queue,10012 Table,
+dedicated tourlab-azure_blob-data. Only Blob is used by AZ-006; host/receipt storage is later work.
+Fresh account key remains ignored/private; no source AWS bucket, source data, shared volume or
+running source resource is used. Existing broker containers/volume are retained unchanged.
+Real Azure account creation/public-access denial and container-scoped managed-identity RBAC
+remain separately authorized future cloud verification; local account-key emulator is not that proof.

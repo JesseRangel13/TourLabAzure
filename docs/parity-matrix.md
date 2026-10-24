@@ -105,4 +105,17 @@ Storage/Cosmos/receipt extensions remain explicitly scheduled AZ-006/007/008.
 94 real SQL-suite tests,13 actual live broker/HTTPS checks,29 foundation tests and50 Angular tests passed.
 Seven browser tests are discovered; Chromium and complete AC-A21 execution remain NOT VERIFIED.
 AC-A34 evidence covers the current five API/message/worker paths; Functions/cloud claims remain future.
-Implemented is not independently Verified; Antigravity AZ-005 review is pending.
+Independent Antigravity AZ-005 review passed on2026-10-24; see reviews/AZ-005.md.
+
+## AZ-006 evidence boundary
+
+Tour detail now includes ready image display and explicit pending/broken/empty placeholders.
+Admin has typed Angular/NGXS raw upload, remove, reload and one-item recovery controls.
+Backend independently enforces human/Admin identity, tour visibility, owned GUID lookup,
+decode/size/dimension/count bounds and authenticated no-store content proxying.
+AC-A22/23 are mapped to actual SQL/Azurite and HTTPS process checks in evidence/AZ-006.md.
+SQL intents precede Blob I/O; guarded completion/deletion, retained tombstones, durable history,
+competing leases and restarted hosted recovery are implemented. No broad purge or browser credentials.
+AC-A20 image state/account/navigation/reset/error tests execute. The eighth browser smoke is
+implemented/discovered; Chromium and complete AC-A21/33 remain NOT VERIFIED.
+Cosmos and receipt Functions remain AZ-007/008. Independent AZ-006 review is pending.

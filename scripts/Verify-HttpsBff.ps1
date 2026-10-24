@@ -1,5 +1,5 @@
 [CmdletBinding()]
-param([string]$ConfigurationDirectory = '.local/sql', [switch]$IncludeBooking, [switch]$IncludeRecovery)
+param([string]$ConfigurationDirectory = '.local/sql', [switch]$IncludeBooking, [switch]$IncludeRecovery, [switch]$IncludeImages)
 $ErrorActionPreference = 'Stop'
 . "$PSScriptRoot/Use-Toolchain.ps1"
 $root = Split-Path $PSScriptRoot
@@ -57,6 +57,16 @@ try {
         Start-Sleep -Seconds 60
         & dotnet test tests/Scaffold.Tests -c Release --no-build --filter 'FullyQualifiedName~LiveRecoveryTests' --logger 'trx;LogFileName=AZ-005-live-recovery.trx'
         if ($LASTEXITCODE -ne 0) { throw 'Actual recovery workflow checks failed.' }
+    }
+    if ($IncludeImages) {
+        & dotnet test tests/Scaffold.Tests -c Release --no-build --filter 'FullyQualifiedName~LiveImageTests.RoundTrip' --logger 'trx;LogFileName=AZ-006-https-images.trx'
+        if ($LASTEXITCODE -ne 0) { throw 'HTTPS Blob image forwarding failed.' }
+        Stop-LabHost $processes['Catalog']
+        & dotnet test tests/Scaffold.Tests -c Release --no-build --filter 'FullyQualifiedName~LiveImageTests.Stage' --logger 'trx;LogFileName=AZ-006-crash-stage.trx'
+        if ($LASTEXITCODE -ne 0) { throw 'Blob/SQL crash fixture failed.' }
+        Start-LabHost 'Catalog'
+        & dotnet test tests/Scaffold.Tests -c Release --no-build --filter 'FullyQualifiedName~LiveImageTests.Restarted' --logger 'trx;LogFileName=AZ-006-worker-restart.trx'
+        if ($LASTEXITCODE -ne 0) { throw 'Catalog process restart recovery failed.' }
     }
     Stop-LabHost $processes['Gateway']
     Start-LabHost 'Gateway'

@@ -1,3 +1,4 @@
+using TourLab.Azure.Catalog.Images;
 using TourLab.Azure.Infrastructure.Messaging;
 using TourLab.Azure.Infrastructure.Operations;
 using TourLab.Azure.Catalog.Messaging;
@@ -21,6 +22,7 @@ public partial class Program
             services.GetRequiredService<IOptions<RuntimeDatabase>>().Value.ConnectionString,
             sql => { sql.MigrationsHistoryTable("__EFMigrationsHistory", "catalog"); sql.CommandTimeout(5); }));
         builder.Services.AddBackendSecurity("Catalog");
+        builder.Services.AddTourImages();
 
         builder.Services.ConfigureHttpJsonOptions(o => o.SerializerOptions.RespectRequiredConstructorParameters = true);
         builder.Services.AddSingleton(TimeProvider.System);
@@ -43,7 +45,7 @@ public partial class Program
         app.MapServiceOperations("catalog");
         app.MapDatabaseReadiness(BackendSecurity.Human);
         app.MapBackendBoundary("Catalog");
-        app.MapCatalog();
+        app.MapCatalog(); app.MapTourImages();
         if (app.Environment.IsDevelopment())
             app.MapOpenApi("/v1/openapi/{documentName}.json").RequireAuthorization(BackendSecurity.Human);
         await app.RunAsync();

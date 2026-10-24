@@ -120,7 +120,7 @@ public sealed class LiveBffTests
         Assert.Equal(HttpStatusCode.NotFound, hidden.StatusCode);
     }
     private static SocketsHttpHandler? bobHandler;
-    private static HttpClient Client(X509Certificate2? trust = null, bool captureBob = false)
+    internal static HttpClient Client(X509Certificate2? trust = null, bool captureBob = false)
     {
         var handler = new SocketsHttpHandler { UseCookies = true, AllowAutoRedirect = false, ConnectTimeout = TimeSpan.FromSeconds(3) };
         handler.SslOptions.CertificateChainPolicy = new X509ChainPolicy
@@ -132,12 +132,12 @@ public sealed class LiveBffTests
         if (captureBob) bobHandler = handler;
         return new HttpClient(handler) { BaseAddress = Origin, Timeout = TimeSpan.FromSeconds(15) };
     }
-    private static async Task<string> Csrf(HttpClient client)
+    internal static async Task<string> Csrf(HttpClient client)
     {
         var token = await client.GetFromJsonAsync<JsonElement>("/auth/csrf");
         return token.GetProperty("requestToken").GetString()!;
     }
-    private static async Task Login(HttpClient client, string name)
+    internal static async Task Login(HttpClient client, string name)
     {
         var seed = TestSettings.Configuration.Users.Single(user => user.UserName == name);
         using var request = new HttpRequestMessage(HttpMethod.Post, "/auth/login")

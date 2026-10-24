@@ -1,3 +1,4 @@
+import { TourImagesPanel } from './images.panel';
 import { BookingForm } from "../reservations/reservations.pages";
 import { Component, DestroyRef, effect, inject, input } from '@angular/core';
 import { CurrencyPipe, DatePipe } from '@angular/common';
@@ -62,7 +63,7 @@ export class SessionEditor {
         <button [disabled]="create.invalid || vm().saving">Create tour</button>
       </form></section>
     }
-    <p>Choose a session to book. Payments and notification deliveries are simulated. Images arrive in AZ-006.</p>
+    <p>Choose a session to book. Payments and notification deliveries are simulated. Private tour images are available on each tour detail.</p>
   </main>`
 })
 export class CatalogListPage {
@@ -83,13 +84,13 @@ export class CatalogListPage {
   }
 }
 @Component({
-  standalone: true, imports: [ReactiveFormsModule, RouterLink, DatePipe, CurrencyPipe, SessionEditor, BookingForm],
+  standalone: true, imports: [ReactiveFormsModule, RouterLink, DatePipe, CurrencyPipe, SessionEditor, BookingForm, TourImagesPanel],
   template: `<main><a routerLink="/tours">All tours</a>
     @if (vm().detailLoading) { <p role="status">Loading tour…</p> }
     @if (vm().error) { <p role="alert">{{ vm().error }}</p> }
     <button (click)="reload()" [disabled]="vm().saving || vm().detailLoading">Reload tour</button>
     @if (vm().tour; as tour) {
-      <h1>{{ tour.name }}</h1><p>{{ tour.description }}</p><p>{{ tour.active ? 'Active' : 'Inactive' }}</p>
+      <app-tour-images [tour]="tour.id" /><h1>{{ tour.name }}</h1><p>{{ tour.description }}</p><p>{{ tour.active ? 'Active' : 'Inactive' }}</p>
       @if (auth().user?.role === 'Admin') {
         <h2>Edit tour</h2><form [formGroup]="edit" (ngSubmit)="save()">
           <label>Tour name <input formControlName="name" maxlength="200"></label>

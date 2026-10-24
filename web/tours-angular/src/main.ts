@@ -1,3 +1,4 @@
+import { ImagesState } from './catalog/images.state';
 import { AdminState } from './admin/admin.state';
 import { SagasPage, SimulationsPage, OperationsPage } from './admin/admin.pages';
 import { EffectsState, EffectDetailPage, ProjectionsPage } from './reservations/effects.state';
@@ -64,7 +65,7 @@ class App {
 bootstrapApplication(App, {
   providers: [
     provideHttpClient(withXsrfConfiguration({ cookieName: 'AZURELAB-XSRF-TOKEN', headerName: 'X-AZURELAB-XSRF-TOKEN' }), withInterceptors([sessionExpiryInterceptor])),
-    provideStore([ScaffoldState, AuthState, CatalogState, ReservationsState, AdminState, EffectsState]),
+    provideStore([ScaffoldState, AuthState, CatalogState, ReservationsState, AdminState, EffectsState, ImagesState]),
     provideRouter([{ path: '', component: FoundationPage }, { path: 'login', component: LoginPage },
       {path:'admin/sagas',component:SagasPage,canActivate:[authGuard,adminGuard]}, {path:'simulations',component:SimulationsPage,canActivate:[authGuard,adminGuard]}, {path:'operations',component:OperationsPage,canActivate:[authGuard,adminGuard]}, {path:'tour-projections',component:ProjectionsPage,canActivate:[authGuard]}, {path:'payments/:id',component:EffectDetailPage,canActivate:[authGuard],data:{kind:'payments'}}, {path:'notifications/:id',component:EffectDetailPage,canActivate:[authGuard],data:{kind:'notifications'}}, { path: 'reservations', component: ReservationsPage, canActivate: [authGuard] }, { path: 'reservations/:id', component: ReservationDetailPage, canActivate: [authGuard] }, { path: 'payments', component: PersonalEffectsPage, canActivate: [authGuard], data: { kind: 'payments' } }, { path: 'notifications', component: PersonalEffectsPage, canActivate: [authGuard], data: { kind: 'notifications' } }, { path: 'tours', component: CatalogListPage, canActivate: [authGuard] }, { path: 'tours/:id', component: CatalogDetailPage, canActivate: [authGuard] }, { path: 'admin/catalog', component: CatalogListPage, canActivate: [authGuard, adminGuard] }, { path: 'account', component: AccountPage, canActivate: [authGuard] }, { path: '**', redirectTo: '' }]),
     provideAppInitializer(() => firstValueFrom(inject(Store).dispatch(new LoadCurrentUser())).catch(() => undefined))

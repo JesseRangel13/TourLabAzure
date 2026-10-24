@@ -1,29 +1,27 @@
 # Current task
 
-AZ-005 — **Verified** (2026-10-24).
-Branch: codex/az005-recovery.
-Baseline: 795a5d00ca0b73fe50dd014d21fcb6cfcf184ce0.
-Prerequisite: actual independent Antigravity AZ-004 PASS in docs/reviews/AZ-004.md; independent Antigravity AZ-005 PASS in docs/reviews/AZ-005.md.
+AZ-006 — **Verified** (2026-10-24).
+Branch: codex/az006-images.
+Baseline: dda226bed182e792a093e09ff031b607bc6ff8e4.
+Prerequisite: actual independent Antigravity AZ-005 PASS in docs/reviews/AZ-005.md; independent Antigravity AZ-006 PASS in docs/reviews/AZ-006.md.
 
-Delivered: guarded cancellation/full simulated refund and release; uncertain payment/ManualReview/
-same-ID provider reconciliation; deadline/late-event/concurrency recovery; Admin faults/reset, Saga
-retry, owned effect/refund detail and informational projection; bounded redacted diagnostics and audited
-real built-in DLQ replay; durable W3C trace propagation/readiness/worker shutdown; baseline Angular/API
-controls, typed reactive forms, shared NGXS loading/error/reset/stale response guards.
+Delivered: private Blob tour images with preserved2MiB/three-image/2048x2048 validation;
+service-owned SQL intents/metadata/history and guarded leases; immutable conditional upload,
+success-before-SQL recovery, delete races/tombstones, bounded scoped recovery and authorized
+no-store downloads. Angular/NGXS Admin upload/remove/reload/recover and user placeholders,
+state reset/stale-response/mutation guards. No storage credentials in browser.
 
-Executed: real SQL suite94 passed/13 separate live skips; actual broker/HTTPS suite13 passed/0 skipped;
-Windows PowerShell5.1 foundation29 non-relational tests,50 Angular tests,0 build warnings/errors,
-0 npm vulnerabilities,396.84kB production SPA and Compose validation.
-Four migration/model comparisons, actionlint, NuGet audit, PowerShell5.1 parsing and browser discovery
-(seven tests) passed. Source HEAD/status and all416 tracked hashes unchanged, including dirty source CI.
+Executed: Windows PowerShell5.1 foundation31 .NET tests,56Angular tests,0buildwarnings/errors,
+0npm vulnerabilities,403.99kB SPA. Real SQL/Azurite suite104passed/13separate live skips.
+Six actual HTTPS/staging/restart assertions passed,0skips, including restarted hosted image recovery.
+Catalog model snapshot/actionlint/NuGet audit pass; eight browser tests discovered.
+Source HEAD/status/all416tracked hashes unchanged, including pre-existing dirty source CI.
+Private SQL profiles, test objects and existing broker/Azurite data retained; helper API trees stopped.
 
-Existing authorized Azure lab broker containers remain running; all SQL/DLQ data retained.
-Only the helper's five HTTPS host trees stopped; ports9443..9447 free.
-No original-project mutation, data purge, commit/push or cloud operation.
+NOT VERIFIED: Chromium (known CA gap), application Docker SQL/images, remote CI, actual Azure
+Blob/MI/RBAC, Cosmos/Functions receipts and emulator restart durability. No cloud deployment,
+source mutation, data purge, commit/push or independent AZ-006 review claim.
 
-NOT VERIFIED: Chromium (known CA gap), application Docker SQL/images, remote CI, actual Azure/RBAC/
-managed identity, production emulator restart durability and later Functions/storage extension claims.
-
-Read docs/evidence/AZ-005.md, docs/recovery-execution.md, docs/recovery-learning.md,
-docs/recovery-api-map.md and docs/parity-matrix.md.
-Next: independent Antigravity AZ-005 review, resolve findings, then AZ-006 Blob tour images.
+Read docs/evidence/AZ-006.md, docs/images-execution.md, docs/images-learning.md,
+docs/parity-matrix.md and docs/decisions.md(D40..43).
+Next: independent Antigravity AZ-006 review, resolve findings, then AZ-007 Cosmos dashboard.

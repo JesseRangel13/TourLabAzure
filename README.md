@@ -25,17 +25,16 @@ AZ-001 isolation/scaffold; AZ-002 SQL Server/Identity; AZ-003 Catalog + Angular/
 
 Read specs/07-acceptance.md and tasks/implementation-plan.md for scope and gates. Local functionality comes before cloud spending. All payments, notification deliveries, and booking receipts are explicitly simulated.
 
-## Current implementation — AZ-005 (2026-10-24)
+## Current implementation — AZ-006 (2026-10-24)
 
-AZ-004 has an independent PASS. AZ-005 is **Implemented Awaiting Review**:
-full Saga recovery/cancellation/refunds, uncertain fictional-provider reconciliation, backend Admin
-fault/diagnostic/DLQ replay controls, durable tracing and baseline Angular/API parity.
-Start with [recovery execution](docs/recovery-execution.md), [learning](docs/recovery-learning.md),
-[human action/API map](docs/recovery-api-map.md) and [actual AZ-005 evidence](docs/evidence/AZ-005.md).
-Real SQL, broker/HTTPS recovery and Angular checks pass. Chromium and Azure cloud execution remain
-NOT VERIFIED. Existing local broker/data are retained; the original AWS/Blazor repository is unchanged.
-Next: independent Antigravity AZ-005 review, then AZ-006 Blob tour images.
-
+AZ-005 has an independent PASS. AZ-006 is **Implemented Awaiting Review**:
+private Blob tour images, preserved bounded JPEG/PNG validation, SQL intent/history/lease recovery,
+delete-race/tombstone protection, authenticated downloads and Angular/NGXS Admin image controls.
+Start with [image execution](docs/images-execution.md), [learning](docs/images-learning.md) and
+[actual AZ-006 evidence](docs/evidence/AZ-006.md).
+Real SQL/Azurite and HTTPS restart recovery pass; Chromium and actual Azure cloud remain
+NOT VERIFIED. Original AWS/Blazor source is unchanged; existing lab broker/storage data are retained.
+Next: independent Antigravity AZ-006 review, then AZ-007 Cosmos dashboard.
 ## AZ-001 implementation status (2026-10-23)
 
 The independent scaffold is now present: five API processes, isolated Functions, Angular21/NGXS,

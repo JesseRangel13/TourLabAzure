@@ -12,6 +12,11 @@ try
 
         Console.WriteLine("Fresh Azure-only credentials and signing/Data Protection keys generated privately.");
     }
+    else if (args.Length == 2 && args[0] == "images-local")
+    {
+        await LocalImages.InitializeAsync(Directory.GetCurrentDirectory(), args[1], shutdown.Token);
+        Console.WriteLine("Dedicated private Azurite container verified; Catalog profile enabled.");
+    }
     else if (args.Length == 2 && args[0] == "bootstrap")
     {
         await DatabaseProvisioner.BootstrapAsync(PrivateConfiguration.Read(args[1]), shutdown.Token);

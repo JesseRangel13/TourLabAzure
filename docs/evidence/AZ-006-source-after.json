@@ -1,0 +1,1675 @@
+{
+    "capturedUtc":  "2026-10-24T19:17:20.6545091Z",
+    "source":  "C:\\Users\\JesseRangel\\Documents\\ChatGPT\\Tour Microservices",
+    "target":  "C:\\Users\\JesseRangel\\Documents\\ChatGPT\\TourLab Azure",
+    "commit":  "41ad79265ea7a7ec66af20aa3f8a7342b77d910d",
+    "status":  [
+                   " M .github/workflows/ci.yml"
+               ],
+    "files":  [
+                  {
+                      "path":  ".dockerignore",
+                      "sha256":  "20BA843E87D4C50984C229D9B295D2233E2531131215A74CA150E44C36D04025"
+                  },
+                  {
+                      "path":  ".github/workflows/ci.yml",
+                      "sha256":  "6F0F74E3E174EEEDA9D46A6619DBD6B574B1029744CD86FC9B375927D970B579"
+                  },
+                  {
+                      "path":  ".gitignore",
+                      "sha256":  "E2326C692D29FB0E64CBB4C1A07AE9D114851D5E7AC8E595A75E0E65549A05DD"
+                  },
+                  {
+                      "path":  "AGENTS.md",
+                      "sha256":  "3B80A79A75FE98BDB822D5CA1EF667EB07E1CD4B1892C783F29D43CE65EDEC6D"
+                  },
+                  {
+                      "path":  "Directory.Build.props",
+                      "sha256":  "CD8CCB16BDC1099258227F20880C4464A5EFF50B89C989B15D474745393BFB64"
+                  },
+                  {
+                      "path":  "Directory.Packages.props",
+                      "sha256":  "0F30759DCFEF998779F446BFF34CA171C61A1B9B7F8BADBBA5AFB535CCAE0444"
+                  },
+                  {
+                      "path":  "Dockerfile",
+                      "sha256":  "55AE2510CF164DA98B8DA1CF4FB559EDAE5D3694049864A4B3E6C458CB08F89E"
+                  },
+                  {
+                      "path":  "README.md",
+                      "sha256":  "0E314551FE87627D13895FBFDCBFE5284FA469A95FC3DDDC81A5CFC6A0B7303D"
+                  },
+                  {
+                      "path":  "TourMicroservicesLab-Full-Specification.md",
+                      "sha256":  "11E2FA55941925E16EBA67685CEEFCA117D89F80EFED83194E1C535C9E13518B"
+                  },
+                  {
+                      "path":  "TourMicroservicesLab.slnx",
+                      "sha256":  "80C89B775277F7D28D39303E891B7B0BBBDD5FD98EF99051DB58F03F97C16484"
+                  },
+                  {
+                      "path":  "compose.tracing.yaml",
+                      "sha256":  "D59B5FA0E780189762CC60DC105D8621AE26736167EAEEA7953ABE3CA605867F"
+                  },
+                  {
+                      "path":  "compose.yaml",
+                      "sha256":  "D8C7A9CAE20D9BE4AE5A0FD820FC77C1C9CC7BCEBB52ED64B6955100EEAE6BC6"
+                  },
+                  {
+                      "path":  "config/aws.session.example.json",
+                      "sha256":  "15D6DD0A21736D76133D893433B9ACD77F28F92A2419915B74C6E766B9622870"
+                  },
+                  {
+                      "path":  "config/private.example.json",
+                      "sha256":  "9C058F229DB4DA627F6AAC877281E6F1F8260B43AB7F30734D78E0BA1BC91FF8"
+                  },
+                  {
+                      "path":  "docs/acceptance-matrix.md",
+                      "sha256":  "63B6169EA0C9064B856C76F55EAF6824D19607E49082FA0964D3B56F30234DE1"
+                  },
+                  {
+                      "path":  "docs/adr/002-catalog-transactions.md",
+                      "sha256":  "FF69C77A70D560016A7219E64775D65055A15E51A4E26D17829A40B38B013555"
+                  },
+                  {
+                      "path":  "docs/aws-execution.md",
+                      "sha256":  "BF586372BF72F8A6434233FEAEE4382475CD18C972CD5399B621C1F2B5CDFCAA"
+                  },
+                  {
+                      "path":  "docs/catalog-execution.md",
+                      "sha256":  "BCFC8B8613E1D976A5CD84AE2E79956472E2980419E6363BE834838F2430C795"
+                  },
+                  {
+                      "path":  "docs/ci.md",
+                      "sha256":  "1E7EA7314EE09FD8140AB3E3D3A50FAC19266D4B8362A4ACACD18CFE74640179"
+                  },
+                  {
+                      "path":  "docs/costs.md",
+                      "sha256":  "AF1952D58111F90AEFFEEF79FE6C468A72FDCFE97B0011EDF0FE4EEF58E6DC86"
+                  },
+                  {
+                      "path":  "docs/csharp-project-lessons.md",
+                      "sha256":  "DB2D244864ED43D96E15768D68A7FF4FAFF9660E7AA388EE2D3B58576CBB29CB"
+                  },
+                  {
+                      "path":  "docs/decisions/001-local-foundation.md",
+                      "sha256":  "2438CECD87878FCEBB6BC5E76FE6F06C9292DCB2E9FE70CF30AECA26C380A552"
+                  },
+                  {
+                      "path":  "docs/decisions/003-durable-reservations.md",
+                      "sha256":  "7E8F7DEBA8A9AA343ABEC9E3511D7504D423408D3DF08C545A06783FD752146A"
+                  },
+                  {
+                      "path":  "docs/decisions/004-provider-commit-and-compensation-boundary.md",
+                      "sha256":  "42836D538C3EEA15696E53E6BD8EA07C4C116636F6A566E60737E0352BFF0927"
+                  },
+                  {
+                      "path":  "docs/decisions/005-recovery-policy.md",
+                      "sha256":  "D9C3DB3E6CAC680D510A7FC609CA051875327AFB316A14652B825B6E87C46821"
+                  },
+                  {
+                      "path":  "docs/decisions/006-operations.md",
+                      "sha256":  "80A91DF85E1BD41A14C1B6E460EF0C5865A334CC1F3108D0109B10BC66CB48E3"
+                  },
+                  {
+                      "path":  "docs/decisions/008-cloud-study-profile.md",
+                      "sha256":  "7CF6481392B6B685CE02A4A08139299637D6588207EB57D433311BB0493E957B"
+                  },
+                  {
+                      "path":  "docs/decisions/010-storage-and-booking-projections.md",
+                      "sha256":  "7980CA4D9C110BEE7FB003F1D6AAF34A6B0DFF9B8997837168822F9833C5E188"
+                  },
+                  {
+                      "path":  "docs/demo-guide.md",
+                      "sha256":  "A18771215866F56ACEAF2D90152ED907BF1754438AC4874E81178BCC3D5CAB5F"
+                  },
+                  {
+                      "path":  "docs/evidence/CI-review.md",
+                      "sha256":  "64AF92FEEEEA4AC1609EB86BBBE84426AFA8CA9430AE6A2AB2EE93A6D7BF453B"
+                  },
+                  {
+                      "path":  "docs/evidence/CI.md",
+                      "sha256":  "017BA8A14052803130A4985393A9B3B4E5A98B141EB1A7839D3AC3588C838014"
+                  },
+                  {
+                      "path":  "docs/evidence/DEFECT-LAB007-01.md",
+                      "sha256":  "BA50F2FB4E1C3E53F0C6DD4ACB8FA1477D6727E9AFCBB046E20C059FDBE2F7CB"
+                  },
+                  {
+                      "path":  "docs/evidence/DEFECT-LAB008-01.md",
+                      "sha256":  "4FF6F3B2500EBDF67FBAA0E592093A8A2021643D6F870F58A1EA00EA63EDD6FB"
+                  },
+                  {
+                      "path":  "docs/evidence/EXT-001-002-review.md",
+                      "sha256":  "ADF6490850A0784A59418AF1E66F82EC19049769FE810F0B8AADF963A751FFB4"
+                  },
+                  {
+                      "path":  "docs/evidence/EXT-001-002.md",
+                      "sha256":  "BFDEDBEB588E4A7657AD16102E2EAEC94425C72DABE2A81A7366A96EAAA39084"
+                  },
+                  {
+                      "path":  "docs/evidence/LAB-001-review.md",
+                      "sha256":  "CBC83508E663CAB033B4B80C52DCBF7D1B9033AFCB29B891CB43054301E6A448"
+                  },
+                  {
+                      "path":  "docs/evidence/LAB-001.md",
+                      "sha256":  "CD4B0ECE39B28ADB0F14B73C5FF105CEF14104621C643ED2F6221D17D23EF346"
+                  },
+                  {
+                      "path":  "docs/evidence/LAB-002-review.md",
+                      "sha256":  "199F5DFA02276E98F0417FC949C429E9C4650D64B0239929B81359CE54D170A2"
+                  },
+                  {
+                      "path":  "docs/evidence/LAB-002.md",
+                      "sha256":  "B0F6FADB5D63586499AC38BE58ABF3070B44F4A9A1734139BE9FD2CC34312888"
+                  },
+                  {
+                      "path":  "docs/evidence/LAB-003-review.md",
+                      "sha256":  "9CBC10EE9D5EE3D5C848482BFBEF2F186964F7361F4188CCD34E48ABDFC785F6"
+                  },
+                  {
+                      "path":  "docs/evidence/LAB-003.md",
+                      "sha256":  "FF65003F3E76706A155BDC859934F04AE47D9445E97DD95EB5C6159C73D8D997"
+                  },
+                  {
+                      "path":  "docs/evidence/LAB-004-review.md",
+                      "sha256":  "B175ACDF6CF643D02D74CAAABE497B6471A5A71190FE52CC0C61408DAC41B6F0"
+                  },
+                  {
+                      "path":  "docs/evidence/LAB-004.md",
+                      "sha256":  "FF02F2623EAFC3FBD31AAF4195AF13132551782D2D57C5D6939189DE7B85C52C"
+                  },
+                  {
+                      "path":  "docs/evidence/LAB-005-review.md",
+                      "sha256":  "607D4C3095CAE6F56E53CC68EC2517E89DA36497E8E0BFF1BBEEE234D29E948A"
+                  },
+                  {
+                      "path":  "docs/evidence/LAB-005.md",
+                      "sha256":  "087CD8C9133DC99A02595B4B6FB611753CB319309009585CE7B562771A1BDD3E"
+                  },
+                  {
+                      "path":  "docs/evidence/LAB-006-review.md",
+                      "sha256":  "051B0D1563CE58A293A8356C0CBF015CA0360FE690B2D51A435FDFE0A473780E"
+                  },
+                  {
+                      "path":  "docs/evidence/LAB-006.md",
+                      "sha256":  "D281C17786C70988F11C1A7BD72209FB8A2C6454AE5738F6D038A9718682864D"
+                  },
+                  {
+                      "path":  "docs/evidence/LAB-007-review.md",
+                      "sha256":  "50239B6A50D8A6F03C469D53123300E94F1C47219C8D43D09A8BC2BCD7D072FC"
+                  },
+                  {
+                      "path":  "docs/evidence/LAB-007.md",
+                      "sha256":  "2F2020B4B9D1E6FFF180239BF4DA11B4F2333D3A3CABB5EA02841ECF990A0D93"
+                  },
+                  {
+                      "path":  "docs/evidence/LAB-008-review.md",
+                      "sha256":  "F865DB077B7F9BDDCBC17ABC65093DF87CDC4319E5D04BEE8C849E66045CB323"
+                  },
+                  {
+                      "path":  "docs/evidence/LAB-008.md",
+                      "sha256":  "3AF9D1B811C0E178913E9086366888F0346754E2B1CAA3221546041B9E549BD1"
+                  },
+                  {
+                      "path":  "docs/extension-study-guide.md",
+                      "sha256":  "810BA1B45C2C7B3DC227DF73B44A7DAAD8FE3C0BF98224D5DCF7688A3A1DEF64"
+                  },
+                  {
+                      "path":  "docs/extensions-execution.md",
+                      "sha256":  "75EB1A6E69BF5195DEC670DC8F48672E77050AA1E888A689992DAE6E0FAE8DF0"
+                  },
+                  {
+                      "path":  "docs/interview-prep/angular.md",
+                      "sha256":  "FB4BB899E7D51DBD1C7B6518A4618883F2D1C5D6B4D81B11602B03EC4DD2FF1D"
+                  },
+                  {
+                      "path":  "docs/interview-prep/assessment.md",
+                      "sha256":  "792CDD99E876F14FCB67E9EEE81AA0A75938FCBB88C5088B34DE6394D735BFA1"
+                  },
+                  {
+                      "path":  "docs/interview-prep/cheat-sheet.md",
+                      "sha256":  "60BE8051CC6091D56C0AD238E8670949762FAC49652303EB37E67DA2B9BA48F3"
+                  },
+                  {
+                      "path":  "docs/interview-prep/developer-cheat-sheet.md",
+                      "sha256":  "C335E8E7EA0733A9CCE99A924451540A68A0AD2CB9223E9230627FE32535DB18"
+                  },
+                  {
+                      "path":  "docs/interview-prep/practice.md",
+                      "sha256":  "7304327FF84BF16DE9A97D980CB1A28D353832EB084B88A6F59D1D0D9184AA0D"
+                  },
+                  {
+                      "path":  "docs/interview-prep/study-guide.md",
+                      "sha256":  "2A9D96FB535A8959D59101122A6B93EF95EA26515B68BC0AF00BF1F764427A41"
+                  },
+                  {
+                      "path":  "docs/interview-study-guide.md",
+                      "sha256":  "4EC3466F074B4A76F4E2E6D4A196B8ACFBAB4423F0747AAA8B1BBD62241983A8"
+                  },
+                  {
+                      "path":  "docs/learning-map.md",
+                      "sha256":  "47588D3376D51A1ACCACA0FE10B1DBDE76735B9AC99FFFBF46259FE3D066AD4F"
+                  },
+                  {
+                      "path":  "docs/operations-execution.md",
+                      "sha256":  "1C8693610409D14B8398F42BB9D102C3003138A171B2A30B2D0DBFFA934A66D9"
+                  },
+                  {
+                      "path":  "docs/payments-execution.md",
+                      "sha256":  "EF4FC9104442BD646E3EE00D009175BBAB6743FE8B7A26DAE02775BEBA1A9CD3"
+                  },
+                  {
+                      "path":  "docs/reservations-execution.md",
+                      "sha256":  "42132123E5315533221CCFD4A4F1CD5C2221000F73F42E3D5C69302260FA7D82"
+                  },
+                  {
+                      "path":  "docs/saga-execution.md",
+                      "sha256":  "8236FE077F8EFFFF5DEFC86B0684F3257CF1243DDBAD3A697ADFA1C9C40217F0"
+                  },
+                  {
+                      "path":  "docs/security-execution.md",
+                      "sha256":  "79D161F68D89E40D4DE2EA391ECA02A501CA2493CD27CD563477381B50F14618"
+                  },
+                  {
+                      "path":  "dotnet-tools.json",
+                      "sha256":  "C50D950C1B480D932399A71066B159A54BB4EDBF59B25067743C01C9B47FBFA7"
+                  },
+                  {
+                      "path":  "frontend/angular/.editorconfig",
+                      "sha256":  "9DA1D179FA691E796EC7CB26D719E2308A073594B7C7C77756D1BA4560E295BE"
+                  },
+                  {
+                      "path":  "frontend/angular/.gitignore",
+                      "sha256":  "AE6D22F040C44292C421A5C0715E28B9330B8C26D9F2BF08C7935374C6147967"
+                  },
+                  {
+                      "path":  "frontend/angular/.prettierrc",
+                      "sha256":  "7BBD911F1AD35A68FD6C04D83C101B4AB1D08C1F8008623C056A27070A735532"
+                  },
+                  {
+                      "path":  "frontend/angular/.vscode/extensions.json",
+                      "sha256":  "2F13A5BB182525A4150F20E023A17EACB5411EAF6877D60209AC3CEA86AB5C85"
+                  },
+                  {
+                      "path":  "frontend/angular/.vscode/launch.json",
+                      "sha256":  "0DD378135C3D394A1E07E9C28AF48EDEA54C5690A805DE42C7DF101D5E195574"
+                  },
+                  {
+                      "path":  "frontend/angular/.vscode/tasks.json",
+                      "sha256":  "63D74D916C9875099B559CFAED85A493C9297A7C03805E18132CA383DB045895"
+                  },
+                  {
+                      "path":  "frontend/angular/README.md",
+                      "sha256":  "FCBDE9A4A2AE99AF0CBF4A8B3F970AF9C2BA4A7132902BE54327A23DCBEFF305"
+                  },
+                  {
+                      "path":  "frontend/angular/angular.json",
+                      "sha256":  "892581D57F1498A38DFE45329A86A73E6D907EAD1CBE22E4FEEB284C0B289495"
+                  },
+                  {
+                      "path":  "frontend/angular/package-lock.json",
+                      "sha256":  "3F6393E418C8EB01B61CE9997FFE237FEE9BC81AF4609B11E0BBAEC230A31293"
+                  },
+                  {
+                      "path":  "frontend/angular/package.json",
+                      "sha256":  "B4E2E197D5F33C4A935DFA61336D053403BCEFC4E2EE8B0B3EE9F0E19192DEB6"
+                  },
+                  {
+                      "path":  "frontend/angular/proxy.conf.cjs",
+                      "sha256":  "540BF897F3F8A0423756341D1A8F4F407E6AA671C8067889B9369E61F2CCA2E1"
+                  },
+                  {
+                      "path":  "frontend/angular/public/favicon.ico",
+                      "sha256":  "F9102BE80297C0529207607BE5277B4F90BCA89D65988FA1771B91C7894E815F"
+                  },
+                  {
+                      "path":  "frontend/angular/src/app/api.spec.ts",
+                      "sha256":  "58D02C2E08C7BE6B2BC6BBBB74F87930013815BC427B70BA3DABE78953809F57"
+                  },
+                  {
+                      "path":  "frontend/angular/src/app/api.ts",
+                      "sha256":  "D9A3A90803FD1B0C4EDF9587AD8EC90599FDBD1CC8CC27BA4D3410E030B75085"
+                  },
+                  {
+                      "path":  "frontend/angular/src/app/app.config.ts",
+                      "sha256":  "ABB10BBBF16841DA8AA4BC38DEF7042B1E66EFCFD55DFF75C69D704B1745EFE3"
+                  },
+                  {
+                      "path":  "frontend/angular/src/app/app.css",
+                      "sha256":  "E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855"
+                  },
+                  {
+                      "path":  "frontend/angular/src/app/app.html",
+                      "sha256":  "6878C40A943ADA9A945C3E9D9175B6CBA709A2EFF351707BE172EB36A7B9903F"
+                  },
+                  {
+                      "path":  "frontend/angular/src/app/app.routes.ts",
+                      "sha256":  "B02B53567602CF702BE0A6BF1360941313394916C62D8DCE9F32A68BF1EB2EDD"
+                  },
+                  {
+                      "path":  "frontend/angular/src/app/app.spec.ts",
+                      "sha256":  "66CC9606C98FEA448AF3381C42192F0FD2A5D048D0A14344F98371BA887B91AB"
+                  },
+                  {
+                      "path":  "frontend/angular/src/app/app.ts",
+                      "sha256":  "ABCC21CBFFA5CD4E9DB877793A7269E739DC02F8FB8E1BE3563A23D6361719FB"
+                  },
+                  {
+                      "path":  "frontend/angular/src/app/booking.spec.ts",
+                      "sha256":  "A51B1BD8BBC807AB90B80BBECE0E0089E72823D35CFCF93D2633837AF10063E0"
+                  },
+                  {
+                      "path":  "frontend/angular/src/app/booking.ts",
+                      "sha256":  "952D240B51DE21AAD7630821A5527CA16145C319343CDCEC08461800002841F2"
+                  },
+                  {
+                      "path":  "frontend/angular/src/app/login.spec.ts",
+                      "sha256":  "987E2664BE1CB96C96E77B94BC988EDD22E901498ED9A9D8D682D45258733EDC"
+                  },
+                  {
+                      "path":  "frontend/angular/src/app/login.ts",
+                      "sha256":  "918FB6AEBE7092B106304CA9930C73538A3FB38DE1AB6D5CE53C85781AB81641"
+                  },
+                  {
+                      "path":  "frontend/angular/src/app/models.ts",
+                      "sha256":  "C99F36AFD73380D69200F43F85BF90AE2CD99D251077269E7EBDB383EE356329"
+                  },
+                  {
+                      "path":  "frontend/angular/src/app/reservation-detail.ts",
+                      "sha256":  "EFA4F17C0AADDD578A5ED3D490C4C1072228DB2FE95F0759774F10C33EF55C30"
+                  },
+                  {
+                      "path":  "frontend/angular/src/app/reservations.ts",
+                      "sha256":  "91A46803769330182B57CFF004A0DB2F2E3C8E1769178CED06D7C7DE475AFC88"
+                  },
+                  {
+                      "path":  "frontend/angular/src/app/tour-detail.spec.ts",
+                      "sha256":  "E838E31B3CEA78A3CF1B8CB80FA8D84A265271E78C4BE26704CB0438D790423A"
+                  },
+                  {
+                      "path":  "frontend/angular/src/app/tour-detail.ts",
+                      "sha256":  "B75AD308099D0BE2E9ECAC6D8050557DE2DE0BB58C02F5959D9B72D74271C498"
+                  },
+                  {
+                      "path":  "frontend/angular/src/app/tours.ts",
+                      "sha256":  "7E27820B39C423A44A9D241836E7B57C4BC23A0DD858890EE0D9F2255D5A2C6C"
+                  },
+                  {
+                      "path":  "frontend/angular/src/index.html",
+                      "sha256":  "B9B5DAC840078964C38310040D9302C2085FB4B56276B3E769AA29C431C0FF8F"
+                  },
+                  {
+                      "path":  "frontend/angular/src/main.ts",
+                      "sha256":  "ECC610FB7D56C95A01A8AA6C274A63210D45B2944DD6B9A88B2C8F70B6351037"
+                  },
+                  {
+                      "path":  "frontend/angular/src/styles.css",
+                      "sha256":  "FAB8F677D22ED02BDF2F7BC0F7CE57BCF2246DD8CE51459DCF05498D3D366FF4"
+                  },
+                  {
+                      "path":  "frontend/angular/tsconfig.app.json",
+                      "sha256":  "EF0951130D6161F26968E606A4A5B7FA0B72D282E638BCA68364FA154F9B7966"
+                  },
+                  {
+                      "path":  "frontend/angular/tsconfig.json",
+                      "sha256":  "11A2F093288EDD2C2A90E15505EB16CCA663E27BCCA98E037AF73065AA40A263"
+                  },
+                  {
+                      "path":  "frontend/angular/tsconfig.spec.json",
+                      "sha256":  "9B0620ADCB42EF8500DEEE34709D053FEDF51B673321F744EE28436735C98FD8"
+                  },
+                  {
+                      "path":  "global.json",
+                      "sha256":  "E0C0882461E712F6C2C66241BF2F175C60832E3FF077DC26091FF8C661D4193E"
+                  },
+                  {
+                      "path":  "infra/local/elasticmq.conf",
+                      "sha256":  "B74636BC03693D58CEEB1D81CD7D25B90D0277646865A5B3E4B36F7BE15F2EEA"
+                  },
+                  {
+                      "path":  "infra/local/otel-collector.yaml",
+                      "sha256":  "9C491200FAEA94DAC41DDA2BA64814A9031BB3214C6454D1B737A95B9F6C59AA"
+                  },
+                  {
+                      "path":  "infra/local/pg_hba.conf",
+                      "sha256":  "E6FBDB139DA29FF73B5206ADC046DFE2D78B0AB7A2D483521372E0CBF6B04FBF"
+                  },
+                  {
+                      "path":  "infra/local/postgres-entrypoint.sh",
+                      "sha256":  "65157A32B441DEEE0F24D14363BB61BC5ACFA19D558E2B48705EA3032967AE26"
+                  },
+                  {
+                      "path":  "infra/terraform/.terraform.lock.hcl",
+                      "sha256":  "F5AFAF6CE6B5F16732D9DB42C5D664E7CCD81532184C2436B386B0FB6FEFBFB8"
+                  },
+                  {
+                      "path":  "infra/terraform/README.md",
+                      "sha256":  "6D9D924F48AE8A1B9851A73CA0B70D6EA634889CB2AB9380002B2731B1123245"
+                  },
+                  {
+                      "path":  "infra/terraform/ecs.tf",
+                      "sha256":  "454E60136B6625B428D1C25921FDC51FB4C8A36416B44B584080AD4163690910"
+                  },
+                  {
+                      "path":  "infra/terraform/example.tfvars.json",
+                      "sha256":  "E931AE7A0C06378750A0AC75DA90F2B987B35354FE4EE90E16C671744E70ADE0"
+                  },
+                  {
+                      "path":  "infra/terraform/extensions.tf",
+                      "sha256":  "4172503580525D34E62B2E0C48F617A9B6C9DF9816780C04C4217A770ADA4677"
+                  },
+                  {
+                      "path":  "infra/terraform/iam.tf",
+                      "sha256":  "4D2E7F2B6AAA8EAA044C0423E9461C3DED34B7221F197EF6F7AD26FA88BA5697"
+                  },
+                  {
+                      "path":  "infra/terraform/network.tf",
+                      "sha256":  "30ECE5F276D203B1B46949426A889340E97CEC1981B1FD1BFE99231B31BF7144"
+                  },
+                  {
+                      "path":  "infra/terraform/outputs.tf",
+                      "sha256":  "AC7CD491EC950C007B2C7D9A8877BABCEB2845871B257E36933C5E44B66BF012"
+                  },
+                  {
+                      "path":  "infra/terraform/storage.tf",
+                      "sha256":  "A45185ECA57741CB8C26F25A151399F636512816E896099EF952DB3C6B114F11"
+                  },
+                  {
+                      "path":  "infra/terraform/tests/study.tftest.hcl",
+                      "sha256":  "CD0B78131B92208795F4D064F6557ACB818211A9FCA7690A272260EDDCD68161"
+                  },
+                  {
+                      "path":  "infra/terraform/variables.tf",
+                      "sha256":  "806C8C9E9E2B888A51E0FF9169C3B32FE928AD5747517AC15A43AD581898582A"
+                  },
+                  {
+                      "path":  "infra/terraform/versions.tf",
+                      "sha256":  "652B535CA21D65EE62D03A403F135179C21F1CCB82ACE07329A2C8CB5425544B"
+                  },
+                  {
+                      "path":  "prompts/NEXT-TASK.md",
+                      "sha256":  "DCBCCB2560220A59E68FB3F2360E2E1EF231E1B9BED8FB4E277C0BC38139170E"
+                  },
+                  {
+                      "path":  "prompts/REVIEW.md",
+                      "sha256":  "0541F771E7FE616FE531F474546D86CB4030CB13FF5F78A8C6A94024F69C66D2"
+                  },
+                  {
+                      "path":  "prompts/START-CODEX.md",
+                      "sha256":  "486A9B91CA7ACE46161D1AA240C0938AF9B98FBAEF6D4A059636CFFEB8D8DF74"
+                  },
+                  {
+                      "path":  "scripts/New-LocalConfiguration.ps1",
+                      "sha256":  "0082841FB6D9D053CBCA0E780933DF2401B6D325B119C7C1FA53DD363F2E2A25"
+                  },
+                  {
+                      "path":  "scripts/README.md",
+                      "sha256":  "FC60C1868125B347CAC4C72F56303AC58C97852F4F6078D492A0F7F56B108A28"
+                  },
+                  {
+                      "path":  "scripts/Start-Angular.ps1",
+                      "sha256":  "2A31A0D5367596B334E98AA374BCEA0E41B589E81DC5DD36E187F8B9E2E84345"
+                  },
+                  {
+                      "path":  "scripts/Start-CI.ps1",
+                      "sha256":  "408F87ECCC7C579E159C30218AAF5B69A1FDEFFF130C3ABB0424914B697DF498"
+                  },
+                  {
+                      "path":  "scripts/Start-Local.ps1",
+                      "sha256":  "F50649409542A5A7735D8AD5B1B4212196EBC5118073822A5327C0949362029D"
+                  },
+                  {
+                      "path":  "scripts/Stop-Local.ps1",
+                      "sha256":  "5C855D4500B50EC519CBAEB3AAC2311031803C0114599EF001BFE5389CAE3B91"
+                  },
+                  {
+                      "path":  "scripts/Test-CIReports.ps1",
+                      "sha256":  "BCEAD211F897DC977CC1CF801F71CD9F52166D2873307D6DF65718310B0FFAB2"
+                  },
+                  {
+                      "path":  "scripts/Trust-LocalCa.ps1",
+                      "sha256":  "406A7E459CA6D8F76C164F768CF512A5CCB19AA777ED9CCA55B958161953DF74"
+                  },
+                  {
+                      "path":  "scripts/Verify-Browser.ps1",
+                      "sha256":  "6746A729F1BEAD0191B3CDB1A7CA48D816DBA8F9D05FABCAF840CDF70C703008"
+                  },
+                  {
+                      "path":  "scripts/Verify-CI.ps1",
+                      "sha256":  "09EBAAD40AFA39CC011FD92113D9D2991B1A81C4A41E6C336DFDB3B89E87F761"
+                  },
+                  {
+                      "path":  "scripts/Verify-Local.ps1",
+                      "sha256":  "8D880DD33EA3706B6B0136B1EED1EDB5E58C37BF7FA1373750B22B62D63B6370"
+                  },
+                  {
+                      "path":  "scripts/Verify-Messaging.ps1",
+                      "sha256":  "3B6904F7041542F587865A6397CFD5A05A9BB73D78021D8BE8AAD7ED96288873"
+                  },
+                  {
+                      "path":  "scripts/Verify-Operations.ps1",
+                      "sha256":  "580DCC94833B136582913304B92BEBC52999D82886B86BBE0333724F298BDF9E"
+                  },
+                  {
+                      "path":  "scripts/Verify-Payments.ps1",
+                      "sha256":  "0091160FF903CFC6420169B6B1BBFDD36C5DF438FFFDB6B641AEC74E354BAC14"
+                  },
+                  {
+                      "path":  "scripts/Verify-Restart.ps1",
+                      "sha256":  "9B4E10931BCDDE5271218AE6C2A28B654E6ADCCD1744401C21E227258F46697D"
+                  },
+                  {
+                      "path":  "scripts/Verify-Sagas.ps1",
+                      "sha256":  "00F6884444AA2563FA49A3539B9481B3B2F59E17E092E57B982A53C311E7841E"
+                  },
+                  {
+                      "path":  "scripts/Verify-Security.ps1",
+                      "sha256":  "C1231EF3EC9103A38F04F7A012D4DCD208FC5B4EA55909813F52F41A491FE788"
+                  },
+                  {
+                      "path":  "scripts/Verify-Tracing.ps1",
+                      "sha256":  "4AC9704C7E57790D6C95DBDFA373B50F947CD2D08602DCF92C045629F21B09A1"
+                  },
+                  {
+                      "path":  "scripts/Write-CIReports.ps1",
+                      "sha256":  "B641B3ABAA508B6DBAAFA0EC9412214DEFBC9FBF540D522D22E5465A7ADB0A75"
+                  },
+                  {
+                      "path":  "scripts/aws/Invoke-Migrations.ps1",
+                      "sha256":  "71359E285C5E0DD5F93B39446FFECD8E517D8AD0CC85CCF83630BD6C2DD4B7DB"
+                  },
+                  {
+                      "path":  "scripts/aws/Invoke-Session.ps1",
+                      "sha256":  "4F30CE70753819F4453F7998495A6D77418BB407D9BD1BB221CDF8EA0C1F60E2"
+                  },
+                  {
+                      "path":  "scripts/aws/New-PrivateConfiguration.ps1",
+                      "sha256":  "E6EF946C561518CFF8B3334B52A80329A10A12894407FA91EB80D0B8770F5924"
+                  },
+                  {
+                      "path":  "scripts/aws/Publish-Parameters.ps1",
+                      "sha256":  "85598BD4EAFAB638C6CB3EB86A2FA16F0E8776E72A693D1605E17D12879AE381"
+                  },
+                  {
+                      "path":  "scripts/aws/README.md",
+                      "sha256":  "0BDCF5D87817C191CA3AED992A78CDF491118278098FA022A928030EFD08D4FC"
+                  },
+                  {
+                      "path":  "scripts/aws/Review-Destroy.ps1",
+                      "sha256":  "129725654F485DFF7AC9D6556DE1326773CF72C0033D649F314C35BE0FEEB245"
+                  },
+                  {
+                      "path":  "scripts/aws/Shared.ps1",
+                      "sha256":  "34E4931FE542C27897A17B5D8445425F865D302EFFA90D27618C2EF08F58C6DE"
+                  },
+                  {
+                      "path":  "scripts/aws/Test-Guards.ps1",
+                      "sha256":  "1638394B5C3439950D76E76E5A0298D65259CFABEBB1B0C04077ADB8E8248F19"
+                  },
+                  {
+                      "path":  "scripts/aws/Verify-Readiness.ps1",
+                      "sha256":  "8C3CEAC43FC39EBF14B6DF57EBA0D21F8086B7ABA8AF829BC9BC234093D62582"
+                  },
+                  {
+                      "path":  "specs/01-product.md",
+                      "sha256":  "0165F7F5DC19066B3F1ABE5223498C3B7D20552B06B7FBB454C4860E301F4C30"
+                  },
+                  {
+                      "path":  "specs/02-architecture.md",
+                      "sha256":  "B246B698495A972BCACB4ED98A1563874F72B5F92F0205BCE1CEBD0A1D26A4A2"
+                  },
+                  {
+                      "path":  "specs/03-contracts.md",
+                      "sha256":  "97DC69C6554BBA60771F80DB4C48CE39D4863480CD82185D7A46620186B6F30D"
+                  },
+                  {
+                      "path":  "specs/04-workflows.md",
+                      "sha256":  "208AF8FD23711C29CF1AC7575161F226C3B3EB0B49D7316909480D8731E37794"
+                  },
+                  {
+                      "path":  "specs/05-blazor-and-learning.md",
+                      "sha256":  "E7155DCB41BF724016A956649676EC1DCB40AE6F270749B2D809C01B426DE505"
+                  },
+                  {
+                      "path":  "specs/06-aws-and-costs.md",
+                      "sha256":  "F9EEDF840F0AF0B4F3A3114B8B220653A9828AB0105CE1F9553C8821F2080BCC"
+                  },
+                  {
+                      "path":  "specs/07-acceptance.md",
+                      "sha256":  "A0BC84C41573388C6D5C4DB31E43301E905225093443B2DE6A83C438266A426D"
+                  },
+                  {
+                      "path":  "specs/08-tour-images-extension.md",
+                      "sha256":  "3089898EE934D0EF7A8A4DD1A9390DD69DD7C7A5C26DE94E7D58AB0D44E4FEA5"
+                  },
+                  {
+                      "path":  "specs/09-my-bookings-extension.md",
+                      "sha256":  "CE4F87F5EAC8958A058D56555555BFD6C70A42A0644762545455793C622355DA"
+                  },
+                  {
+                      "path":  "specs/10-angular-frontend.md",
+                      "sha256":  "0366FCBBBE0E85B0334F89DCFAB2BB7683A821F9D8C1DB168B3B01039892F356"
+                  },
+                  {
+                      "path":  "src/Catalog.Api/Application/CatalogOperations.cs",
+                      "sha256":  "BC885F2C699FE1C7A11FBCE81E325D13399ABA37BE2CF843B0C2D961BEEADC29"
+                  },
+                  {
+                      "path":  "src/Catalog.Api/Application/InventoryHandlers.cs",
+                      "sha256":  "BF4DFBB43FB011207E4C431A02EC0563733A65FB211512B47AFFDA964C19C8D8"
+                  },
+                  {
+                      "path":  "src/Catalog.Api/Catalog.Api.csproj",
+                      "sha256":  "213F421ADA7F643512FF12F9A67A6C29626033E28559FE5C15759DD67D54BDD0"
+                  },
+                  {
+                      "path":  "src/Catalog.Api/CatalogEndpoints.cs",
+                      "sha256":  "4AA4C5EE34E3D450FC3B6790D2C5CA3F8BA4907ED0E2A2AF52568C96F3446C8C"
+                  },
+                  {
+                      "path":  "src/Catalog.Api/Images/ImageEndpoints.cs",
+                      "sha256":  "1AE83D7A407CD16CA0C06B27B05B45B88810839BE84F78CBC1FB067ABC6645BF"
+                  },
+                  {
+                      "path":  "src/Catalog.Api/Images/ImageStorage.cs",
+                      "sha256":  "010BC685F5686E399E7267F3528126788C5B04E81EBDEE1016DF39311EFA274C"
+                  },
+                  {
+                      "path":  "src/Catalog.Api/Images/TourImages.cs",
+                      "sha256":  "D0DA1D4FD893A0698DD5A2549C2253C0F8845A645DCB517D659D130083D174AF"
+                  },
+                  {
+                      "path":  "src/Catalog.Api/Images/ValidatedImage.cs",
+                      "sha256":  "B41C159B5C0EF139A95727DB556CAB73F95AF3B4179163A75FC94D466B0933C9"
+                  },
+                  {
+                      "path":  "src/Catalog.Api/Messaging/CatalogConsumer.cs",
+                      "sha256":  "F9D95244BD349574BB2B1F59DA615672580DC8D8D142FD4E850BFD9A0FA15CB1"
+                  },
+                  {
+                      "path":  "src/Catalog.Api/Persistence/CatalogDb.cs",
+                      "sha256":  "6B18427DB2C134200F209B810F2356AE0720BD0D1096896FB51503D706AD48A7"
+                  },
+                  {
+                      "path":  "src/Catalog.Api/Persistence/CatalogFault.cs",
+                      "sha256":  "53C62F1B274B8E2C5E3BA5C4F2E7A0D3D17DE977BBFD822A9ADFCAE481F8DBC9"
+                  },
+                  {
+                      "path":  "src/Catalog.Api/Persistence/CatalogSeed.cs",
+                      "sha256":  "41DE2C7AD7BDE67959528A38E494B4C055935E7674B351AE18BFD2AFF5596679"
+                  },
+                  {
+                      "path":  "src/Catalog.Api/Persistence/Migrations/20261003203839_InitialCatalog.Designer.cs",
+                      "sha256":  "B40736E45C731535BA87C4F608AEB6567D88629DEB509383A289C9128DA087BD"
+                  },
+                  {
+                      "path":  "src/Catalog.Api/Persistence/Migrations/20261003203839_InitialCatalog.cs",
+                      "sha256":  "1094B93EFF18E229BA506E58CF350CB539E0D4BC8B4B74D19FB4379C0FA96E6F"
+                  },
+                  {
+                      "path":  "src/Catalog.Api/Persistence/Migrations/20261003221442_MessagingLeasesAndInbox.Designer.cs",
+                      "sha256":  "7720E56134473F132BB9E8D0E1966C0BD270A199E5EB403088C0CBC7DA4374B2"
+                  },
+                  {
+                      "path":  "src/Catalog.Api/Persistence/Migrations/20261003221442_MessagingLeasesAndInbox.cs",
+                      "sha256":  "28DEC3CF4298168B52102EBCAE18662B9D7978D6FBB806C58E9E18DEA297BEBD"
+                  },
+                  {
+                      "path":  "src/Catalog.Api/Persistence/Migrations/20261004171403_Lab005ConfirmationSimulation.Designer.cs",
+                      "sha256":  "E76C31AAFC77365F7BFBD52815DD36ADCEADB6E45C85D0DEAB2A22F6209D884F"
+                  },
+                  {
+                      "path":  "src/Catalog.Api/Persistence/Migrations/20261004171403_Lab005ConfirmationSimulation.cs",
+                      "sha256":  "7AE2A3743E95471A496165DE6A482453ADCF4835C16E193D905FCDE7AA6D3792"
+                  },
+                  {
+                      "path":  "src/Catalog.Api/Persistence/Migrations/20261004210000_Lab006Operations.cs",
+                      "sha256":  "FCBCC13A3791280CC58CB7ACC34A29C917C9975EB5FC39272788CDCFF8E9081D"
+                  },
+                  {
+                      "path":  "src/Catalog.Api/Persistence/Migrations/20261011201447_Ext001TourImages.Designer.cs",
+                      "sha256":  "AFEF22DDF50CC60AD3ABDE0ABD6574037B7293AB0CFA0540225A78C802A1C9B3"
+                  },
+                  {
+                      "path":  "src/Catalog.Api/Persistence/Migrations/20261011201447_Ext001TourImages.cs",
+                      "sha256":  "7196FF3503DD7E3346580383E793FCB9D3AD4DBEA6AB2445FA76E78C444B7278"
+                  },
+                  {
+                      "path":  "src/Catalog.Api/Persistence/Migrations/CatalogDbModelSnapshot.cs",
+                      "sha256":  "5C04771C0C5EA905F5A09AEEA64CCFD3F95F20903D09271D95BD7394A5902284"
+                  },
+                  {
+                      "path":  "src/Catalog.Api/Persistence/TourImage.cs",
+                      "sha256":  "6A5FDFA75853FD0F4D442294B348A66C454EBFFB61DBE730C3E327DCABFCBC68"
+                  },
+                  {
+                      "path":  "src/Catalog.Api/Program.cs",
+                      "sha256":  "75877FE667467ABD3F4FD7D42B8E7ED58904543561FF1373B6802D3A4613D445"
+                  },
+                  {
+                      "path":  "src/Catalog.Api/Properties/launchSettings.json",
+                      "sha256":  "6E9A301ABB36C6CA9A61CC6F1903613A340E168229B4E7F4850151AF3C62AEDE"
+                  },
+                  {
+                      "path":  "src/Catalog.Api/appsettings.Development.json",
+                      "sha256":  "73F95F9E0CEB205FC1C4DC50C07697FCFA29D7087868C2AEF1D504CB38C771EC"
+                  },
+                  {
+                      "path":  "src/Catalog.Api/appsettings.json",
+                      "sha256":  "200332B434757A0054A3D356C91CDE01F2C48712BE8AA2BCB0F3E973619F06E3"
+                  },
+                  {
+                      "path":  "src/Catalog.Api/packages.lock.json",
+                      "sha256":  "B29A4D9C542E8581B6D56C54B66C682EB6C39F8152E12B3828A06CB14DD65DE4"
+                  },
+                  {
+                      "path":  "src/Gateway.Web/Browser/BrowserEndpoints.cs",
+                      "sha256":  "538F10A8CC4B5C9100A780C162A9EF3267C5102EC3EA12A7502ABB897A7D284D"
+                  },
+                  {
+                      "path":  "src/Gateway.Web/Business/BusinessClient.cs",
+                      "sha256":  "CBBD7ECA76A0CD6FDD7D82367CA6E786667FB03D5C743CA4F70C41D114582E10"
+                  },
+                  {
+                      "path":  "src/Gateway.Web/Catalog/CatalogClient.cs",
+                      "sha256":  "40C855CFD77B8365ED0188C790F1E08608E9A310269849641958DB93F078C49E"
+                  },
+                  {
+                      "path":  "src/Gateway.Web/Catalog/CatalogComponent.cs",
+                      "sha256":  "88B3B2D45FB4CB244F85F5D1EA7D9B0FB7D62D41095B5ABC1B01BBD45F8518D7"
+                  },
+                  {
+                      "path":  "src/Gateway.Web/Components/App.razor",
+                      "sha256":  "EFE5F016C509464D50A8A9D5CCDD7417CD070B0343060B3EBA23D01ACCCA27BE"
+                  },
+                  {
+                      "path":  "src/Gateway.Web/Components/Catalog/SessionEditor.razor",
+                      "sha256":  "3DB1AB3AE49DC43D007DDFDD1F5CED8C81FA6A3A96BA8923217763C0E86E1AA3"
+                  },
+                  {
+                      "path":  "src/Gateway.Web/Components/Catalog/TourImages.razor",
+                      "sha256":  "F57530AA0B28F81536AC7BA25C792727789F479558B42335A5AE280BE86612F3"
+                  },
+                  {
+                      "path":  "src/Gateway.Web/Components/Layout/MainLayout.razor",
+                      "sha256":  "61D3CDF9DC74FCE2761973A982F095344BE84A57193EC9C9EB46F9EC24E793BF"
+                  },
+                  {
+                      "path":  "src/Gateway.Web/Components/Layout/MainLayout.razor.css",
+                      "sha256":  "7EB70257593DA06F682A3DDDA54A9D260D4FC514F645237F5CA74B08F8DA61A6"
+                  },
+                  {
+                      "path":  "src/Gateway.Web/Components/Layout/NavMenu.razor",
+                      "sha256":  "7880D7B388BD7FA98B9696EF7E2B2F769C7496AEBF357D88353ED0DB3A9A46B1"
+                  },
+                  {
+                      "path":  "src/Gateway.Web/Components/Layout/NavMenu.razor.css",
+                      "sha256":  "7EB70257593DA06F682A3DDDA54A9D260D4FC514F645237F5CA74B08F8DA61A6"
+                  },
+                  {
+                      "path":  "src/Gateway.Web/Components/Layout/ReconnectModal.razor",
+                      "sha256":  "E1C8308C1EC6656C8F5CD50DF3F1879B614E43109AD6B1E23AB26D6F1007C6DB"
+                  },
+                  {
+                      "path":  "src/Gateway.Web/Components/Layout/ReconnectModal.razor.css",
+                      "sha256":  "BA73539337ECFF370E1CE8EBB9EBC0992D6ED100080A29F4BCAC888F1CE1ABD8"
+                  },
+                  {
+                      "path":  "src/Gateway.Web/Components/Layout/ReconnectModal.razor.js",
+                      "sha256":  "E6EFAFF747CEB6D105CC4DAA1CC18C3979B2F77224FC1686A8BAEB9EEEA67465"
+                  },
+                  {
+                      "path":  "src/Gateway.Web/Components/Pages/AccessDenied.razor",
+                      "sha256":  "BE8124DF41006A315377512661999A731E9213096E0C6855183843BDBA3E04A2"
+                  },
+                  {
+                      "path":  "src/Gateway.Web/Components/Pages/Account.razor",
+                      "sha256":  "79DC1CDC9ED53C39C1451FF793C0F7F5CAA861A30CE77613FD38552CBC785844"
+                  },
+                  {
+                      "path":  "src/Gateway.Web/Components/Pages/Admin.razor",
+                      "sha256":  "4BE2DB44926B242D0CB18E454849F3861D4A4C17C559C405F95913F437C1C4F9"
+                  },
+                  {
+                      "path":  "src/Gateway.Web/Components/Pages/CatalogAdmin.razor",
+                      "sha256":  "C19AE099FA8FD9513461829F7E99D343418E1A4B80043D9CEF63E74984198A2C"
+                  },
+                  {
+                      "path":  "src/Gateway.Web/Components/Pages/CatalogEdit.razor",
+                      "sha256":  "26D1B56213ABBD721924C931B154D9BD37EE869C18D3226A7EDC6BE7D797AD0F"
+                  },
+                  {
+                      "path":  "src/Gateway.Web/Components/Pages/Error.razor",
+                      "sha256":  "8F10B1547E7D71505645AFA52CEEF88CF9D3FEC53CC32768024E8C64A69F5336"
+                  },
+                  {
+                      "path":  "src/Gateway.Web/Components/Pages/Home.razor",
+                      "sha256":  "E89A6B792DB32454D1839A6ADAAA13AC78BD5854DC83BA127C3F6522883AFBBA"
+                  },
+                  {
+                      "path":  "src/Gateway.Web/Components/Pages/Login.razor",
+                      "sha256":  "66F3E5946704BADB4E0609716EF29ED7063A37237012FB2E4C7209EF6C0AA485"
+                  },
+                  {
+                      "path":  "src/Gateway.Web/Components/Pages/Logout.razor",
+                      "sha256":  "5EC44DA0495C7714B09E9407B06288DA66C053B973DA0261F882FEB97AED5418"
+                  },
+                  {
+                      "path":  "src/Gateway.Web/Components/Pages/MyBookings.razor",
+                      "sha256":  "B914826DFF0A75497A344F784F67294709FD067AA915F1E2B059FD739206CA6B"
+                  },
+                  {
+                      "path":  "src/Gateway.Web/Components/Pages/NotFound.razor",
+                      "sha256":  "C267B98A248A516F8CA8C79DD8410D9F09D9AD302466E65C6B9B959B5FFC7CBD"
+                  },
+                  {
+                      "path":  "src/Gateway.Web/Components/Pages/Notifications.razor",
+                      "sha256":  "FC75EFEA687EF1E4F058B3A996387960A6A4BCE7D4F5AE44CE51DFC0099C6F15"
+                  },
+                  {
+                      "path":  "src/Gateway.Web/Components/Pages/Operations.razor",
+                      "sha256":  "82E83873CA9BD1E05289662E63DB472870AC7D17A8F462C2EA32B9D8066BE6A6"
+                  },
+                  {
+                      "path":  "src/Gateway.Web/Components/Pages/Payments.razor",
+                      "sha256":  "53D86D148E53DB7BC5E67179A25F5D679135448B9F7F85E281155C28C37511D7"
+                  },
+                  {
+                      "path":  "src/Gateway.Web/Components/Pages/Pending.razor",
+                      "sha256":  "B76F058CB8CAAE34582388A242D78AC0FB13FDDF04F6A611F0789234D3586A9D"
+                  },
+                  {
+                      "path":  "src/Gateway.Web/Components/Pages/ReservationDetail.razor",
+                      "sha256":  "8160AE60BECBE16369FBCC3C873E71B122370A9CE6517F26247D0A1948CC6CEF"
+                  },
+                  {
+                      "path":  "src/Gateway.Web/Components/Pages/Reservations.razor",
+                      "sha256":  "84FA7E253815F0394CD4D594B0902C8113BDF78A6946F3FC127AB326762BD354"
+                  },
+                  {
+                      "path":  "src/Gateway.Web/Components/Pages/Sagas.razor",
+                      "sha256":  "602A33811240C655E97CB33288EAB10EF2580AEF14455CB41EF61650EEFC9386"
+                  },
+                  {
+                      "path":  "src/Gateway.Web/Components/Pages/Simulations.razor",
+                      "sha256":  "B3FEF22EB5B5952DE49F8F33AAAEBDD52EE2F91ECC7712362AF82C443A30DE57"
+                  },
+                  {
+                      "path":  "src/Gateway.Web/Components/Pages/TourDetail.razor",
+                      "sha256":  "800747DA966B21B884ED3EB6588E6387FADE67B530079FDBE84D1E815FF9EADE"
+                  },
+                  {
+                      "path":  "src/Gateway.Web/Components/Pages/TourProjections.razor",
+                      "sha256":  "0BCE522FE3F12F4D75DBAE71E752B44E8A17A67F98672E32C15F6D1B802DAD9C"
+                  },
+                  {
+                      "path":  "src/Gateway.Web/Components/Pages/Tours.razor",
+                      "sha256":  "2A51DA4A10F461A94E2C8990441F097BE930D6A231F2F7854F8805D6A6193056"
+                  },
+                  {
+                      "path":  "src/Gateway.Web/Components/Reservations/ReservationSubmission.razor",
+                      "sha256":  "ED2543780C3E84AD66C01D62B02DCE25DDA82B894FD3DAE26477553579744D03"
+                  },
+                  {
+                      "path":  "src/Gateway.Web/Components/Routes.razor",
+                      "sha256":  "0AC69CBF4316AAD8DC9C58D070D6960556AD70A199A2502D210C49B2DA94990C"
+                  },
+                  {
+                      "path":  "src/Gateway.Web/Components/_Imports.razor",
+                      "sha256":  "1F0DE2672339104E8A562B24F6C373A87B2B6E5406865AABFB5C7C368C2CE77F"
+                  },
+                  {
+                      "path":  "src/Gateway.Web/Gateway.Web.csproj",
+                      "sha256":  "190469DEBD37D33EFEBE54FF043A43A92AFB9E1469ABFE88153D4250A57C14B6"
+                  },
+                  {
+                      "path":  "src/Gateway.Web/Identity/AuthEndpoints.cs",
+                      "sha256":  "A86F36904FDFD3CD531FBDDFD1BA09918908A145CA94F51497E170A6AC6E7C86"
+                  },
+                  {
+                      "path":  "src/Gateway.Web/Identity/IdentityDb.cs",
+                      "sha256":  "B88909BBA9476A35571EAF715E168A9CE2DE6D5B75AB2598C82FE450F476A4EB"
+                  },
+                  {
+                      "path":  "src/Gateway.Web/Identity/IdentityDesignFactory.cs",
+                      "sha256":  "BE95514730076C3AEB5AC3AD29CB2CC20604235D1E8FBB35022A1ECAD25B8756"
+                  },
+                  {
+                      "path":  "src/Gateway.Web/Identity/IdentityRegistration.cs",
+                      "sha256":  "CF0725AB78A1EA883CFF3228F98EA7EF2C2BC6ABCF4D4453E30919DB0ADC3349"
+                  },
+                  {
+                      "path":  "src/Gateway.Web/Identity/JwtIssuer.cs",
+                      "sha256":  "08633853DE8106104E1F502792711A4F8A626375CF0158FBF1800D9637C674EE"
+                  },
+                  {
+                      "path":  "src/Gateway.Web/Identity/LabRevalidatingAuthenticationStateProvider.cs",
+                      "sha256":  "16D705221296389C15A3C34BB8A7EDE83B48B80354AF1CE08807BA4BA9B37D7F"
+                  },
+                  {
+                      "path":  "src/Gateway.Web/Identity/LabUser.cs",
+                      "sha256":  "D3D5ABD046D64459448C8425212310CE8B12E91D7A6BF3FAA9827114BC73084C"
+                  },
+                  {
+                      "path":  "src/Gateway.Web/Identity/Migrations/20261003155022_InitialIdentity.Designer.cs",
+                      "sha256":  "1E929B0D9E4102EFB577E815F1583CE1B333A79BF0AE80A6A8BD325A7E615153"
+                  },
+                  {
+                      "path":  "src/Gateway.Web/Identity/Migrations/20261003155022_InitialIdentity.cs",
+                      "sha256":  "4C66448FB310C7449B2C6C72BBA1E03F96E6BF5A65FD2CF6E28E4A505143FA95"
+                  },
+                  {
+                      "path":  "src/Gateway.Web/Identity/Migrations/IdentityDbModelSnapshot.cs",
+                      "sha256":  "82E970966F1C96862092914B69CBFF7BC2C1E41E291DE5BAAEAE2BC8C2F486D9"
+                  },
+                  {
+                      "path":  "src/Gateway.Web/Program.cs",
+                      "sha256":  "709435BE2BAA991B5E1400EDB45763E27E1969967CAB6E5133E462EE45E8002B"
+                  },
+                  {
+                      "path":  "src/Gateway.Web/Properties/launchSettings.json",
+                      "sha256":  "F65B3EBBE9C896CE65957998DEEB6CF1BEE723186094450A3F7398326C31C2C7"
+                  },
+                  {
+                      "path":  "src/Gateway.Web/Reservations/ReservationClient.cs",
+                      "sha256":  "850B29BA4210EBAE24C59911198BAB986965426E8CEF1153D8AB988F08997B54"
+                  },
+                  {
+                      "path":  "src/Gateway.Web/appsettings.Development.json",
+                      "sha256":  "73F95F9E0CEB205FC1C4DC50C07697FCFA29D7087868C2AEF1D504CB38C771EC"
+                  },
+                  {
+                      "path":  "src/Gateway.Web/appsettings.json",
+                      "sha256":  "200332B434757A0054A3D356C91CDE01F2C48712BE8AA2BCB0F3E973619F06E3"
+                  },
+                  {
+                      "path":  "src/Gateway.Web/packages.lock.json",
+                      "sha256":  "D5CD610DDE80DB7785B7D7D1AC04B92939A8A327DE9F0DF142A161641DF5CBFC"
+                  },
+                  {
+                      "path":  "src/Gateway.Web/wwwroot/app.css",
+                      "sha256":  "43B6C0A4EB48A847E423F7A265276AE4BB0480ECF9AC7339A3C588ECFFC67F86"
+                  },
+                  {
+                      "path":  "src/Gateway.Web/wwwroot/favicon.png",
+                      "sha256":  "E265AC0F2DDA1E5DFA65B1ADF330722BB3EF7789115283604D8CD19F098F1F08"
+                  },
+                  {
+                      "path":  "src/Gateway.Web/wwwroot/lib/bootstrap/dist/css/bootstrap-grid.css",
+                      "sha256":  "632E7F841A919A6536309D532B03F6697A133BAF8E8F3ACB98922C0B65B2E07F"
+                  },
+                  {
+                      "path":  "src/Gateway.Web/wwwroot/lib/bootstrap/dist/css/bootstrap-grid.css.map",
+                      "sha256":  "C404FE9F6E4513986F3A38F67C6E1874EC2BD5B97822500904D83A3DB84B4F61"
+                  },
+                  {
+                      "path":  "src/Gateway.Web/wwwroot/lib/bootstrap/dist/css/bootstrap-grid.min.css",
+                      "sha256":  "E670C73068B27D91E5DD45DE3EE84B0D047D9DC3DF051D4725E64B5F224D576E"
+                  },
+                  {
+                      "path":  "src/Gateway.Web/wwwroot/lib/bootstrap/dist/css/bootstrap-grid.min.css.map",
+                      "sha256":  "9202FEC7056633C20EB35E659E81EDF5D691D8B44C8811BF7188143DC290398E"
+                  },
+                  {
+                      "path":  "src/Gateway.Web/wwwroot/lib/bootstrap/dist/css/bootstrap-grid.rtl.css",
+                      "sha256":  "099C6817CCE368B97256472F5420E573C09E411D70D5132BBE0631DF472CF243"
+                  },
+                  {
+                      "path":  "src/Gateway.Web/wwwroot/lib/bootstrap/dist/css/bootstrap-grid.rtl.css.map",
+                      "sha256":  "FEC890500F325FCDF48FE70BE1A98A1D8DF206D9F79FCCF7120F95675E5FF749"
+                  },
+                  {
+                      "path":  "src/Gateway.Web/wwwroot/lib/bootstrap/dist/css/bootstrap-grid.rtl.min.css",
+                      "sha256":  "BCCC5372F902E0BCBB2E2013DC6F32132F44A53AFB1607B849CCD6A74EFFA779"
+                  },
+                  {
+                      "path":  "src/Gateway.Web/wwwroot/lib/bootstrap/dist/css/bootstrap-grid.rtl.min.css.map",
+                      "sha256":  "EC674E970ED4FF083269E52D166C4FCF9FCCA6176F5523ED54E3A54E7F5CDF74"
+                  },
+                  {
+                      "path":  "src/Gateway.Web/wwwroot/lib/bootstrap/dist/css/bootstrap-reboot.css",
+                      "sha256":  "968F5823CD8E174DEFA2376EF97391DFE0D1ACB229321A7364D9876CCE420CC0"
+                  },
+                  {
+                      "path":  "src/Gateway.Web/wwwroot/lib/bootstrap/dist/css/bootstrap-reboot.css.map",
+                      "sha256":  "45727F4198817C75E83ED5D1D84802F9B168DA97B71AD6D93BBDB646D88B1B34"
+                  },
+                  {
+                      "path":  "src/Gateway.Web/wwwroot/lib/bootstrap/dist/css/bootstrap-reboot.min.css",
+                      "sha256":  "97CBEDE68A33BFDE7C78C77D4C5B0F016825F4924AF5829F6D54ACF2672143CE"
+                  },
+                  {
+                      "path":  "src/Gateway.Web/wwwroot/lib/bootstrap/dist/css/bootstrap-reboot.min.css.map",
+                      "sha256":  "D1EA954FADA4A912C987DA13A8B7881F852742C92A56389BF219767D7C65E258"
+                  },
+                  {
+                      "path":  "src/Gateway.Web/wwwroot/lib/bootstrap/dist/css/bootstrap-reboot.rtl.css",
+                      "sha256":  "57CA6C9C7A094BF30F9425D6C1CFC9DED1ADA7D7378061519AAB08420A67F868"
+                  },
+                  {
+                      "path":  "src/Gateway.Web/wwwroot/lib/bootstrap/dist/css/bootstrap-reboot.rtl.css.map",
+                      "sha256":  "3A8415C21EC0AE9EDB5682B66624F1D92FFF2AB9CFAD23F33D9F770AA08C85EF"
+                  },
+                  {
+                      "path":  "src/Gateway.Web/wwwroot/lib/bootstrap/dist/css/bootstrap-reboot.rtl.min.css",
+                      "sha256":  "FFC8E1F217043052B24BA8285AA9CDBBBB7713364F0867506603BAB02908F2D2"
+                  },
+                  {
+                      "path":  "src/Gateway.Web/wwwroot/lib/bootstrap/dist/css/bootstrap-reboot.rtl.min.css.map",
+                      "sha256":  "F75D33C3EACC75C8342ECE3C013A7AE6F127F2B7791EF3F138A9B6C77FC20482"
+                  },
+                  {
+                      "path":  "src/Gateway.Web/wwwroot/lib/bootstrap/dist/css/bootstrap-utilities.css",
+                      "sha256":  "D81B9B80D50F950485FF4C0B15C45743F623CE4F6FB146C301E2B640CFA1FB2A"
+                  },
+                  {
+                      "path":  "src/Gateway.Web/wwwroot/lib/bootstrap/dist/css/bootstrap-utilities.css.map",
+                      "sha256":  "35F8EB73852BF45BF6A0112CC10588C819CD0CFF7DABE2E12FECFDE79DCED1C6"
+                  },
+                  {
+                      "path":  "src/Gateway.Web/wwwroot/lib/bootstrap/dist/css/bootstrap-utilities.min.css",
+                      "sha256":  "2B213DC5B28EF42B98C741D7A482A0B1622F5E401F213B62435EF68F6EB0991B"
+                  },
+                  {
+                      "path":  "src/Gateway.Web/wwwroot/lib/bootstrap/dist/css/bootstrap-utilities.min.css.map",
+                      "sha256":  "AC70E68A9E09673B9A18E71243541242B21B1B411BDD98DAF7086A485D736085"
+                  },
+                  {
+                      "path":  "src/Gateway.Web/wwwroot/lib/bootstrap/dist/css/bootstrap-utilities.rtl.css",
+                      "sha256":  "1FAC2405B4B08EE6B6BDE2684E1268E2ECB5EB58E9F833A2653968525719EAA4"
+                  },
+                  {
+                      "path":  "src/Gateway.Web/wwwroot/lib/bootstrap/dist/css/bootstrap-utilities.rtl.css.map",
+                      "sha256":  "A74055AB955EFDDA2104875F6EB66CA1036ED36252B0A875834C1BCA242251A5"
+                  },
+                  {
+                      "path":  "src/Gateway.Web/wwwroot/lib/bootstrap/dist/css/bootstrap-utilities.rtl.min.css",
+                      "sha256":  "18052E9BA163C10F07AD719AA054671D3A9040BA658D719ABD3EE6057F04F6A5"
+                  },
+                  {
+                      "path":  "src/Gateway.Web/wwwroot/lib/bootstrap/dist/css/bootstrap-utilities.rtl.min.css.map",
+                      "sha256":  "A3C5CADF699C63F15F70E4350F61C9BD5B99D184D74944590CB5C22B47E741E0"
+                  },
+                  {
+                      "path":  "src/Gateway.Web/wwwroot/lib/bootstrap/dist/css/bootstrap.css",
+                      "sha256":  "18A105D7CB38E01E5ED0CA255C092992A2E211B39594A7FA57262BFC6FC4EA9C"
+                  },
+                  {
+                      "path":  "src/Gateway.Web/wwwroot/lib/bootstrap/dist/css/bootstrap.css.map",
+                      "sha256":  "2B3355477A7B51919B6BDE1D9C2B6573A8D78CAE6EAD23E267F78D9CA4E60E4C"
+                  },
+                  {
+                      "path":  "src/Gateway.Web/wwwroot/lib/bootstrap/dist/css/bootstrap.min.css",
+                      "sha256":  "3C8F27E6009CCFD710A905E6DCF12D0EE3C6F2AC7DA05B0572D3E0D12E736FC8"
+                  },
+                  {
+                      "path":  "src/Gateway.Web/wwwroot/lib/bootstrap/dist/css/bootstrap.min.css.map",
+                      "sha256":  "F12338536350A422C64D02D6E43FF1DEA493C3156AD823FE19761CDD5D56C05B"
+                  },
+                  {
+                      "path":  "src/Gateway.Web/wwwroot/lib/bootstrap/dist/css/bootstrap.rtl.css",
+                      "sha256":  "8F91385C88F5A7590D9C38B4C75B5E5FD457A21D7F14D94FBC230BF589918764"
+                  },
+                  {
+                      "path":  "src/Gateway.Web/wwwroot/lib/bootstrap/dist/css/bootstrap.rtl.css.map",
+                      "sha256":  "DDB61652289560C65FBF6C2AE499D722C1E540A8122ACFD57118AF823819D61A"
+                  },
+                  {
+                      "path":  "src/Gateway.Web/wwwroot/lib/bootstrap/dist/css/bootstrap.rtl.min.css",
+                      "sha256":  "879944ECD9BC4A4788A411C763137DF6CA4FDD5B8614A97935982CA1C8A5EF39"
+                  },
+                  {
+                      "path":  "src/Gateway.Web/wwwroot/lib/bootstrap/dist/css/bootstrap.rtl.min.css.map",
+                      "sha256":  "AD3CD79677A971BFEF80502207E53B3834007CE9492DF337818E8853B78800D9"
+                  },
+                  {
+                      "path":  "src/Gateway.Web/wwwroot/lib/bootstrap/dist/js/bootstrap.bundle.js",
+                      "sha256":  "9A4A11A15DB88D5FAB08F59C1C34796B03F1F15BB3CC928DD226E1C59F7F59A3"
+                  },
+                  {
+                      "path":  "src/Gateway.Web/wwwroot/lib/bootstrap/dist/js/bootstrap.bundle.js.map",
+                      "sha256":  "5AAE1A596D6B41D27EEA8020CB525073D2018C72FD4F730A7D74C136A3AFD367"
+                  },
+                  {
+                      "path":  "src/Gateway.Web/wwwroot/lib/bootstrap/dist/js/bootstrap.bundle.min.js",
+                      "sha256":  "0833B2E9C3A26C258476C46266E6877FC75218625162E0460BE9A3A098A61C6C"
+                  },
+                  {
+                      "path":  "src/Gateway.Web/wwwroot/lib/bootstrap/dist/js/bootstrap.bundle.min.js.map",
+                      "sha256":  "5E3E0763164143BAAA1CA0706B6100BA0452F911D6CE9713B48E3DBE07B35125"
+                  },
+                  {
+                      "path":  "src/Gateway.Web/wwwroot/lib/bootstrap/dist/js/bootstrap.esm.js",
+                      "sha256":  "7B189764D243C2E7177EE8DEDC26D73DBB92EBE12BCB7CFDB0FFA9826BE1F270"
+                  },
+                  {
+                      "path":  "src/Gateway.Web/wwwroot/lib/bootstrap/dist/js/bootstrap.esm.js.map",
+                      "sha256":  "10F44B829A9691A84BC449FA0948DD33BE91218230D71747C136DE1ECB2E8FFE"
+                  },
+                  {
+                      "path":  "src/Gateway.Web/wwwroot/lib/bootstrap/dist/js/bootstrap.esm.min.js",
+                      "sha256":  "4197454F564D765CB8AE681406D5E65C54BD054D454DAFAC3DEEA1EFDE2C1514"
+                  },
+                  {
+                      "path":  "src/Gateway.Web/wwwroot/lib/bootstrap/dist/js/bootstrap.esm.min.js.map",
+                      "sha256":  "4EC6EFF33E9594D815113F31BF3FF22E8FEFE622474C08F62788648633F5AC73"
+                  },
+                  {
+                      "path":  "src/Gateway.Web/wwwroot/lib/bootstrap/dist/js/bootstrap.js",
+                      "sha256":  "F945BCD36C2055F9E36926DDC321CB954EC056995BD164E83A5BCDD429F321A7"
+                  },
+                  {
+                      "path":  "src/Gateway.Web/wwwroot/lib/bootstrap/dist/js/bootstrap.js.map",
+                      "sha256":  "F56AFB1F17BC802243A081E1E713F6F65757BC2DE43761A489F423F5CF2F631E"
+                  },
+                  {
+                      "path":  "src/Gateway.Web/wwwroot/lib/bootstrap/dist/js/bootstrap.min.js",
+                      "sha256":  "DE040986D9A3ED89D5D5F9AD6D5727015E9E238C2CD13AF8F1B55909386D0864"
+                  },
+                  {
+                      "path":  "src/Gateway.Web/wwwroot/lib/bootstrap/dist/js/bootstrap.min.js.map",
+                      "sha256":  "648D357BF9ECE3BDC62AF0021B831C82025DC6F15F148C38C6CA704221BC61EE"
+                  },
+                  {
+                      "path":  "src/Notifications.Api/Application/NotificationProcessing.cs",
+                      "sha256":  "0BBBC4C823911EF72389F636ADA7FC8B69B6F94254891860812AACB72C9754C6"
+                  },
+                  {
+                      "path":  "src/Notifications.Api/Application/NotificationWorker.cs",
+                      "sha256":  "BC151DE0CFB0CEBCB6E2EF74295FA6638386D50BCC715EF9DD7B0779C5D94A2C"
+                  },
+                  {
+                      "path":  "src/Notifications.Api/Migrations/20261004023759_InitialNotifications.Designer.cs",
+                      "sha256":  "AE06970DCC786298844ADCFCA457D1A7716E108B4C237FA960A0C7B687523131"
+                  },
+                  {
+                      "path":  "src/Notifications.Api/Migrations/20261004023759_InitialNotifications.cs",
+                      "sha256":  "CA6464DDD50A849C622BCBE2CE52334F7F9EBE6ED2AB95D1584536927AA6D4D6"
+                  },
+                  {
+                      "path":  "src/Notifications.Api/Migrations/20261004210000_Lab006Operations.cs",
+                      "sha256":  "10CC845EC7CA8EF1364BAB11DFB62558CB09C18905195A0196F984D180C43E98"
+                  },
+                  {
+                      "path":  "src/Notifications.Api/Migrations/NotificationsDbModelSnapshot.cs",
+                      "sha256":  "C4EDF0781B8135B1DA7D565926D75B93DABF734D67C1D9BE4A2B2B042FF42037"
+                  },
+                  {
+                      "path":  "src/Notifications.Api/NotificationEndpoints.cs",
+                      "sha256":  "1BB5F5BDAA3B71A26AA6DF5C9285390B0495B0E44E435F804757E7F2E683D22A"
+                  },
+                  {
+                      "path":  "src/Notifications.Api/Notifications.Api.csproj",
+                      "sha256":  "07E0CF31F5700CFD832395CF28E23910BB2F5C31D5CCC968F02F0A19E538FAD6"
+                  },
+                  {
+                      "path":  "src/Notifications.Api/Persistence/NotificationsDb.cs",
+                      "sha256":  "DFE842EA4216829E533016B6AB254A72ED5EC6C1005D6A6727C47B8DE41A4645"
+                  },
+                  {
+                      "path":  "src/Notifications.Api/Persistence/TransportStorage.cs",
+                      "sha256":  "C48ECB8AF0C4A8F516AB4026D113457147BC519B6D87632EA3D75A5163A52A56"
+                  },
+                  {
+                      "path":  "src/Notifications.Api/Program.cs",
+                      "sha256":  "A7AC353E662A7D3E1F4C8F38C563F24F4D07329E37FF22FCF28992170B67227F"
+                  },
+                  {
+                      "path":  "src/Notifications.Api/Properties/launchSettings.json",
+                      "sha256":  "B70A972F855FFCBDFF49DCE673467095D2AF4678AEB9D9A6F8F9F0CE16E03DFA"
+                  },
+                  {
+                      "path":  "src/Notifications.Api/appsettings.Development.json",
+                      "sha256":  "73F95F9E0CEB205FC1C4DC50C07697FCFA29D7087868C2AEF1D504CB38C771EC"
+                  },
+                  {
+                      "path":  "src/Notifications.Api/appsettings.json",
+                      "sha256":  "200332B434757A0054A3D356C91CDE01F2C48712BE8AA2BCB0F3E973619F06E3"
+                  },
+                  {
+                      "path":  "src/Notifications.Api/packages.lock.json",
+                      "sha256":  "EEB6911E3CD3E5711C02CEB2A5B9C644D925F3F9097E914F41EC274341327C9E"
+                  },
+                  {
+                      "path":  "src/Payments.Api/Application/PaymentProcessing.cs",
+                      "sha256":  "21F61995CA946846B8613D3B19EB8F1F77648DF5E4B6E51DC74A8CEE04D9CE28"
+                  },
+                  {
+                      "path":  "src/Payments.Api/Application/PaymentWorker.cs",
+                      "sha256":  "D57686E068E01C42A4750E570540D5EBF4CEBE918FC6DFA3F8525416FF553357"
+                  },
+                  {
+                      "path":  "src/Payments.Api/Application/RefundProcessing.cs",
+                      "sha256":  "51603F0354609AE72CBC336DCAD674519AF336DBE90D2CB75F33C7C60772BA0B"
+                  },
+                  {
+                      "path":  "src/Payments.Api/Migrations/20261004023751_InitialPayments.Designer.cs",
+                      "sha256":  "C5D1CD35AA5101E40A8FA41E9925A2D3BCCB737378069C829F554ADA6C39159F"
+                  },
+                  {
+                      "path":  "src/Payments.Api/Migrations/20261004023751_InitialPayments.cs",
+                      "sha256":  "55284AFEEEC8CA951ED3AC1E552432D4ABBC705C282E64CCD94A9DD0A6EE5810"
+                  },
+                  {
+                      "path":  "src/Payments.Api/Migrations/20261004171355_Lab005Refunds.Designer.cs",
+                      "sha256":  "3C91D71EDD5818600759815FECAB8CA7A72EDC212660DC77B2B760F96827657B"
+                  },
+                  {
+                      "path":  "src/Payments.Api/Migrations/20261004171355_Lab005Refunds.cs",
+                      "sha256":  "F4683CB3E9806F46EB91D201CA399FD061E8963B0050FD976DEBCD04B9BA4ACF"
+                  },
+                  {
+                      "path":  "src/Payments.Api/Migrations/20261004174208_Lab005RefundRetryGuard.Designer.cs",
+                      "sha256":  "9DCD9FACB254C32BEEA70A3E4E924D4BF90C90C940BAD8DBAB33D234B6D1DD53"
+                  },
+                  {
+                      "path":  "src/Payments.Api/Migrations/20261004174208_Lab005RefundRetryGuard.cs",
+                      "sha256":  "CCE64BDB937098755EAF330A996B3B650C222772F638D9644D1C96AC1B103A97"
+                  },
+                  {
+                      "path":  "src/Payments.Api/Migrations/20261004210000_Lab006Operations.cs",
+                      "sha256":  "FC574A40BE849B0D65A909A58BCA5D61BF76EC0038B571D4BAD2C9F4E1913C77"
+                  },
+                  {
+                      "path":  "src/Payments.Api/Migrations/PaymentsDbModelSnapshot.cs",
+                      "sha256":  "4822743BF1EA38774808C462051C8B7FE822C0D674318EF0438E6DF7FBC27A66"
+                  },
+                  {
+                      "path":  "src/Payments.Api/PaymentEndpoints.cs",
+                      "sha256":  "84BBF520A0A84962A1AE4AE8F482E7A909B4796CA6E5150E1173548990611367"
+                  },
+                  {
+                      "path":  "src/Payments.Api/Payments.Api.csproj",
+                      "sha256":  "07E0CF31F5700CFD832395CF28E23910BB2F5C31D5CCC968F02F0A19E538FAD6"
+                  },
+                  {
+                      "path":  "src/Payments.Api/Persistence/PaymentsDb.cs",
+                      "sha256":  "E26C9D3F8251ADE932F41BE0238BEFF012A77D7CE17F326CE82CA766455A0B52"
+                  },
+                  {
+                      "path":  "src/Payments.Api/Persistence/RefundOperation.cs",
+                      "sha256":  "567E62CFD26AAA557E7FB00FC1C6EB80502D074CD9291C338DA7905DA90AF204"
+                  },
+                  {
+                      "path":  "src/Payments.Api/Persistence/TransportStorage.cs",
+                      "sha256":  "B2302F8CD9315781E2B4CDD46DB59BC05CC1296C5850541CA562E4354AAA5F9F"
+                  },
+                  {
+                      "path":  "src/Payments.Api/Program.cs",
+                      "sha256":  "282C7C9A24D6539EB251C39DE820750AB941C4750A333CBEC13C07B809141EE0"
+                  },
+                  {
+                      "path":  "src/Payments.Api/Properties/launchSettings.json",
+                      "sha256":  "ACF0B2E3E58496EDAC95DC5969BB0B0418003D7C71CDF69861A8A4856B7B28C6"
+                  },
+                  {
+                      "path":  "src/Payments.Api/appsettings.Development.json",
+                      "sha256":  "73F95F9E0CEB205FC1C4DC50C07697FCFA29D7087868C2AEF1D504CB38C771EC"
+                  },
+                  {
+                      "path":  "src/Payments.Api/appsettings.json",
+                      "sha256":  "200332B434757A0054A3D356C91CDE01F2C48712BE8AA2BCB0F3E973619F06E3"
+                  },
+                  {
+                      "path":  "src/Payments.Api/packages.lock.json",
+                      "sha256":  "EEB6911E3CD3E5711C02CEB2A5B9C644D925F3F9097E914F41EC274341327C9E"
+                  },
+                  {
+                      "path":  "src/Reservations.Api/Application/CatalogQuoteClient.cs",
+                      "sha256":  "E71B8EF7407EC0FC725954EE0E03AB07EAAF101E328BB42E0B40F42DD7BE486B"
+                  },
+                  {
+                      "path":  "src/Reservations.Api/Application/ReservationHandlers.cs",
+                      "sha256":  "A38F9BE6E27B454E252FE06489837A154D6F46B30326BDDEE4F49FB9DED1786D"
+                  },
+                  {
+                      "path":  "src/Reservations.Api/Application/SagaCommands.cs",
+                      "sha256":  "91AA7F000081553CE214D382B9940EC2494A37F319A4C24383B107C6170B8963"
+                  },
+                  {
+                      "path":  "src/Reservations.Api/Application/SagaRecovery.cs",
+                      "sha256":  "1C9E9A3DCD78C689C9D32A620D36C8141AA6706E308309495A3BE651E4730266"
+                  },
+                  {
+                      "path":  "src/Reservations.Api/Bookings/BookingProjection.cs",
+                      "sha256":  "BDA96CB91F73894868F2835178790400EE47762F83FE8A3A5645E74AB35D6A38"
+                  },
+                  {
+                      "path":  "src/Reservations.Api/Bookings/BookingStore.cs",
+                      "sha256":  "03D0DE6D4B0A9A756D460FC1372F6C2B78A8B39220FF8F5774CB946DBC8268D5"
+                  },
+                  {
+                      "path":  "src/Reservations.Api/Messaging/ReservationConsumer.cs",
+                      "sha256":  "8F8AF6138D7AFB5EBB2B039D3AD926A12A5ED1294F28555D937CC74C154A3A8E"
+                  },
+                  {
+                      "path":  "src/Reservations.Api/Persistence/Migrations/20261003221450_InitialReservations.Designer.cs",
+                      "sha256":  "E2402EE461C20A562D314A4838450B28307880CB40AC9417BAC3895ABC7C845C"
+                  },
+                  {
+                      "path":  "src/Reservations.Api/Persistence/Migrations/20261003221450_InitialReservations.cs",
+                      "sha256":  "F16F7E40DC32C347F89384D900F03D9613376F356DDCEA8A8143311CDB57AFB3"
+                  },
+                  {
+                      "path":  "src/Reservations.Api/Persistence/Migrations/20261004023744_Lab004CompensationPrerequisite.Designer.cs",
+                      "sha256":  "1460C928CC9B630F660A5330D38795FC86F14CD089A86529DBC3658FB6A9AE21"
+                  },
+                  {
+                      "path":  "src/Reservations.Api/Persistence/Migrations/20261004023744_Lab004CompensationPrerequisite.cs",
+                      "sha256":  "1ACEFE0836BAC4EB2D6E5777AF20365A5C9F6835715C97A6AA04F25F2C3FF1C5"
+                  },
+                  {
+                      "path":  "src/Reservations.Api/Persistence/Migrations/20261004171359_Lab005Recovery.Designer.cs",
+                      "sha256":  "B8754434498235DFC6E8407CA560A47057DFDD33734225D5BFC6ED00E94A9E6F"
+                  },
+                  {
+                      "path":  "src/Reservations.Api/Persistence/Migrations/20261004171359_Lab005Recovery.cs",
+                      "sha256":  "3FB2C4F642ABC20E6149BE37B312FCA8E18D6B46F1400A853EDDE28FE52BF931"
+                  },
+                  {
+                      "path":  "src/Reservations.Api/Persistence/Migrations/20261004210000_Lab006Operations.cs",
+                      "sha256":  "B29E2FA91EBDECB63E91BBCBC7A46BFCE736F2F6A3E5716650676B3B857B642B"
+                  },
+                  {
+                      "path":  "src/Reservations.Api/Persistence/Migrations/20261011201453_Ext002BookingSnapshots.Designer.cs",
+                      "sha256":  "105F8E692D4D544EC18EEEFBBBE013C327E9FD9BDC242C42DABA85CDD43E7320"
+                  },
+                  {
+                      "path":  "src/Reservations.Api/Persistence/Migrations/20261011201453_Ext002BookingSnapshots.cs",
+                      "sha256":  "43112D9D105B9B3F50F342D3078416078D5E71FC960FAAD57EC0D83F362FD076"
+                  },
+                  {
+                      "path":  "src/Reservations.Api/Persistence/Migrations/ReservationsDbModelSnapshot.cs",
+                      "sha256":  "94A3CBD434E933ED8A4AD5421C799A3F827351B627A994C07CCB5C3B000A65AD"
+                  },
+                  {
+                      "path":  "src/Reservations.Api/Persistence/ReservationsDb.cs",
+                      "sha256":  "7CA91284DD0458A74DCD48F5053998E65F9D4ED431221415BF6DBBD71F34839D"
+                  },
+                  {
+                      "path":  "src/Reservations.Api/Program.cs",
+                      "sha256":  "4D7866A6A6B97B0B4568493E373EF81D34063D0F971B4C01FFA9F39F5DA5E4D6"
+                  },
+                  {
+                      "path":  "src/Reservations.Api/Properties/launchSettings.json",
+                      "sha256":  "B679C8B646764E6C852AA36EC5EBCE5F4DE8D670AEE92B7283BBFCD4A8105798"
+                  },
+                  {
+                      "path":  "src/Reservations.Api/ReservationEndpoints.cs",
+                      "sha256":  "214FCDFDEE9BC007D7B4EE3816F36786EA94CF5BE9F682A23F9C2D6F3DAC19EE"
+                  },
+                  {
+                      "path":  "src/Reservations.Api/Reservations.Api.csproj",
+                      "sha256":  "4E1BDD3864CAA82BB30345DE8B742E11BF680C26613A75E096ADA2C0C9BA5BC2"
+                  },
+                  {
+                      "path":  "src/Reservations.Api/appsettings.Development.json",
+                      "sha256":  "73F95F9E0CEB205FC1C4DC50C07697FCFA29D7087868C2AEF1D504CB38C771EC"
+                  },
+                  {
+                      "path":  "src/Reservations.Api/appsettings.json",
+                      "sha256":  "200332B434757A0054A3D356C91CDE01F2C48712BE8AA2BCB0F3E973619F06E3"
+                  },
+                  {
+                      "path":  "src/Reservations.Api/packages.lock.json",
+                      "sha256":  "1922098797EDF94634BEF7A9DE7981A1EEF04833961B776D15E81383DFD870ED"
+                  },
+                  {
+                      "path":  "src/Shared.Contracts/CatalogContracts.cs",
+                      "sha256":  "7E07D84CD12D4C5A2B93B36D30171D88EB0B6D018B1EE4B9FCEA44D415FF3B04"
+                  },
+                  {
+                      "path":  "src/Shared.Contracts/ExtensionContracts.cs",
+                      "sha256":  "53297EC43DA55D139025ADBF762659C20E0BC40824DF3AF79054B8054F5D9132"
+                  },
+                  {
+                      "path":  "src/Shared.Contracts/OperationsContracts.cs",
+                      "sha256":  "81E7AD9850757E6AC561DD8793363BA6EEDA98C139F1CEA8E274794A28B1CA45"
+                  },
+                  {
+                      "path":  "src/Shared.Contracts/PaymentContracts.cs",
+                      "sha256":  "E84ACD35305611A98C7FEF2BCE67FEDCDBDD836D46AA80C982DD486D8AA0F92D"
+                  },
+                  {
+                      "path":  "src/Shared.Contracts/ReservationContracts.cs",
+                      "sha256":  "6A0F36B2DBEAA03E941451E756652E4CC01E3F69915A65A6EB7BBB13508DEC40"
+                  },
+                  {
+                      "path":  "src/Shared.Contracts/ServiceStatus.cs",
+                      "sha256":  "759FF07BA042B7D10F2590F6492F343CF79F6FD551FE7964B76AB05EA421971B"
+                  },
+                  {
+                      "path":  "src/Shared.Contracts/Shared.Contracts.csproj",
+                      "sha256":  "61E3F2D043E37F0DB4BE1D8083DD31BEBBFBB8FDE2CF027327DB2556C16BC385"
+                  },
+                  {
+                      "path":  "src/Shared.Contracts/packages.lock.json",
+                      "sha256":  "2241481B7E74DCDCD600303146B730ECC12CBD8E49AA55755EF95EE499FE229A"
+                  },
+                  {
+                      "path":  "src/Shared.Infrastructure/LabHosting.cs",
+                      "sha256":  "CC88E04D2BA285C0FC59E08BFC69328F7FCCAC3101309FC4775F8E8679F2D0C4"
+                  },
+                  {
+                      "path":  "src/Shared.Infrastructure/LabTelemetry.cs",
+                      "sha256":  "95F9E4CB9CE986C3C017F9C6358D15AE4B34D93F75C4A487F886B1ED6B9B67D5"
+                  },
+                  {
+                      "path":  "src/Shared.Infrastructure/Messaging/LocalTransactions.cs",
+                      "sha256":  "FD1638D03A75DE8BF22A126F1896450F0215277B63840C79B5A324307BF05CC6"
+                  },
+                  {
+                      "path":  "src/Shared.Infrastructure/Messaging/MessageCodec.cs",
+                      "sha256":  "52CB1EA34620BF6271E07DFAB844FA5877607109A216C5F9A4133B0050A078EC"
+                  },
+                  {
+                      "path":  "src/Shared.Infrastructure/Messaging/OutboxDispatch.cs",
+                      "sha256":  "C7DB38AE97A5FB57199AC6B5C4F8EC9D7BA96D7C8D869F16D242598FA101D9BD"
+                  },
+                  {
+                      "path":  "src/Shared.Infrastructure/Messaging/SqsTransport.cs",
+                      "sha256":  "84BB0DD6C971BA082D3DCA544DE9C07F1135952173C07989501C0B7FA7E5346B"
+                  },
+                  {
+                      "path":  "src/Shared.Infrastructure/Messaging/Workers.cs",
+                      "sha256":  "18F93E061946D8A4D3CB80999001A687BD1EF1841C4419101DBB30DBE59C9091"
+                  },
+                  {
+                      "path":  "src/Shared.Infrastructure/Operations/ServiceOperations.cs",
+                      "sha256":  "BAA5ADC3A92E2BE848DABFB8A4CE9755E18AC92069E3CF080C078B692EA34EA1"
+                  },
+                  {
+                      "path":  "src/Shared.Infrastructure/RuntimeDatabaseOptions.cs",
+                      "sha256":  "C0D67014D0967A6EA8B84DB1354831C82A7A310DFDE2FE5F5C6A360EF48C9684"
+                  },
+                  {
+                      "path":  "src/Shared.Infrastructure/RuntimeSecretFiles.cs",
+                      "sha256":  "78F1D0599A6B62061768E0478F5239FE6A56D6C4A9D625BF45C1D0C4F981D2EE"
+                  },
+                  {
+                      "path":  "src/Shared.Infrastructure/Shared.Infrastructure.csproj",
+                      "sha256":  "9F2328E2414586F82330490F3EA4A8DFE63FD2FCDC98198E4319BCAB40767E93"
+                  },
+                  {
+                      "path":  "src/Shared.Infrastructure/packages.lock.json",
+                      "sha256":  "9FCD7AEF1721FB53ABA39473D702C82A58D5D1E4AE60A16868500E5337A4171C"
+                  },
+                  {
+                      "path":  "tasks/implementation-plan.md",
+                      "sha256":  "5E56CF98D673447AD07A4B6AAA18D8A30FADCB2AFF781D9A8C75E9E990B4D0B4"
+                  },
+                  {
+                      "path":  "tests/EndToEnd/angular.spec.js",
+                      "sha256":  "2F5935B1E302B6327A03C8D4FB9CA42C6320611EB23E87B0EB1FF2ACE8AC8324"
+                  },
+                  {
+                      "path":  "tests/EndToEnd/extensions.spec.js",
+                      "sha256":  "97B90B3068BFFFD39D458515B664A351FACE5150B47F0EF9CB049428A8B6F0DC"
+                  },
+                  {
+                      "path":  "tests/EndToEnd/package-lock.json",
+                      "sha256":  "232873902EEDCFA1C8F70C6FA8AA7169132FD95665F4100C2F6582752CDFE383"
+                  },
+                  {
+                      "path":  "tests/EndToEnd/package.json",
+                      "sha256":  "B54C50E48FD88390CFDD5E4ED541F03574D7459D9B0C5F1C4D8A702BCF9CE02F"
+                  },
+                  {
+                      "path":  "tests/EndToEnd/pages/login-page.js",
+                      "sha256":  "D03D502CF67293494487C0B0F9EAC4F7FA317C252C246F2B38FA657CAF2478F5"
+                  },
+                  {
+                      "path":  "tests/EndToEnd/playwright.config.js",
+                      "sha256":  "C62E9B03BBCA92ED5C420BB2E04AB4B4B7AAA536BAA62465F79386DFAB83CA97"
+                  },
+                  {
+                      "path":  "tests/EndToEnd/security.spec.js",
+                      "sha256":  "6C033B8F1E0E36FAB7559DE3A8C3E14070857A746C976BB3C41F4783B525300E"
+                  },
+                  {
+                      "path":  "tests/EndToEnd/smoke.spec.js",
+                      "sha256":  "821480AB1AA3953478E922BEE7FB2F6C9CF0C67D424319713404389111C40D9D"
+                  },
+                  {
+                      "path":  "tests/Lab.Tests/BookingExtensionTests.cs",
+                      "sha256":  "6806370096DA176DEF9EE13279D120304D66DB851F2908C35907699212527234"
+                  },
+                  {
+                      "path":  "tests/Lab.Tests/BrowserBffTests.cs",
+                      "sha256":  "90BCFE7E42C69D4DBED1F87A7E9A40ED1E66603C85661E06AF4C21CB60F60ADE"
+                  },
+                  {
+                      "path":  "tests/Lab.Tests/CatalogContractTests.cs",
+                      "sha256":  "A8D6BD3B171AA49F67F414CA02E306E58CA392D086E958FD816E7A352178AE14"
+                  },
+                  {
+                      "path":  "tests/Lab.Tests/CatalogHttpTests.cs",
+                      "sha256":  "FA674A8CF2EB9D72C54FB6B1FE0025C55300B6D238F0C7B426588E902D08C8D3"
+                  },
+                  {
+                      "path":  "tests/Lab.Tests/CatalogTests.cs",
+                      "sha256":  "A0B6606219882180D2E65005F29B7CD98A489258F80CD698A85BE3D95DC8B014"
+                  },
+                  {
+                      "path":  "tests/Lab.Tests/CircuitIsolationTests.cs",
+                      "sha256":  "DA5EEDEF3DA72E58020FD2C5F99860D6B755A6D68A78B1E0B788799A9CD791B8"
+                  },
+                  {
+                      "path":  "tests/Lab.Tests/ExtensionFactAttribute.cs",
+                      "sha256":  "B4910F1FB154F16749B5DEBEAE7D34C0BF38C7EF7CCE3BEDB7B2469FDB0EA1F3"
+                  },
+                  {
+                      "path":  "tests/Lab.Tests/ExternalProvisioningTests.cs",
+                      "sha256":  "B630B2F862641A497D0162E8C79A92F870D455D761E7A8971AA7C5AEDB4450F0"
+                  },
+                  {
+                      "path":  "tests/Lab.Tests/ImageExtensionTests.cs",
+                      "sha256":  "BD26817FFF469E590FB654B97DE394B2346AAB5DBA0DED62943B77D6891757BA"
+                  },
+                  {
+                      "path":  "tests/Lab.Tests/ImageFixtures.cs",
+                      "sha256":  "0C83D1329BDEA6E83F0BD0ED902EA4FACFA0E58DC47B20315E11B09844676B58"
+                  },
+                  {
+                      "path":  "tests/Lab.Tests/IntegrationTests.cs",
+                      "sha256":  "F017DBC786C79B5A64928CF6AEB3F4FEB8897060694607F4DB3D37EA3FB13CA5"
+                  },
+                  {
+                      "path":  "tests/Lab.Tests/JwtValidationTests.cs",
+                      "sha256":  "49E8BDCD20BB4C6A72044EDA32BB557693C13FDD6BD8EA57D52B807D8FE7AD5E"
+                  },
+                  {
+                      "path":  "tests/Lab.Tests/Lab.Tests.csproj",
+                      "sha256":  "46021FE77833C505AA59CABBD27205A978E7835F699FC9D1FC77E00F8C5A41A7"
+                  },
+                  {
+                      "path":  "tests/Lab.Tests/MessagingContractTests.cs",
+                      "sha256":  "7B88C3EC9DD32EAF82CD29BAF78C918D497FC0BB2BB0F58DE68D595EB7AD5C8E"
+                  },
+                  {
+                      "path":  "tests/Lab.Tests/MessagingTests.cs",
+                      "sha256":  "842CF479DCB2F6FF7D9A65D45A26529CBF7D7D6F1A7CE8576F0E9D2AD943408A"
+                  },
+                  {
+                      "path":  "tests/Lab.Tests/OperationsTests.cs",
+                      "sha256":  "2743F823E81AEBA5DF7B991D7504474FCCC050FA50814ED5DA5AE7C6EC4DC2B0"
+                  },
+                  {
+                      "path":  "tests/Lab.Tests/PaymentWorkflowTests.cs",
+                      "sha256":  "F73EEACDDC04C02DBCDB8FEB671485FE07E4BA1CE2009FC44A743B56CA371835"
+                  },
+                  {
+                      "path":  "tests/Lab.Tests/PersistenceTests.cs",
+                      "sha256":  "0F87422A160A1DFAB73BDAA0395B15AF925B8499C11752ED1162F2ED4091EE5B"
+                  },
+                  {
+                      "path":  "tests/Lab.Tests/QuoteResilienceTests.cs",
+                      "sha256":  "E9768849B19EDC6DBFF01E3D1E1FFDB872007A05621625A27A8561935EDE50C5"
+                  },
+                  {
+                      "path":  "tests/Lab.Tests/ReservationHttpTests.cs",
+                      "sha256":  "569B2CB3C87A1510567CA1F287605BD9929A3959EFBFDB42131B7C6116344BF1"
+                  },
+                  {
+                      "path":  "tests/Lab.Tests/ReservationInputTests.cs",
+                      "sha256":  "488822CE7BA5853BC2BD6ABD0CA7E49ED5B8D04AB68FC94E09C055558BBEC53F"
+                  },
+                  {
+                      "path":  "tests/Lab.Tests/ReservationTestSupport.cs",
+                      "sha256":  "5106BF3B429E22CC25ABBB2367713A8A4526602C0B1632293367641DC62498FF"
+                  },
+                  {
+                      "path":  "tests/Lab.Tests/RuntimeOptionsTests.cs",
+                      "sha256":  "73BFF9BDF4FF223CDE5C6FC8405A456CE906364CDE2D427D5FB2F27F5A06D2CE"
+                  },
+                  {
+                      "path":  "tests/Lab.Tests/RuntimeSecretFilesTests.cs",
+                      "sha256":  "FA9771A95D80506DDDBDF5B12C77916BE09AA57358132FB848848AE5C576B44E"
+                  },
+                  {
+                      "path":  "tests/Lab.Tests/SagaWorkflowTests.cs",
+                      "sha256":  "FA302DCF17FED1FF51A3B2331CEDC9342AB79DF499BE88EAF97CB63A20DE1793"
+                  },
+                  {
+                      "path":  "tests/Lab.Tests/SecurityTests.cs",
+                      "sha256":  "3C96A1D911EC79629578E6D11E00219B4C6104A80CA478D3226E0D85C3FF4C8F"
+                  },
+                  {
+                      "path":  "tests/Lab.Tests/packages.lock.json",
+                      "sha256":  "9A51AAD456B9D248F64D64627129AF349D2984BD36624FABE5343E65B0BC5729"
+                  },
+                  {
+                      "path":  "tools/Lab.Provisioner/DatabaseBootstrap.cs",
+                      "sha256":  "48B9FF0BE07729D719190E9EA9623090BBE2A723AE5976FE5DB14DA7AC11DD1E"
+                  },
+                  {
+                      "path":  "tools/Lab.Provisioner/ExtensionBootstrap.cs",
+                      "sha256":  "E2708BF8E8EA345AF1BF91A15593586FA5AB74D4ACF89829CD747E1505AB2D11"
+                  },
+                  {
+                      "path":  "tools/Lab.Provisioner/ExternalProvisioning.cs",
+                      "sha256":  "935CC3BD82A8A6D2B63B3133B4107217E8E2803CBBCE71F06B7D6950490D7B8B"
+                  },
+                  {
+                      "path":  "tools/Lab.Provisioner/Lab.Provisioner.csproj",
+                      "sha256":  "5E06023E6F13E1C70A1698468DB3D69B6231C6E37DDE33BA823CBB7E50714B7D"
+                  },
+                  {
+                      "path":  "tools/Lab.Provisioner/LocalConfiguration.cs",
+                      "sha256":  "5B933B2A0D1D78ECA3110A0B574E6970AB687FB37147B765BFBD46AAA919F26E"
+                  },
+                  {
+                      "path":  "tools/Lab.Provisioner/Program.cs",
+                      "sha256":  "88ADA2FB2E26AF41A9280599D2569E8FA6D9F4F18B6FBAB49FFC946D85A58FAB"
+                  },
+                  {
+                      "path":  "tools/Lab.Provisioner/QueueBootstrap.cs",
+                      "sha256":  "A4E26C94103A15028CA219E71A11B3D8FF380D01CC9EDF6804D123C66CEA035F"
+                  },
+                  {
+                      "path":  "tools/Lab.Provisioner/packages.lock.json",
+                      "sha256":  "EF7EC3797472A2E097AFB3FDFED9036943ECD0D9CA4CA45BC02297DA825662E1"
+                  }
+              ]
+}

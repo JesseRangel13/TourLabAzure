@@ -177,3 +177,24 @@ D39 — Preserve existing broker containers and SQL/DLQ data. Use fresh SQL prof
 service-owned operations/tracing migrations and existing pinned SDKs. Local emulator routing,
 replay and worker shutdown evidence is separate from remote CI, Chromium and actual Azure.
 Browser certificate verification remains mandatory; the known Chromium CA gap is not bypassed.
+
+D40 — AZ-006 preserves the source image bounds (2MiB,three images/tour,2048x2048), which are stricter
+than the Azure spec's suggested examples. Server-generated random Blob keys are independent of the
+client's stable GUID intention. Authenticated proxy downloads replace S3 signed URLs; no browser
+credentials/SAS/public access. Retain decoder/signature/CRC/ending validation and bounded concurrency.
+
+D41 — SQL image intent commits before conditional immutable Blob PUT/HEAD. Ready completion checks
+owner,lease expiry and Pending state. DeletePending retains upload lease; retained hourly-swept Deleted
+tombstones remove uncertain late objects without resurrection. Scoped bounded SQL claims use
+UPDLOCK/READPAST/READCOMMITTEDLOCK; no network in a transaction, broad purge or untracked object scan.
+Persist attempt counts/history. See images-learning.md for failure and age/retry boundaries.
+
+D42 — Pin Blob12.30.1,Core1.62.0,Identity1.21.0 forwarding facade and StbImageSharp2.30.16 after official
+API/package verification. Local credentials stay in ignored restricted profiles and only target the
+dedicated loopback Azurite account/container. Cloud is managed-identity/HTTPS preparation only;
+container-scoped RBAC/public-account restrictions still require actual Azure evidence in later tasks.
+
+D43 — Keep existing broker/data untouched. Verify images using fresh retained real SQL profiles and
+actual SDK/Azurite, plus helper-owned Catalog stop/start recovery fixtures. Angular state/render tests,
+browser discovery and Chromium/cloud verification are separate evidence. Known browser CA gap remains
+NOT VERIFIED; no TLS bypass, cloud deployment, commit/push or resource destruction.
