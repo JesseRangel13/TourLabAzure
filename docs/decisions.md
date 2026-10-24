@@ -116,3 +116,17 @@ therefore target tourlab-azure-domain-events exactly once per logical event, not
 or per-subscriber copies. This routing difference is resolved before activating a dispatcher.
 AZ-004 will add the topic/subscriptions/filters and actual broker evidence; AZ-003 asserts only
 durable intent destination, not delivery.
+## AZ-004 decisions (2026-10-24)
+
+D30 — AZ-003 independent PASS is confirmed. Port only service-owned domain/transport logic;
+replace SQS fan-out with one Service Bus topic publish and filtered subscriptions. Preserve
+durable provider/sender effects, idempotent booking and safe compensation guards internally.
+Advanced fault/admin/cancellation controls remain AZ-005. No cloud operations are authorized.
+
+D31 — Actual emulator 2.0.1 startup rejected a 14-day transport TTL: its maximum is one hour.
+Use an explicit one-hour local broker/message TTL, as documented by Microsoft's emulator
+quota/schema, while retaining SQL Inbox/idempotency/provider/tombstone records without purge
+(at least 14 days). Transport TTL and business deduplication retention are distinct. Local TTL,
+restarts and emulator persistence are not production durability proof. No existing broker accepted
+traffic before this startup validation failed; restarting the failed new lab container loses no
+accepted messages. Broker SQL volume is retained.

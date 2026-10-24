@@ -1,3 +1,6 @@
+using TourLab.Azure.Notifications.Application;
+using TourLab.Azure.Infrastructure.Messaging;
+using TourLab.Azure.Infrastructure.Operations;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using TourLab.Azure.Infrastructure;
@@ -13,11 +16,21 @@ public partial class Program
     {
         var builder = ScaffoldHosting.Create(args);
         builder.Services.AddRuntimeDatabase("notifications");
-        builder.Services.AddDbContext<NotificationsDb>((services, options) => options.UseSqlServer(
+        builder.Services.AddDbContextFactory<NotificationsDb>((services, options) => options.UseSqlServer(
             services.GetRequiredService<IOptions<RuntimeDatabase>>().Value.ConnectionString,
-            sql => { sql.MigrationsHistoryTable("__EFMigrationsHistory", "notifications"); sql.CommandTimeout(5); }));
+            sql => { sql.MigrationsHistoryTable("__EFMigrationsHistory", "notifications"); sql.CommandTimeout(5); }), ServiceLifetime.Scoped);
         builder.Services.AddBackendSecurity("Notifications");
 
+        builder.Services.AddSingleton(TimeProvider.System);
+        builder.Services.AddSingleton<WorkerStatus>();
+        builder.Services.Configure<MessagingOptions>(builder.Configuration.GetSection("Messaging"));
+        builder.Services.AddLabMessaging("notifications");
+        builder.Services.AddScoped<IInboxConsumer,NotificationConsumer>();
+        builder.Services.AddScoped<INotificationSender,DurableFakeSender>();
+        builder.Services.AddScoped<NotificationProcessor>();
+        builder.Services.Configure<NotificationWorkOptions>(o=>o.Enabled=builder.Configuration.GetValue<bool>("Messaging:Enabled"));
+        builder.Services.AddHostedService<NotificationWorker>();
+        builder.Services.ConfigureHttpJsonOptions(o=>o.SerializerOptions.RespectRequiredConstructorParameters=true);
         var app = builder.Build();
         app.MapScaffold("Notifications");
         app.UseAuthentication();
@@ -25,6 +38,7 @@ public partial class Program
         app.MapDatabaseReadiness(BackendSecurity.Human);
         app.MapBackendBoundary("Notifications");
 
+        app.MapNotifications();
         await app.RunAsync();
     }
 }

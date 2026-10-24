@@ -1,10 +1,191 @@
 {
   "UserConfig": {
-    "Namespaces": [{
-      "Name": "sbemulatorns",
-      "Queues": [],
-      "Topics": []
-    }],
-    "Logging": { "Type": "Console" }
+    "Namespaces": [
+      {
+        "Queues": [
+          {
+            "Properties": {
+              "DefaultMessageTimeToLive": "PT1H",
+              "LockDuration": "PT1M",
+              "RequiresSession": false,
+              "RequiresDuplicateDetection": false,
+              "MaxDeliveryCount": 5,
+              "DeadLetteringOnMessageExpiration": true,
+              "DuplicateDetectionHistoryTimeWindow": "PT20S"
+            },
+            "Name": "tourlab-azure-catalog-commands"
+          },
+          {
+            "Properties": {
+              "DefaultMessageTimeToLive": "PT1H",
+              "LockDuration": "PT1M",
+              "RequiresSession": false,
+              "RequiresDuplicateDetection": false,
+              "MaxDeliveryCount": 5,
+              "DeadLetteringOnMessageExpiration": true,
+              "DuplicateDetectionHistoryTimeWindow": "PT20S"
+            },
+            "Name": "tourlab-azure-reservations-commands"
+          },
+          {
+            "Properties": {
+              "DefaultMessageTimeToLive": "PT1H",
+              "LockDuration": "PT1M",
+              "RequiresSession": false,
+              "RequiresDuplicateDetection": false,
+              "MaxDeliveryCount": 5,
+              "DeadLetteringOnMessageExpiration": true,
+              "DuplicateDetectionHistoryTimeWindow": "PT20S"
+            },
+            "Name": "tourlab-azure-payments-commands"
+          },
+          {
+            "Properties": {
+              "DefaultMessageTimeToLive": "PT1H",
+              "LockDuration": "PT1M",
+              "RequiresSession": false,
+              "RequiresDuplicateDetection": false,
+              "MaxDeliveryCount": 5,
+              "DeadLetteringOnMessageExpiration": true,
+              "DuplicateDetectionHistoryTimeWindow": "PT20S"
+            },
+            "Name": "tourlab-azure-notifications-commands"
+          },
+          {
+            "Properties": {
+              "DefaultMessageTimeToLive": "PT1H",
+              "LockDuration": "PT1M",
+              "RequiresSession": false,
+              "RequiresDuplicateDetection": false,
+              "MaxDeliveryCount": 5,
+              "DeadLetteringOnMessageExpiration": true,
+              "DuplicateDetectionHistoryTimeWindow": "PT20S"
+            },
+            "Name": "tourlab-azure-receipt-jobs"
+          }
+        ],
+        "Topics": [
+          {
+            "Subscriptions": [
+              {
+                "Properties": {
+                  "DefaultMessageTimeToLive": "PT1H",
+                  "MaxDeliveryCount": 5,
+                  "DeadLetteringOnMessageExpiration": true,
+                  "RequiresSession": false,
+                  "LockDuration": "PT1M"
+                },
+                "Rules": [
+                  {
+                    "Properties": {
+                      "SqlFilter": {
+                        "SqlExpression": "1=0"
+                      },
+                      "FilterType": "Sql"
+                    },
+                    "Name": "explicit-types-v1"
+                  }
+                ],
+                "Name": "catalog-events"
+              },
+              {
+                "Properties": {
+                  "DefaultMessageTimeToLive": "PT1H",
+                  "MaxDeliveryCount": 5,
+                  "DeadLetteringOnMessageExpiration": true,
+                  "RequiresSession": false,
+                  "LockDuration": "PT1M"
+                },
+                "Rules": [
+                  {
+                    "Properties": {
+                      "SqlFilter": {
+                        "SqlExpression": "type = 'SeatsHeld' OR type = 'SeatsHoldRejected' OR type = 'SeatsConfirmed' OR type = 'SeatsConfirmationRejected' OR type = 'SeatsHoldExpired' OR type = 'SeatsReleased' OR type = 'TourSessionChanged' OR type = 'PaymentSucceeded' OR type = 'PaymentDeclined' OR type = 'PaymentOutcomeUnknown' OR type = 'PaymentRefunded' OR type = 'RefundNeedsReview'"
+                      },
+                      "FilterType": "Sql"
+                    },
+                    "Name": "explicit-types-v1"
+                  }
+                ],
+                "Name": "reservations-events"
+              },
+              {
+                "Properties": {
+                  "DefaultMessageTimeToLive": "PT1H",
+                  "MaxDeliveryCount": 5,
+                  "DeadLetteringOnMessageExpiration": true,
+                  "RequiresSession": false,
+                  "LockDuration": "PT1M"
+                },
+                "Rules": [
+                  {
+                    "Properties": {
+                      "SqlFilter": {
+                        "SqlExpression": "1=0"
+                      },
+                      "FilterType": "Sql"
+                    },
+                    "Name": "explicit-types-v1"
+                  }
+                ],
+                "Name": "payments-events"
+              },
+              {
+                "Properties": {
+                  "DefaultMessageTimeToLive": "PT1H",
+                  "MaxDeliveryCount": 5,
+                  "DeadLetteringOnMessageExpiration": true,
+                  "RequiresSession": false,
+                  "LockDuration": "PT1M"
+                },
+                "Rules": [
+                  {
+                    "Properties": {
+                      "SqlFilter": {
+                        "SqlExpression": "type = 'ReservationConfirmed' OR type = 'ReservationFailed' OR type = 'ReservationCancelled'"
+                      },
+                      "FilterType": "Sql"
+                    },
+                    "Name": "explicit-types-v1"
+                  }
+                ],
+                "Name": "notifications-events"
+              },
+              {
+                "Properties": {
+                  "DefaultMessageTimeToLive": "PT1H",
+                  "MaxDeliveryCount": 5,
+                  "DeadLetteringOnMessageExpiration": true,
+                  "RequiresSession": false,
+                  "LockDuration": "PT1M"
+                },
+                "Rules": [
+                  {
+                    "Properties": {
+                      "SqlFilter": {
+                        "SqlExpression": "type = 'BookingSnapshotChanged'"
+                      },
+                      "FilterType": "Sql"
+                    },
+                    "Name": "explicit-types-v1"
+                  }
+                ],
+                "Name": "dashboard-events"
+              }
+            ],
+            "Properties": {
+              "DefaultMessageTimeToLive": "PT1H",
+              "DuplicateDetectionHistoryTimeWindow": "PT20S",
+              "RequiresDuplicateDetection": false
+            },
+            "Name": "tourlab-azure-domain-events"
+          }
+        ],
+        "Name": "sbemulatorns"
+      }
+    ],
+    "Logging": {
+      "Type": "Console"
+    }
   }
 }

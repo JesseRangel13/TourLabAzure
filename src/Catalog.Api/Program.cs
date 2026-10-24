@@ -1,3 +1,6 @@
+using TourLab.Azure.Infrastructure.Messaging;
+using TourLab.Azure.Infrastructure.Operations;
+using TourLab.Azure.Catalog.Messaging;
 using TourLab.Azure.Catalog.Application;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
@@ -27,6 +30,12 @@ public partial class Program
         builder.Services.AddScoped<QuoteHandler>();
         builder.Services.AddScoped<InventoryHandlers>();
         builder.Services.AddHostedService<HoldExpiryWorker>();
+
+        builder.Services.AddSingleton<WorkerStatus>();
+        builder.Services.Configure<MessagingOptions>(builder.Configuration.GetSection("Messaging"));
+        builder.Services.AddLabMessaging("catalog");
+        builder.Services.AddScoped<IInboxConsumer, CatalogConsumer>();
+        builder.Services.ConfigureHttpJsonOptions(o=>o.SerializerOptions.RespectRequiredConstructorParameters=true);
         var app = builder.Build();
         app.MapScaffold("Catalog");
         app.UseAuthentication();

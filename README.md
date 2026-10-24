@@ -25,16 +25,17 @@ AZ-001 isolation/scaffold; AZ-002 SQL Server/Identity; AZ-003 Catalog + Angular/
 
 Read specs/07-acceptance.md and tasks/implementation-plan.md for scope and gates. Local functionality comes before cloud spending. All payments, notification deliveries, and booking receipts are explicitly simulated.
 
-## Current implementation — AZ-003 (2026-10-23)
+## Current implementation — AZ-004 (2026-10-24)
 
-AZ-002 has an independent PASS. AZ-003 Catalog/quotes/atomic inventory and Angular Catalog/Admin
-controls are implemented, awaiting independent review.
-Start with [Catalog execution](docs/catalog-execution.md), [learning walkthrough](docs/catalog-learning.md),
-and [AZ-003 evidence](docs/evidence/AZ-003.md).
-The real SQL profile is a new isolated SQL Server 2025 LocalDB database; use Verify-Catalog.ps1
-and its printed configuration directory. Existing default SQL files are preserved.
-Broker/booking success is AZ-004; images are AZ-006. Browser CA trust and cloud evidence remain separate.
-The original AWS/Blazor repository is read-only and unchanged.
+AZ-003 has an independent PASS. AZ-004 is **Implemented Awaiting Review**:
+Service Bus routing, SQL Outbox/Inbox, idempotent bookings, durable simulated payments/notifications,
+and basic Angular booking/detail/payment/notification pages.
+Start with [booking execution](docs/booking-execution.md), [learning walkthrough](docs/booking-learning.md),
+[actual routing](docs/servicebus-routing-v1.md) and [AZ-004 evidence](docs/evidence/AZ-004.md).
+Real SQL and the authorized local Service Bus emulator completed the live HTTPS booking checks.
+Browser CA trust and all cloud execution remain separate NOT VERIFIED gaps.
+The original AWS/Blazor repository remains read-only. Next: Antigravity AZ-004 review, then AZ-005.
+
 ## AZ-001 implementation status (2026-10-23)
 
 The independent scaffold is now present: five API processes, isolated Functions, Angular21/NGXS,

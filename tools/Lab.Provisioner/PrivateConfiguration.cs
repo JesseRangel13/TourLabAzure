@@ -93,6 +93,7 @@ public static class PrivateConfiguration
                     ? new { PrivateKeyPath = Path.Combine(output, "quote-signing.key") } as object
                     : new { PublicKeyPath = Path.Combine(output, "quote-signing.pub") }
             };
+            if (schema == "reservations") { settings["Catalog"] = new { BaseAddress = "https://localhost:9444/" }; settings["Tls"] = new { CaPath = Path.Combine(root, ".local", "certificates", "ca.crt") }; }
             if (schema == "identity")
             {
                 settings["DataProtection"] = new { CertificatePath = Path.Combine(output, "data-protection.pfx"), CertificatePassword = dpPassword };

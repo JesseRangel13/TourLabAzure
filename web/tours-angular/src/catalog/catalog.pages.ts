@@ -1,3 +1,4 @@
+import { BookingForm } from "../reservations/reservations.pages";
 import { Component, DestroyRef, effect, inject, input } from '@angular/core';
 import { CurrencyPipe, DatePipe } from '@angular/common';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
@@ -61,7 +62,7 @@ export class SessionEditor {
         <button [disabled]="create.invalid || vm().saving">Create tour</button>
       </form></section>
     }
-    <p>Booking and images arrive in later tasks. Payments and notification deliveries are simulated.</p>
+    <p>Choose a session to book. Payments and notification deliveries are simulated. Images arrive in AZ-006.</p>
   </main>`
 })
 export class CatalogListPage {
@@ -82,7 +83,7 @@ export class CatalogListPage {
   }
 }
 @Component({
-  standalone: true, imports: [ReactiveFormsModule, RouterLink, DatePipe, CurrencyPipe, SessionEditor],
+  standalone: true, imports: [ReactiveFormsModule, RouterLink, DatePipe, CurrencyPipe, SessionEditor, BookingForm],
   template: `<main><a routerLink="/tours">All tours</a>
     @if (vm().detailLoading) { <p role="status">Loading tour…</p> }
     @if (vm().error) { <p role="alert">{{ vm().error }}</p> }
@@ -110,7 +111,7 @@ export class CatalogListPage {
         <section [attr.aria-label]="'Session ' + session.startsAtUtc">
           <h3>{{ session.startsAtUtc | date:'medium':'UTC' }} UTC</h3>
           <p>{{ session.unitAmountMinor / 100 | currency:'MXN' }} per participant · {{ session.availableSeats }} / {{ session.capacity }} seats available</p>
-          @if (auth().user?.role === 'Admin') { <app-session-editor [session]="session" /> }
+          @if (tour.active) { <app-booking-form [session]="session" /> } @if (auth().user?.role === 'Admin') { <app-session-editor [session]="session" /> }
         </section>
       }
     }

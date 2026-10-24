@@ -31,13 +31,19 @@ public sealed class InboxEntry
 
 public sealed class NotificationsDb(DbContextOptions<NotificationsDb> options) : DbContext(options)
 {
+    public DbSet<Notification> Notifications => Set<Notification>();
+    public DbSet<DeliveryReceipt> Receipts => Set<DeliveryReceipt>();
+    public DbSet<NotificationFault> Faults => Set<NotificationFault>();
+    public DbSet<NotificationAudit> Audit => Set<NotificationAudit>();
     public DbSet<OutboxEntry> Outbox => Set<OutboxEntry>();
     public DbSet<InboxEntry> Inbox => Set<InboxEntry>();
 
+    protected override void ConfigureConventions(ModelConfigurationBuilder configuration) => configuration.Properties<DateTimeOffset>().HaveConversion<TourLab.Azure.Infrastructure.Persistence.UtcOffsetConverter>().HaveColumnType("datetime2");
     protected override void OnModelCreating(ModelBuilder model)
     {
         model.HasDefaultSchema("notifications");
         model.UseCollation("Latin1_General_100_BIN2");
+        BookingModel.Configure(model);
         model.Entity<OutboxEntry>(b =>
         {
             b.ToTable("Outbox", table => table.HasCheckConstraint("CK_Outbox_Json", "ISJSON([EnvelopeJson])=1"));

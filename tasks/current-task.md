@@ -1,26 +1,30 @@
 # Current task
 
-AZ-003 — **Verified** (2026-10-23).
-Branch: codex/az003-catalog. Baseline: f4a49fa050285f0909d0fedf7e9a7ad426547b71.
-Antigravity independent PASS is recorded in docs/reviews/AZ-003.md.
+AZ-004 — **Verified** (2026-10-24).
+Branch: codex/az004-booking.
+Baseline: fb222a5fd21f47b3664d9df110a84c34f7894883.
+Prerequisite: actual independent Antigravity AZ-003 PASS in docs/reviews/AZ-003.md; independent Antigravity AZ-004 PASS in docs/reviews/AZ-004.md.
 
-Delivered: Catalog tour search/detail/create/edit/activation, future sessions, versioned price/capacity,
-service-only five-minute quote snapshots, atomic SQL inventory, hold/confirm/release/tombstone,
-scoped expiry workers, idempotent Azure-only synthetic seeds and durable single-topic Outbox intents.
-Angular typed clients, shared NGXS selectors/actions, stale/cancelled-load/account reset handling,
-tour search/pagination/detail and reactive Admin controls are implemented.
-Authenticated Development-only OpenAPI describes the typed contract.
+Delivered: Service Bus SDK command queues and filtered single-topic events; leased SQL Outbox,
+transactional Inbox/manual settlement; idempotent booking and success Saga; independent durable
+simulated charge/reconciliation and notification receipts; basic Angular booking/detail/timeline,
+paginated payment/notification pages and per-user NGXS state/reset/error/cancellation guards.
 
-Executed: Windows PowerShell 5.1 foundation (0 build warnings/errors, 18 .NET tests,
-22 Angular tests, 0 npm vulnerabilities, production build, Compose validation);
-real SQL/security/Catalog 52 passed / 3 intentional separate live skips;
-live HTTPS Catalog/CSRF/roles, bearer transformation and Gateway restart/TLS tests passed.
-Migration/model consistency, PowerShell parsing, pinned actionlint and NuGet audit passed.
+Executed: Windows PowerShell5.1 foundation (0 warnings/errors,18 .NET tests,32 Angular tests,
+0 npm vulnerabilities, production build361.14kB, Compose validation); real SQL suite60 passed,
+7 separate live skips; actual broker/HTTPS workflow7 passed (routing, real redelivery, complete booking,
+owned404, poison built-in DLQ, BFF/CSRF/roles and Gateway restart/TLS).
+Four migration/model comparisons, actionlint, NuGet audit and PowerShell5.1 parsing passed.
+Source HEAD/status and all416 tracked content hashes unchanged, including pre-existing dirty CI file.
 
-NOT VERIFIED: Chromium UI (known CA-trust gap; Catalog Playwright smoke is implemented and discovered),
-Docker SQL/container image execution, actual Azure SQL/managed identity or cloud deployment.
-The existing default .local/sql file collision is preserved; use the fresh profile printed by Verify-Catalog.
-No source mutation, existing-data deletion, remote push or cloud operation.
+Docker Desktop started by user; both Microsoft licenses explicitly accepted.
+Only Azure lab broker-sql/servicebus containers started; they remain running and data/DLQ probes retained.
+Five verification HTTPS host process trees stopped; ports9443..9447 free.
+No data deletion, source mutation, commit/push or cloud operation.
 
-Read docs/evidence/AZ-003.md, docs/catalog-execution.md and docs/catalog-learning.md.
-Next: independent Antigravity AZ-003 review, then AZ-004 Service Bus and reservation success slice.
+NOT VERIFIED: Chromium UI (known CA trust gap; six smoke tests discovered), Docker application SQL/
+application images, remote CI, actual Azure/RBAC/managed identity and emulator restart durability.
+
+Read docs/evidence/AZ-004.md, docs/booking-execution.md, docs/booking-learning.md,
+docs/servicebus-routing-v1.md and docs/parity-matrix.md.
+Next: independent Antigravity AZ-004 review; resolve findings before AZ-005 full Saga/admin/API/UI parity.

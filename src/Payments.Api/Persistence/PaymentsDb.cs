@@ -31,13 +31,21 @@ public sealed class InboxEntry
 
 public sealed class PaymentsDb(DbContextOptions<PaymentsDb> options) : DbContext(options)
 {
+    public DbSet<PaymentOperation> Operations => Set<PaymentOperation>();
+    public DbSet<ProviderEffect> Effects => Set<ProviderEffect>();
+    public DbSet<RefundOperation> Refunds => Set<RefundOperation>();
+    public DbSet<ProviderRefund> ProviderRefunds => Set<ProviderRefund>();
+    public DbSet<PaymentFault> Faults => Set<PaymentFault>();
+    public DbSet<PaymentAudit> Audit => Set<PaymentAudit>();
     public DbSet<OutboxEntry> Outbox => Set<OutboxEntry>();
     public DbSet<InboxEntry> Inbox => Set<InboxEntry>();
 
+    protected override void ConfigureConventions(ModelConfigurationBuilder configuration) => configuration.Properties<DateTimeOffset>().HaveConversion<TourLab.Azure.Infrastructure.Persistence.UtcOffsetConverter>().HaveColumnType("datetime2");
     protected override void OnModelCreating(ModelBuilder model)
     {
         model.HasDefaultSchema("payments");
         model.UseCollation("Latin1_General_100_BIN2");
+        BookingModel.Configure(model);
         model.Entity<OutboxEntry>(b =>
         {
             b.ToTable("Outbox", table => table.HasCheckConstraint("CK_Outbox_Json", "ISJSON([EnvelopeJson])=1"));

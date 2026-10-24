@@ -31,13 +31,20 @@ public sealed class InboxEntry
 
 public sealed class ReservationsDb(DbContextOptions<ReservationsDb> options) : DbContext(options)
 {
+    public DbSet<Reservation> Reservations => Set<Reservation>();
+    public DbSet<ReservationSaga> Sagas => Set<ReservationSaga>();
+    public DbSet<IdempotencyRequest> Idempotency => Set<IdempotencyRequest>();
+    public DbSet<TransitionHistory> History => Set<TransitionHistory>();
+    public DbSet<TourProjection> Projections => Set<TourProjection>();
     public DbSet<OutboxEntry> Outbox => Set<OutboxEntry>();
     public DbSet<InboxEntry> Inbox => Set<InboxEntry>();
 
+    protected override void ConfigureConventions(ModelConfigurationBuilder configuration) => configuration.Properties<DateTimeOffset>().HaveConversion<TourLab.Azure.Infrastructure.Persistence.UtcOffsetConverter>().HaveColumnType("datetime2");
     protected override void OnModelCreating(ModelBuilder model)
     {
         model.HasDefaultSchema("reservations");
         model.UseCollation("Latin1_General_100_BIN2");
+        BookingModel.Configure(model);
         model.Entity<OutboxEntry>(b =>
         {
             b.ToTable("Outbox", table => table.HasCheckConstraint("CK_Outbox_Json", "ISJSON([EnvelopeJson])=1"));

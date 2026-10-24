@@ -1,5 +1,5 @@
 [CmdletBinding()]
-param([string]$ConfigurationDirectory = '.local/sql')
+param([string]$ConfigurationDirectory = '.local/sql', [switch]$IncludeBooking)
 $ErrorActionPreference = 'Stop'
 . "$PSScriptRoot/Use-Toolchain.ps1"
 $root = Split-Path $PSScriptRoot
@@ -48,6 +48,10 @@ try {
     $env:AZURELAB_INTEGRATION_CONFIG = Join-Path $privateRoot 'provisioner.json'
     & dotnet test tests/Scaffold.Tests -c Release --no-build --filter 'FullyQualifiedName~LiveBffTests.RoundTrip' --logger 'trx;LogFileName=AZ-002-https-roundtrip.trx'
     if ($LASTEXITCODE -ne 0) { throw 'Live HTTPS BFF roundtrip failed.' }
+    if ($IncludeBooking) {
+        & dotnet test tests/Scaffold.Tests -c Release --no-build --filter 'FullyQualifiedName~LiveBookingTests' --logger 'trx;LogFileName=AZ-004-live-booking.trx'
+        if ($LASTEXITCODE -ne 0) { throw 'Live Service Bus booking/ownership checks failed.' }
+    }
     Stop-LabHost $processes['Gateway']
     Start-LabHost 'Gateway'
     & dotnet test tests/Scaffold.Tests -c Release --no-build --filter 'FullyQualifiedName~LiveBffTests.Restarted' --logger 'trx;LogFileName=AZ-002-https-restart.trx'
