@@ -40,7 +40,7 @@ jobs:
       - name: Build and execute non-relational tests
         run: |
           dotnet build TourLab.Azure.slnx -c Release --no-restore
-          dotnet test tests/Scaffold.Tests -c Release --no-build --filter "FullyQualifiedName!~SqlIsolationTests&FullyQualifiedName!~IdentityHttpTests&FullyQualifiedName!~LiveBffTests&FullyQualifiedName!~CatalogTests&FullyQualifiedName!~CatalogHttpTests&FullyQualifiedName!~BookingSqlTests&FullyQualifiedName!~BrokerIntegrationTests&FullyQualifiedName!~LiveBookingTests"
+          dotnet test tests/Scaffold.Tests -c Release --no-build --filter "FullyQualifiedName!~SqlIsolationTests&FullyQualifiedName!~IdentityHttpTests&FullyQualifiedName!~LiveBffTests&FullyQualifiedName!~CatalogTests&FullyQualifiedName!~CatalogHttpTests&FullyQualifiedName!~BookingSqlTests&FullyQualifiedName!~BrokerIntegrationTests&FullyQualifiedName!~LiveBookingTests&FullyQualifiedName!~RecoverySqlTests&FullyQualifiedName!~RecoveryHttpTests&FullyQualifiedName!~BrokerRecoveryTests&FullyQualifiedName!~LiveRecoveryTests"
       - name: Angular locked install and tests
         working-directory: web/tours-angular
         run: |
@@ -81,7 +81,7 @@ jobs:
           ./scripts/New-LocalConfiguration.ps1
           ./scripts/Start-Sql.ps1 -AcceptSqlDeveloperLicense
       - name: Real SQL permission, Identity, Catalog and booking recovery checks
-        run: ./scripts/Verify-Booking.ps1 -Profile Docker
+        run: ./scripts/Verify-Recovery.ps1 -Profile Docker
       - name: Stop this run SQL without deleting data
         if: always()
         run: |

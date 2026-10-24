@@ -42,6 +42,7 @@ public sealed class ReservationsDb(DbContextOptions<ReservationsDb> options) : D
     protected override void ConfigureConventions(ModelConfigurationBuilder configuration) => configuration.Properties<DateTimeOffset>().HaveConversion<TourLab.Azure.Infrastructure.Persistence.UtcOffsetConverter>().HaveColumnType("datetime2");
     protected override void OnModelCreating(ModelBuilder model)
     {
+        OperationsModel.Configure(model);
         model.HasDefaultSchema("reservations");
         model.UseCollation("Latin1_General_100_BIN2");
         BookingModel.Configure(model);

@@ -1,3 +1,6 @@
+import { AdminState } from './admin/admin.state';
+import { SagasPage, SimulationsPage, OperationsPage } from './admin/admin.pages';
+import { EffectsState, EffectDetailPage, ProjectionsPage } from './reservations/effects.state';
 import { ReservationsState } from "./reservations/reservations.state";
 import { ReservationsPage, ReservationDetailPage, PersonalEffectsPage } from "./reservations/reservations.pages";
 import { adminGuard } from "./catalog/admin.guard";
@@ -19,7 +22,7 @@ import { AccountPage } from './auth/account.page';
 @Component({
   standalone: true,
   template: `<main>
-    <p>EDUCATIONAL LAB · AZ-004</p>
+    <p>EDUCATIONAL LAB</p>
     <h1>TourLab Azure</h1>
     <p>An independent Angular 21 and .NET 10 microservices companion.</p>
     <p>Sign in to browse tours, sessions and availability. Booking and simulated payment/notification workflows are available locally. Receipt downloads arrive in a later task.
@@ -43,7 +46,7 @@ class FoundationPage {
   selector: 'app-root', standalone: true, imports: [RouterOutlet, RouterLink],
   template: `<nav aria-label="Main navigation"><a routerLink="/">Home</a>
     @if (auth().user) {
-      <a routerLink="/tours">Tours</a><a routerLink="/reservations">My bookings</a><a routerLink="/payments">Payments</a><a routerLink="/notifications">Notifications</a>@if (auth().user?.role === 'Admin') { <a routerLink="/admin/catalog">Admin catalog</a> }<a routerLink="/account">My account</a><button (click)="logout()" [disabled]="auth().loading">Sign out</button>
+      <a routerLink="/tours">Tours</a><a routerLink="/tour-projections">Informational prices</a><a routerLink="/reservations">My bookings</a><a routerLink="/payments">Payments</a><a routerLink="/notifications">Notifications</a>@if (auth().user?.role === 'Admin') { <a routerLink="/admin/catalog">Admin catalog</a><a routerLink="/admin/sagas">Sagas</a><a routerLink="/simulations">Simulations</a><a routerLink="/operations">Operations</a> }<a routerLink="/account">My account</a><button (click)="logout()" [disabled]="auth().loading">Sign out</button>
     } @else { <a routerLink="/login">Sign in</a> }
   </nav>
   @if (auth().error) { <p role="alert" class="session-message">{{ auth().error }}</p> }
@@ -61,9 +64,9 @@ class App {
 bootstrapApplication(App, {
   providers: [
     provideHttpClient(withXsrfConfiguration({ cookieName: 'AZURELAB-XSRF-TOKEN', headerName: 'X-AZURELAB-XSRF-TOKEN' }), withInterceptors([sessionExpiryInterceptor])),
-    provideStore([ScaffoldState, AuthState, CatalogState, ReservationsState]),
+    provideStore([ScaffoldState, AuthState, CatalogState, ReservationsState, AdminState, EffectsState]),
     provideRouter([{ path: '', component: FoundationPage }, { path: 'login', component: LoginPage },
-      { path: 'reservations', component: ReservationsPage, canActivate: [authGuard] }, { path: 'reservations/:id', component: ReservationDetailPage, canActivate: [authGuard] }, { path: 'payments', component: PersonalEffectsPage, canActivate: [authGuard], data: { kind: 'payments' } }, { path: 'notifications', component: PersonalEffectsPage, canActivate: [authGuard], data: { kind: 'notifications' } }, { path: 'tours', component: CatalogListPage, canActivate: [authGuard] }, { path: 'tours/:id', component: CatalogDetailPage, canActivate: [authGuard] }, { path: 'admin/catalog', component: CatalogListPage, canActivate: [authGuard, adminGuard] }, { path: 'account', component: AccountPage, canActivate: [authGuard] }, { path: '**', redirectTo: '' }]),
+      {path:'admin/sagas',component:SagasPage,canActivate:[authGuard,adminGuard]}, {path:'simulations',component:SimulationsPage,canActivate:[authGuard,adminGuard]}, {path:'operations',component:OperationsPage,canActivate:[authGuard,adminGuard]}, {path:'tour-projections',component:ProjectionsPage,canActivate:[authGuard]}, {path:'payments/:id',component:EffectDetailPage,canActivate:[authGuard],data:{kind:'payments'}}, {path:'notifications/:id',component:EffectDetailPage,canActivate:[authGuard],data:{kind:'notifications'}}, { path: 'reservations', component: ReservationsPage, canActivate: [authGuard] }, { path: 'reservations/:id', component: ReservationDetailPage, canActivate: [authGuard] }, { path: 'payments', component: PersonalEffectsPage, canActivate: [authGuard], data: { kind: 'payments' } }, { path: 'notifications', component: PersonalEffectsPage, canActivate: [authGuard], data: { kind: 'notifications' } }, { path: 'tours', component: CatalogListPage, canActivate: [authGuard] }, { path: 'tours/:id', component: CatalogDetailPage, canActivate: [authGuard] }, { path: 'admin/catalog', component: CatalogListPage, canActivate: [authGuard, adminGuard] }, { path: 'account', component: AccountPage, canActivate: [authGuard] }, { path: '**', redirectTo: '' }]),
     provideAppInitializer(() => firstValueFrom(inject(Store).dispatch(new LoadCurrentUser())).catch(() => undefined))
   ]
 }).catch(() => console.error('Angular bootstrap failed'));

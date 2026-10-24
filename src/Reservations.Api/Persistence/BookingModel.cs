@@ -27,4 +27,5 @@ internal static class BookingModel { public static void Configure(ModelBuilder m
             b.HasOne<ReservationSaga>().WithMany().HasForeignKey(x => x.SagaId).OnDelete(DeleteBehavior.Restrict); });
         model.Entity<TourProjection>(b => { b.ToTable("TourProjections"); b.HasKey(x => x.SessionId); b.Property(x => x.Name).HasMaxLength(200); b.Property(x => x.Currency).HasMaxLength(3); });
 
+        model.Entity<ReservationSaga>().Property(x=>x.Traceparent).HasMaxLength(512); model.Entity<ReservationSaga>().Property(x=>x.Tracestate).HasMaxLength(512);
 } }

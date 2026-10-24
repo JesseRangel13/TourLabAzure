@@ -56,6 +56,47 @@ namespace Notifications.Api.Persistence.Migrations
                     b.ToTable("DeliveryReceipts", "notifications");
                 });
 
+            modelBuilder.Entity("TourLab.Azure.Notifications.Persistence.DlqReplay", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("BodyHash")
+                        .IsRequired()
+                        .HasMaxLength(64)
+                        .HasColumnType("nvarchar(64)");
+
+                    b.Property<DateTime>("InspectedAtUtc")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid?>("LeaseOwner")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime?>("LeaseUntilUtc")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid?>("LogicalMessageId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<long>("SequenceNumber")
+                        .HasColumnType("bigint");
+
+                    b.Property<string>("Source")
+                        .IsRequired()
+                        .HasMaxLength(16)
+                        .HasColumnType("nvarchar(16)");
+
+                    b.Property<string>("Status")
+                        .IsRequired()
+                        .HasMaxLength(40)
+                        .HasColumnType("nvarchar(40)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("DlqReplays", "notifications");
+                });
+
             modelBuilder.Entity("TourLab.Azure.Notifications.Persistence.InboxEntry", b =>
                 {
                     b.Property<string>("ConsumerName")
@@ -130,6 +171,14 @@ namespace Notifications.Api.Persistence.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("Traceparent")
+                        .HasMaxLength(512)
+                        .HasColumnType("nvarchar(512)");
+
+                    b.Property<string>("Tracestate")
+                        .HasMaxLength(512)
+                        .HasColumnType("nvarchar(512)");
+
                     b.Property<string>("UserId")
                         .IsRequired()
                         .HasMaxLength(128)
@@ -199,6 +248,35 @@ namespace Notifications.Api.Persistence.Migrations
                             Mode = "None",
                             Remaining = 0
                         });
+                });
+
+            modelBuilder.Entity("TourLab.Azure.Notifications.Persistence.OperationsAudit", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Action")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<string>("Actor")
+                        .IsRequired()
+                        .HasMaxLength(128)
+                        .HasColumnType("nvarchar(128)");
+
+                    b.Property<DateTime>("OccurredAtUtc")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid?>("ReplayId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("OccurredAtUtc");
+
+                    b.ToTable("OperationsAudit", "notifications");
                 });
 
             modelBuilder.Entity("TourLab.Azure.Notifications.Persistence.OutboxEntry", b =>

@@ -22,7 +22,7 @@ public partial class Program
         builder.Services.AddBackendSecurity("Notifications");
 
         builder.Services.AddSingleton(TimeProvider.System);
-        builder.Services.AddSingleton<WorkerStatus>();
+        builder.Services.AddServiceOperations(builder.Configuration,builder.Environment,"notifications");
         builder.Services.Configure<MessagingOptions>(builder.Configuration.GetSection("Messaging"));
         builder.Services.AddLabMessaging("notifications");
         builder.Services.AddScoped<IInboxConsumer,NotificationConsumer>();
@@ -35,6 +35,7 @@ public partial class Program
         app.MapScaffold("Notifications");
         app.UseAuthentication();
         app.UseAuthorization();
+        app.MapServiceOperations("notifications");
         app.MapDatabaseReadiness(BackendSecurity.Human);
         app.MapBackendBoundary("Notifications");
 

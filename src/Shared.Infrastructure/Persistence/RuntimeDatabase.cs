@@ -1,3 +1,4 @@
+using TourLab.Azure.Infrastructure.Messaging;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Data.SqlClient;
@@ -67,7 +68,7 @@ public static class RuntimeDatabaseRegistration
 
     public static void MapDatabaseReadiness(this WebApplication app, string policy)
     {
-        app.MapGet("/health/ready", async (IOptions<RuntimeDatabase> settings, CancellationToken ct) =>
+        app.MapGet("/health/ready", async (HttpContext http, IOptions<RuntimeDatabase> settings, CancellationToken ct) =>
         {
             await using var connection = new SqlConnection(settings.Value.ConnectionString);
             try
@@ -78,7 +79,19 @@ public static class RuntimeDatabaseRegistration
                 command.Parameters.AddWithValue("@user", $"tourlab_azure_{settings.Value.Schema}");
                 command.Parameters.AddWithValue("@role", $"tourlab_azure_{settings.Value.Schema}_runtime");
                 var ready = (int)(await command.ExecuteScalarAsync(ct) ?? 0) == 1;
-                return ready ? Results.Ok(new { status = "Ready" }) :
+                var messaging=http.RequestServices.GetService<IOptions<MessagingOptions>>()?.Value.Enabled==true;
+                if(ready && messaging){
+                    using var budget=CancellationTokenSource.CreateLinkedTokenSource(ct);budget.CancelAfter(TimeSpan.FromSeconds(3));
+                    try{
+                        var transport=http.RequestServices.GetRequiredService<ServiceBusTransport>();
+                        await using var receiver=transport.Client.CreateReceiver(BusTopology.CommandQueue(settings.Value.Schema));
+                        await receiver.PeekMessagesAsync(1,cancellationToken:budget.Token);
+                    }catch(Exception error) when(error is global::Azure.Messaging.ServiceBus.ServiceBusException or OperationCanceledException){
+                        if(ct.IsCancellationRequested)throw;
+                        return Results.Problem(statusCode:503,title:"Owned message transport is unavailable",extensions:new Dictionary<string,object?>{["code"]="BrokerUnavailable"});
+                    }
+                }
+                return ready ? Results.Ok(new { status = "Ready", database="Ready", messaging=messaging?"Ready":"Disabled" }) :
                     Results.Problem(statusCode: 503, title: "Owned database principal is not ready", extensions: new Dictionary<string, object?> { ["code"] = "DatabaseNotReady" });
             }
             catch (SqlException)

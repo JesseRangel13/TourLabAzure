@@ -1,6 +1,8 @@
 namespace TourLab.Azure.Notifications.Persistence;
 public sealed class Notification
 {
+    public string? Traceparent {get;set;}
+    public string? Tracestate {get;set;}
     public Guid Id {get;set;}
     public Guid ReservationId {get;set;}
     public Guid SagaId {get;set;}

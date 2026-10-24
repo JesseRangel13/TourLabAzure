@@ -18,6 +18,8 @@ public sealed class Reservation
 }
 public sealed class ReservationSaga
 {
+    public string? Traceparent {get;set;}
+    public string? Tracestate {get;set;}
     public Guid Id { get; set; }
     public Guid ReservationId { get; set; }
     public Guid HoldId { get; set; }

@@ -23,11 +23,12 @@ public partial class Program
         builder.Services.AddBackendSecurity("Reservations");
         builder.Services.AddSingleton<QuoteServiceTokens>();
         builder.Services.AddSingleton(TimeProvider.System);
-        builder.Services.AddSingleton<WorkerStatus>();
+        builder.Services.AddServiceOperations(builder.Configuration,builder.Environment,"reservations");
         builder.Services.Configure<MessagingOptions>(builder.Configuration.GetSection("Messaging"));
         builder.Services.AddLabMessaging("reservations");
         builder.Services.AddScoped<IInboxConsumer, ReservationConsumer>();
         builder.Services.AddScoped<ReservationCreator>();
+        builder.Services.AddScoped<SagaCommands>();
         builder.Services.AddScoped<ReservationQueries>();
         builder.Services.AddSingleton<QuoteConcurrencyLimit>();
         builder.Services.Configure<CatalogClientOptions>(o => {
@@ -49,6 +50,7 @@ public partial class Program
         app.MapScaffold("Reservations");
         app.UseAuthentication();
         app.UseAuthorization();
+        app.MapServiceOperations("reservations");
         app.MapDatabaseReadiness(BackendSecurity.Human);
         app.MapBackendBoundary("Reservations");
 

@@ -265,6 +265,7 @@ public sealed class PaymentConsumer(PaymentsDb db) : IInboxConsumer
                 Currency = payload.Currency,
                 Mode = mode,
                 SourceMessageId = envelope.MessageId,
+                Traceparent = System.Diagnostics.Activity.Current?.Id ?? envelope.Traceparent, Tracestate = System.Diagnostics.Activity.Current?.TraceStateString ?? envelope.Tracestate,
                 CorrelationId = envelope.CorrelationId
             });
         }, ct);
@@ -312,7 +313,7 @@ public sealed class PaymentProcessor(
             await tx.CommitAsync(ct);
         }
 
-        using var span = TourLab.Azure.Infrastructure.LabTelemetry.Activities.StartActivity("handler.durable-work");
+        using var span = TourLab.Azure.Infrastructure.LabTelemetry.Start("payment.durable-work",System.Diagnostics.ActivityKind.Internal,operation.Traceparent,operation.Tracestate);
         span?.SetTag("ReservationId", operation.ReservationId);
         span?.SetTag("SagaId", operation.SagaId);
         span?.SetTag("OperationId", operation.Id);

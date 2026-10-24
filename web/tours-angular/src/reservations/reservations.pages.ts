@@ -5,7 +5,7 @@ import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { Store } from '@ngxs/store';
 import { Session } from '../catalog/catalog.api';
-import { LoadEffects, LoadReservation, LoadReservations, ReservationsState, SubmitBooking } from './reservations.state';
+import { CancelReservation, LoadEffects, LoadReservation, LoadReservations, ReservationsState, SubmitBooking } from './reservations.state';
 @Component({
   selector: 'app-booking-form', standalone: true, imports: [ReactiveFormsModule, CurrencyPipe],
   template: `<form [formGroup]="form" (ngSubmit)="submit()">
@@ -41,8 +41,8 @@ export class BookingForm {
   }
 }
 @Component({
-  standalone: true, imports: [RouterLink, CurrencyPipe, DatePipe],
-  template: `<main><h1>My bookings</h1><button (click)="load()" [disabled]="vm().loading">Refresh bookings</button>
+  standalone: true, imports: [ReactiveFormsModule, RouterLink, CurrencyPipe, DatePipe],
+  template: `<main><h1>My bookings</h1><form [formGroup]="filters" (ngSubmit)="load(1)"><label>Status filter <input formControlName="status"></label><label>Owner filter (Admin only) <input formControlName="owner"></label><button>Filter bookings</button></form><button (click)="load()" [disabled]="vm().loading">Refresh bookings</button>
     @if (vm().loading) { <p role="status">Loading bookings…</p> }
     @if (vm().error) { <p role="alert">{{ vm().error }}</p> }
     @if (vm().page; as page) {
@@ -58,13 +58,14 @@ export class BookingForm {
   </main>`
 })
 export class ReservationsPage {
+  readonly filters=inject(FormBuilder).nonNullable.group({status:[""],owner:[""]}); get status(){return this.filters.controls.status.value;} get owner(){return this.filters.controls.owner.value;}
   private readonly store = inject(Store);
   readonly vm = this.store.selectSignal(ReservationsState.view);
   constructor() { this.load(); }
-  load(page = 1) { this.store.dispatch(new LoadReservations(page)).subscribe({ error: () => {} }); }
+  load(page = 1) { this.store.dispatch(new LoadReservations(page,this.status,this.owner)).subscribe({ error: () => {} }); }
 }
 @Component({
-  standalone: true, imports: [RouterLink, CurrencyPipe, DatePipe],
+  standalone: true, imports: [ReactiveFormsModule, RouterLink, CurrencyPipe, DatePipe],
   template: `<main><a routerLink="/reservations">My bookings</a><h1>Booking details</h1>
     <button (click)="load()" [disabled]="vm().loading">Refresh booking</button>
     @if (vm().loading) { <p role="status">Loading booking…</p> }
@@ -77,7 +78,7 @@ export class ReservationsPage {
       <h2>Authoritative timeline</h2><ol>@for (entry of vm().timeline; track $index) {
         <li>{{ entry.from }} → {{ entry.to }} · {{ entry.occurredAtUtc | date:'medium':'UTC' }} UTC @if (entry.reason) { · {{ entry.reason }} }</li>
       }</ol>
-      <p>Refresh to see the latest booking status.</p>
+      <p>Refresh to see the latest booking status.</p><p>Cancellation requests a full simulated refund and seat release. Completion is asynchronous.</p><button (click)="cancel()" [disabled]="vm().creating || booking.status!=='Confirmed' || started(booking.startsAtUtc)">Cancel confirmed booking</button>
     }
     <h2>Simulated payments</h2>
     @if (vm().effectsLoading) { <p role="status">Loading simulated effects…</p> }
@@ -92,22 +93,25 @@ export class ReservationDetailPage {
   private readonly route = inject(ActivatedRoute);
   private readonly destroy = inject(DestroyRef);
   private id = '';
+  private cancelKey = crypto.randomUUID();
   readonly vm = this.store.selectSignal(ReservationsState.view);
-  constructor() { this.route.paramMap.pipe(takeUntilDestroyed(this.destroy)).subscribe(params => { this.id = params.get('id') ?? ''; this.load(); }); }
+  constructor() { this.route.paramMap.pipe(takeUntilDestroyed(this.destroy)).subscribe(params => { this.id = params.get('id') ?? ''; this.cancelKey=crypto.randomUUID(); this.load(); }); }
   load() { this.store.dispatch(new LoadReservation(this.id)).subscribe({ error: () => {} }); this.effects(); }
+  started(utc:string){return Date.parse(utc)<=Date.now();}
+  cancel(){this.store.dispatch(new CancelReservation(this.id,this.cancelKey)).subscribe({next:()=>this.load(),error:()=>{}});}
   effects() { this.store.dispatch(new LoadEffects(this.id)).subscribe({ error: () => {} }); }
 }
 @Component({
-  standalone: true, imports: [CurrencyPipe, RouterLink],
+  standalone: true, imports: [ReactiveFormsModule, CurrencyPipe, RouterLink],
   template: `<main><h1>{{ kind === 'payments' ? 'My simulated payments' : 'My simulated notifications' }}</h1>
-    <button (click)="load()" [disabled]="vm().effectsLoading">Refresh</button>
+    <form [formGroup]="filter" (ngSubmit)="load(1)"><label>Reservation ID filter <input formControlName="reservationId"></label><button>Filter effects</button></form><button (click)="load()" [disabled]="vm().effectsLoading">Refresh</button>
     @if (vm().effectsError) { <p role="alert">{{ vm().effectsError }}</p> }
     @if (vm().effectsLoading) { <p role="status">Loading…</p> }
     @if (kind === 'payments') { @for (payment of vm().payments; track payment.id) {
-      <section><a [routerLink]="['/reservations', payment.reservationId]">{{ payment.id }}</a><p>{{ payment.status }} · {{ payment.amountMinor / 100 | currency:'MXN' }} · SIMULATED</p></section>
+      <section><a [routerLink]="['/payments', payment.id]">{{ payment.id }}</a> <a [routerLink]="['/reservations', payment.reservationId]">Booking</a><p>{{ payment.status }} · {{ payment.amountMinor / 100 | currency:'MXN' }} · SIMULATED</p></section>
     } @empty { <p>No payments on this page.</p> } }
     @else { @for (notification of vm().notifications; track notification.id) {
-      <section><a [routerLink]="['/reservations', notification.reservationId]">{{ notification.subject }}</a><p>{{ notification.status }} · SIMULATED DELIVERY</p><p>{{ notification.body }}</p></section>
+      <section><a [routerLink]="['/notifications', notification.id]">{{ notification.subject }}</a> <a [routerLink]="['/reservations', notification.reservationId]">Booking</a><p>{{ notification.status }} · SIMULATED DELIVERY</p><p>{{ notification.body }}</p></section>
     } @empty { <p>No notifications on this page.</p> } }
         <p>Page {{ vm().effectsPage }} · showing up to 10 records</p>
     <button (click)="load(vm().effectsPage - 1)" [disabled]="vm().effectsPage <= 1 || vm().effectsLoading">Previous</button>
@@ -115,9 +119,10 @@ export class ReservationDetailPage {
   </main>`
 })
 export class PersonalEffectsPage {
+  readonly filter=inject(FormBuilder).nonNullable.group({reservationId:[""]}); get reservationId(){return this.filter.controls.reservationId.value;}
   private readonly store = inject(Store);
   readonly kind = inject(ActivatedRoute).snapshot.data['kind'] as 'payments' | 'notifications';
   readonly vm = this.store.selectSignal(ReservationsState.view);
   constructor() { this.load(); }
-  load(page = 1) { this.store.dispatch(new LoadEffects(undefined, page)).subscribe({ error: () => {} }); }
+  load(page = 1) { this.store.dispatch(new LoadEffects(this.reservationId || undefined, page, this.kind)).subscribe({ error: () => {} }); }
 }

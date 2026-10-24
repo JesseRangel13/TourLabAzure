@@ -24,6 +24,47 @@ namespace Payments.Api.Persistence.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
+            modelBuilder.Entity("TourLab.Azure.Payments.Persistence.DlqReplay", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("BodyHash")
+                        .IsRequired()
+                        .HasMaxLength(64)
+                        .HasColumnType("nvarchar(64)");
+
+                    b.Property<DateTime>("InspectedAtUtc")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid?>("LeaseOwner")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime?>("LeaseUntilUtc")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid?>("LogicalMessageId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<long>("SequenceNumber")
+                        .HasColumnType("bigint");
+
+                    b.Property<string>("Source")
+                        .IsRequired()
+                        .HasMaxLength(16)
+                        .HasColumnType("nvarchar(16)");
+
+                    b.Property<string>("Status")
+                        .IsRequired()
+                        .HasMaxLength(40)
+                        .HasColumnType("nvarchar(40)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("DlqReplays", "payments");
+                });
+
             modelBuilder.Entity("TourLab.Azure.Payments.Persistence.InboxEntry", b =>
                 {
                     b.Property<string>("ConsumerName")
@@ -45,6 +86,35 @@ namespace Payments.Api.Persistence.Migrations
                     b.HasKey("ConsumerName", "MessageId");
 
                     b.ToTable("Inbox", "payments");
+                });
+
+            modelBuilder.Entity("TourLab.Azure.Payments.Persistence.OperationsAudit", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Action")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<string>("Actor")
+                        .IsRequired()
+                        .HasMaxLength(128)
+                        .HasColumnType("nvarchar(128)");
+
+                    b.Property<DateTime>("OccurredAtUtc")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid?>("ReplayId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("OccurredAtUtc");
+
+                    b.ToTable("OperationsAudit", "payments");
                 });
 
             modelBuilder.Entity("TourLab.Azure.Payments.Persistence.OutboxEntry", b =>
@@ -210,6 +280,14 @@ namespace Payments.Api.Persistence.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
+                    b.Property<string>("Traceparent")
+                        .HasMaxLength(512)
+                        .HasColumnType("nvarchar(512)");
+
+                    b.Property<string>("Tracestate")
+                        .HasMaxLength(512)
+                        .HasColumnType("nvarchar(512)");
+
                     b.Property<string>("UserId")
                         .IsRequired()
                         .HasMaxLength(128)
@@ -347,6 +425,14 @@ namespace Payments.Api.Persistence.Migrations
                     b.Property<string>("Status")
                         .IsRequired()
                         .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("Traceparent")
+                        .HasMaxLength(512)
+                        .HasColumnType("nvarchar(512)");
+
+                    b.Property<string>("Tracestate")
+                        .HasMaxLength(512)
+                        .HasColumnType("nvarchar(512)");
 
                     b.Property<string>("UserId")
                         .IsRequired()

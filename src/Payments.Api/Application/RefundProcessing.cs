@@ -49,7 +49,7 @@ public static class RefundAcceptance
             if(mode=="RefundTransientFailure" && original.Mode!=mode)fault.Remaining--;
             db.Refunds.Add(new RefundOperation{Id=p.RefundOperationId,PaymentOperationId=p.PaymentOperationId,SagaId=original.SagaId,
                 ReservationId=p.ReservationId,UserId=p.UserId,AmountMinor=p.AmountMinor,Currency=p.Currency,Mode=mode,
-                SourceMessageId=envelope.MessageId,CorrelationId=envelope.CorrelationId,LastRetryVersion=p.RetryVersion});
+                Traceparent=System.Diagnostics.Activity.Current?.Id??envelope.Traceparent,Tracestate=System.Diagnostics.Activity.Current?.TraceStateString??envelope.Tracestate,SourceMessageId=envelope.MessageId,CorrelationId=envelope.CorrelationId,LastRetryVersion=p.RetryVersion});
         },ct);
     }
 }
@@ -71,7 +71,7 @@ public sealed class RefundProcessor(PaymentsDb db,IPaymentProvider provider,Time
             operation.LeaseOwner=Guid.NewGuid();operation.LeaseUntilUtc=now.AddSeconds(60);operation.Version++;
             await db.SaveChangesAsync(ct);await tx.CommitAsync(ct);
         }
-        using var span=TourLab.Azure.Infrastructure.LabTelemetry.Activities.StartActivity("handler.durable-work");
+        using var span=TourLab.Azure.Infrastructure.LabTelemetry.Start("refund.durable-work",System.Diagnostics.ActivityKind.Internal,operation.Traceparent,operation.Tracestate);
         span?.SetTag("ReservationId",operation.ReservationId);span?.SetTag("SagaId",operation.SagaId);span?.SetTag("OperationId",operation.Id);
         var owner=operation.LeaseOwner;string? reference=null;
         try

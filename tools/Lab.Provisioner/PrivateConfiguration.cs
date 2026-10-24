@@ -85,6 +85,7 @@ public static class PrivateConfiguration
             {
                 ["ConnectionStrings"] = new { Runtime = config.Runtime[schema] },
                 ["AllowedHosts"] = "localhost;127.0.0.1",
+                ["LabFeaturesEnabled"] = schema != "identity",
                 ["Database"] = new { Profile = profile },
                 ["Jwt"] = schema == "identity"
                     ? new { PrivateKeyPath = Path.Combine(output, "human-signing.key") } as object

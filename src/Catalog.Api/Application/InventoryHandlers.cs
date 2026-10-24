@@ -20,7 +20,7 @@ public sealed record InventoryResult(
     string? Reason = null,
     DateTimeOffset? ExpiresAtUtc = null);
 
-public sealed class InventoryHandlers(CatalogDb db, TimeProvider clock)
+public sealed class InventoryHandlers(CatalogDb db, TimeProvider clock, TourLab.Azure.Infrastructure.Operations.ServiceOperations? operations = null)
 {
     public async Task<InventoryResult> HoldAsync(
         HoldSeats command,
@@ -159,6 +159,16 @@ public sealed class InventoryHandlers(CatalogDb db, TimeProvider clock)
 
         var now = clock.GetUtcNow();
 
+        if (hold?.Status == "Held" && (hold.Reason == "SimulatedConfirmationRejected" ||
+            (operations is not null && await operations.TakeFaultAsync("RejectNextConfirmation", ct))))
+        {
+            hold.Reason = "SimulatedConfirmationRejected";
+            hold.Version = checked(hold.Version + 1);
+            await IntentAsync($"hold/{hold.Id}/confirmation-rejected", new SeatsConfirmationRejected(hold.Id, hold.Reason), context, ct);
+            await db.SaveChangesAsync(ct);
+            await tx.CommitAsync(ct);
+            return new InventoryResult(false, hold.Status, hold.Reason);
+        }
         if (hold is not null && (hold.Status == "Confirmed" || (hold.Status == "Held" && hold.ExpiresAtUtc > now)))
         {
             if (hold.Status == "Held")

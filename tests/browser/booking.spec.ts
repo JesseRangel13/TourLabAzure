@@ -14,7 +14,7 @@ async function login(page: Page, name: string) {
   await page.getByRole('button', { name: 'Sign in', exact: true }).click();
   await expect(page.getByRole('heading', { name: 'Tours', exact: true })).toBeVisible();
 }
-test('Alice books through Angular and Bob cannot open her booking', async ({ page, browser }) => {
+test('Alice books, cancels with one simulated refund and Bob cannot open her booking', async ({ page, browser }) => {
   const name = 'Synthetic browser booking ' + crypto.randomUUID();
   await login(page, 'Admin');
   await page.getByLabel('Tour name', { exact: true }).fill(name);
@@ -51,4 +51,15 @@ test('Alice books through Angular and Bob cannot open her booking', async ({ pag
     await expect(bob.getByRole('alert').first()).toContainText(/unavailable/i);
     await expect(bob.getByRole('heading', { name: 'Confirmed', exact: true })).toHaveCount(0);
   } finally { await other.close(); }
+  await page.getByRole('button', { name: 'Cancel confirmed booking', exact: true }).click();
+  await expect(async () => {
+    await page.getByRole('button', { name: 'Refresh booking', exact: true }).click();
+    await expect(page.getByRole('heading', { name: 'Cancelled', exact: true })).toBeVisible();
+  }).toPass({ timeout: 60_000, intervals: [1000] });
+  const reservationId = new URL(bookingUrl).pathname.split('/').pop()!;
+  await page.getByRole('link', { name: 'Payments', exact: true }).click();
+  await page.getByLabel('Reservation ID filter', { exact: true }).fill(reservationId);
+  await page.getByRole('button', { name: 'Filter effects', exact: true }).click();
+  await page.locator('a[href^="/payments/"]').click();
+  await expect(page.getByRole('heading', { name: 'Simulated refund Refunded', exact: true })).toBeVisible();
 });

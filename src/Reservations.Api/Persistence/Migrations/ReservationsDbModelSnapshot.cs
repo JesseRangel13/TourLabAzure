@@ -24,6 +24,47 @@ namespace Reservations.Api.Persistence.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
+            modelBuilder.Entity("TourLab.Azure.Reservations.Persistence.DlqReplay", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("BodyHash")
+                        .IsRequired()
+                        .HasMaxLength(64)
+                        .HasColumnType("nvarchar(64)");
+
+                    b.Property<DateTime>("InspectedAtUtc")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid?>("LeaseOwner")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime?>("LeaseUntilUtc")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid?>("LogicalMessageId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<long>("SequenceNumber")
+                        .HasColumnType("bigint");
+
+                    b.Property<string>("Source")
+                        .IsRequired()
+                        .HasMaxLength(16)
+                        .HasColumnType("nvarchar(16)");
+
+                    b.Property<string>("Status")
+                        .IsRequired()
+                        .HasMaxLength(40)
+                        .HasColumnType("nvarchar(40)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("DlqReplays", "reservations");
+                });
+
             modelBuilder.Entity("TourLab.Azure.Reservations.Persistence.IdempotencyRequest", b =>
                 {
                     b.Property<string>("UserId")
@@ -85,6 +126,64 @@ namespace Reservations.Api.Persistence.Migrations
                     b.HasKey("ConsumerName", "MessageId");
 
                     b.ToTable("Inbox", "reservations");
+                });
+
+            modelBuilder.Entity("TourLab.Azure.Reservations.Persistence.LabFault", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Mode")
+                        .IsRequired()
+                        .HasMaxLength(40)
+                        .HasColumnType("nvarchar(40)");
+
+                    b.Property<int>("Remaining")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Faults", "reservations");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Mode = "None",
+                            Remaining = 0
+                        });
+                });
+
+            modelBuilder.Entity("TourLab.Azure.Reservations.Persistence.OperationsAudit", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Action")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<string>("Actor")
+                        .IsRequired()
+                        .HasMaxLength(128)
+                        .HasColumnType("nvarchar(128)");
+
+                    b.Property<DateTime>("OccurredAtUtc")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid?>("ReplayId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("OccurredAtUtc");
+
+                    b.ToTable("OperationsAudit", "reservations");
                 });
 
             modelBuilder.Entity("TourLab.Azure.Reservations.Persistence.OutboxEntry", b =>
@@ -272,6 +371,14 @@ namespace Reservations.Api.Persistence.Migrations
                         .IsRequired()
                         .HasMaxLength(40)
                         .HasColumnType("nvarchar(40)");
+
+                    b.Property<string>("Traceparent")
+                        .HasMaxLength(512)
+                        .HasColumnType("nvarchar(512)");
+
+                    b.Property<string>("Tracestate")
+                        .HasMaxLength(512)
+                        .HasColumnType("nvarchar(512)");
 
                     b.Property<long>("Version")
                         .IsConcurrencyToken()

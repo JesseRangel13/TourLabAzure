@@ -61,4 +61,5 @@ public sealed record SagaView(
     bool PaymentResolved,
     bool CancellationRequested,
     string? Reason,
-    long Version);
+    long Version,
+    bool PaymentRequested = false);

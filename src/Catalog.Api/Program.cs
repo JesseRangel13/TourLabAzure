@@ -31,7 +31,7 @@ public partial class Program
         builder.Services.AddScoped<InventoryHandlers>();
         builder.Services.AddHostedService<HoldExpiryWorker>();
 
-        builder.Services.AddSingleton<WorkerStatus>();
+        builder.Services.AddServiceOperations(builder.Configuration,builder.Environment,"catalog");
         builder.Services.Configure<MessagingOptions>(builder.Configuration.GetSection("Messaging"));
         builder.Services.AddLabMessaging("catalog");
         builder.Services.AddScoped<IInboxConsumer, CatalogConsumer>();
@@ -40,6 +40,7 @@ public partial class Program
         app.MapScaffold("Catalog");
         app.UseAuthentication();
         app.UseAuthorization();
+        app.MapServiceOperations("catalog");
         app.MapDatabaseReadiness(BackendSecurity.Human);
         app.MapBackendBoundary("Catalog");
         app.MapCatalog();

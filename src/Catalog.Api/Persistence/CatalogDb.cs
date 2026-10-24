@@ -40,6 +40,7 @@ public sealed class CatalogDb(DbContextOptions<CatalogDb> options) : DbContext(o
 
     protected override void OnModelCreating(ModelBuilder model)
     {
+        OperationsModel.Configure(model);
         model.HasDefaultSchema("catalog");
         model.UseCollation("Latin1_General_100_BIN2");
         CatalogModel.Configure(model);

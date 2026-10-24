@@ -1,6 +1,7 @@
 [CmdletBinding()]
-param([switch]$InstallBrowser)
+param([string]$ConfigurationDirectory = '.local/sql', [switch]$InstallBrowser)
 $ErrorActionPreference = 'Stop'
+. "$PSScriptRoot/Use-Toolchain.ps1"
 $root = Split-Path $PSScriptRoot
 $env:NODE_EXTRA_CA_CERTS = Join-Path $root '.local/certificates/ca.crt'
 $env:PLAYWRIGHT_BROWSERS_PATH = Join-Path $root '.local/playwright'

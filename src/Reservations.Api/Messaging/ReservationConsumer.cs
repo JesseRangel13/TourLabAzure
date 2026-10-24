@@ -44,6 +44,7 @@ public sealed class ReservationConsumer(
                 .ToListAsync(token))
                 .SingleOrDefault() ?? throw new PoisonMessageException("UnknownSaga");
 
+            saga.Traceparent=System.Diagnostics.Activity.Current?.Id??envelope.Traceparent; saga.Tracestate=System.Diagnostics.Activity.Current?.TraceStateString??envelope.Tracestate;
             var reservation = await db.Reservations.SingleAsync(x => x.Id == saga.ReservationId, token);
             var policy = options ?? new SagaRecoveryOptions();
             var recovery = new SagaRecovery(db, clock, policy);

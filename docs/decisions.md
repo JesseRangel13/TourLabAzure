@@ -130,3 +130,50 @@ quota/schema, while retaining SQL Inbox/idempotency/provider/tombstone records w
 restarts and emulator persistence are not production durability proof. No existing broker accepted
 traffic before this startup validation failed; restarting the failed new lab container loses no
 accepted messages. Broker SQL volume is retained.
+## AZ-005 decisions (2026-10-24)
+
+D32 — AZ-004 independent PASS is present. Its prose mentions compensation after notification
+failure, but authoritative source W-01/W-04 and Azure specs/02 explicitly preserve a Confirmed
+booking while durable notification work retries. Notification failure is not a new refund rule.
+No business rule is silently changed; source code/specifications govern this detail.
+
+D33 — Cancellation is allowed only from Confirmed before departure, fixes the already assigned
+refund ID and waits for both refund and release acknowledgements. Different request keys cannot
+start another full refund. Admin retries continue from durable flags and reuse operation IDs.
+Uncertain payments must be resolved through the fictional provider and actual reconciliation,
+never by editing Saga state. Exact actors are audited in the owning schema.
+
+D34 — Service Bus inspection uses non-locking peek, bounded to ten redacted metadata items,
+with an explicit sequence cursor and commands/events selection. Bodies, credentials, lock tokens
+and arbitrary entity paths never reach the browser. Replay uses a five-minute inspection and
+60-second SQL owner lease, bounds search to 50 PeekLock DLQ items, sends to the original command
+queue or original topic, and only then completes the original. Unrelated locks are abandoned.
+Failures after acceptance retain the original/uncertain audit; no claim of atomic broker/SQL commit.
+
+D35 — Each replay send gets a fresh transport MessageId, preserving the unchanged envelope's
+logical MessageId, DeliveryId and operation IDs, with replay lineage headers. This avoids a
+broker duplicate-detection window suppressing a deliberate resend; SQL Inbox/business IDs remain
+mandatory. Topic replay can reach every matching subscription. Malformed, misrouted or older
+than 14-day envelopes are not replayable. No Inbox clearing, new charge ID or payload editing.
+
+D36 — Fault controls are backend Admin-only, bounded to 0..100 occurrences, durable and audited,
+and fail closed unless Development plus explicit LabFeaturesEnabled. Captured provider/sender
+modes remain attached to each operation. Pause controls retain work; no queue purge or reset of
+historical data. Read the final resolved environment/configuration at DI resolution rather than
+capturing preliminary WebApplicationFactory configuration.
+
+D37 — Persist optional bounded W3C parent/state on each service's own Saga/payment/refund/
+notification work record. Restore it in independent worker operations and propagate envelopes;
+never use IDs as metric dimensions or record token/cookie/body/connection strings. Diagnostics
+use bounded owned-schema metadata, durable counts plus explicitly process-local worker/duplicate
+observations. Enabled messaging readiness performs a bounded non-locking real broker probe.
+No Functions/cloud observability is claimed by the five API implementation.
+
+D38 — Existing credential throttling remains ten requests/minute. The expanded synthetic HTTPS
+test phases exceeded it once; the harness now waits one unchanged 60-second window before its
+additional login phase. No production rate limit or assertion was relaxed.
+
+D39 — Preserve existing broker containers and SQL/DLQ data. Use fresh SQL profiles, generated
+service-owned operations/tracing migrations and existing pinned SDKs. Local emulator routing,
+replay and worker shutdown evidence is separate from remote CI, Chromium and actual Azure.
+Browser certificate verification remains mandatory; the known Chromium CA gap is not bypassed.

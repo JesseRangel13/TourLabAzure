@@ -357,7 +357,7 @@ public sealed class CatalogCommands(CatalogDb db, TimeProvider clock)
     }
 }
 
-public sealed class QuoteHandler(CatalogDb db, TimeProvider clock)
+public sealed class QuoteHandler(CatalogDb db, TimeProvider clock, TourLab.Azure.Infrastructure.Operations.ServiceOperations? operations = null)
 {
     public async Task<QuoteView> HandleAsync(CreateQuote command, CancellationToken ct)
     {
@@ -370,6 +370,8 @@ public sealed class QuoteHandler(CatalogDb db, TimeProvider clock)
             command.UserId.Length <= 128 &&
             command.ExpectedUnitAmountMinor > 0 &&
             !string.IsNullOrWhiteSpace(command.ExpectedCurrency));
+
+        if(operations is not null && await operations.TakeFaultAsync("QuoteTimeout",ct)) await Task.Delay(TimeSpan.FromSeconds(4),ct);
 
         await using var tx = await db.Database.BeginTransactionAsync(ct);
 

@@ -19,8 +19,9 @@ export class ReservationsApi {
     return this.http.post<Accepted>('/api/reservations/v1/reservations', input,
       { headers: new HttpHeaders().set('Idempotency-Key', key) }).pipe(timeout(12_000));
   }
-  list(page: number) {
-    return this.http.get<ReservationPage>('/api/reservations/v1/reservations', { params: { page, pageSize: 10 } }).pipe(timeout(10_000));
+  cancel(id:string,key:string){return this.http.post<Accepted>("/api/reservations/v1/reservations/"+id+"/cancel",{}, {headers:new HttpHeaders().set("Idempotency-Key",key)}).pipe(timeout(12_000));}
+  list(page: number, status="", userId="") {
+    return this.http.get<ReservationPage>('/api/reservations/v1/reservations', { params: { page, pageSize: 10, ...(status?{status}:{}), ...(userId?{userId}:{}) } }).pipe(timeout(10_000));
   }
   detail(id: string) { return this.http.get<Reservation>('/api/reservations/v1/reservations/' + id).pipe(timeout(10_000)); }
   timeline(id: string) { return this.http.get<Transition[]>('/api/reservations/v1/reservations/' + id + '/timeline').pipe(timeout(10_000)); }

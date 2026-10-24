@@ -155,6 +155,7 @@ public sealed class NotificationConsumer(NotificationsDb db, TimeProvider clock)
                 UserId = user,
                 SagaId = envelope.SagaId!.Value,
                 SourceEventId = envelope.MessageId,
+                Traceparent=System.Diagnostics.Activity.Current?.Id??envelope.Traceparent,Tracestate=System.Diagnostics.Activity.Current?.TraceStateString??envelope.Tracestate,
                 Kind = envelope.Type,
                 Subject = "SIMULATED " + envelope.Type,
                 Body = body,
@@ -202,7 +203,7 @@ public sealed class NotificationProcessor(NotificationsDb db, INotificationSende
             await tx.CommitAsync(ct);
         }
 
-        using var span = TourLab.Azure.Infrastructure.LabTelemetry.Activities.StartActivity("handler.durable-work");
+        using var span = TourLab.Azure.Infrastructure.LabTelemetry.Start("notification.durable-work",System.Diagnostics.ActivityKind.Internal,operation.Traceparent,operation.Tracestate);
         span?.SetTag("ReservationId", operation.ReservationId);
         span?.SetTag("SagaId", operation.SagaId);
         span?.SetTag("OperationId", operation.Id);

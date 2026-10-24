@@ -1,3 +1,5 @@
+using System.Diagnostics;
+using TourLab.Azure.Infrastructure.Operations;
 using System.Text;
 using Azure.Messaging.ServiceBus;
 using Microsoft.EntityFrameworkCore;
@@ -38,6 +40,7 @@ public sealed class ServiceBusTransport : IMessageTransport, IAsyncDisposable
         var envelope = MessageCodec.Parse(delivery.EnvelopeJson);
         if (envelope.MessageId != delivery.MessageId || !MessageRoutes.Destinations(envelope.Type).Contains(delivery.Destination))
             throw new PoisonMessageException("OutboxRouteConflict");
+        using var activity = LabTelemetry.Start("outbox.publish", ActivityKind.Producer, envelope.Traceparent, envelope.Tracestate);
         var sender = senders.GetOrAdd(delivery.Destination, name => new Lazy<ServiceBusSender>(() => client.CreateSender(name))).Value;
         var message = new ServiceBusMessage(new BinaryData(Encoding.UTF8.GetBytes(delivery.EnvelopeJson))) {
             MessageId = delivery.MessageId.ToString("D"), CorrelationId = envelope.CorrelationId.ToString("D"),
@@ -46,6 +49,17 @@ public sealed class ServiceBusTransport : IMessageTransport, IAsyncDisposable
         message.ApplicationProperties["type"] = envelope.Type;
         message.ApplicationProperties["schemaVersion"] = envelope.Version;
         return sender.SendMessageAsync(message, ct);
+    }
+    public Task SendReplayAsync(string body,string destination,Guid replayId,CancellationToken ct)
+    {
+        var envelope=MessageCodec.Parse(body);
+        if(!MessageRoutes.Destinations(envelope.Type).Contains(destination,StringComparer.Ordinal))throw new PoisonMessageException("ReplayRouteConflict");
+        var sender=senders.GetOrAdd(destination,name=>new Lazy<ServiceBusSender>(()=>client.CreateSender(name))).Value;
+        var message=new ServiceBusMessage(body){MessageId="replay-"+Guid.NewGuid().ToString("N"),CorrelationId=envelope.CorrelationId.ToString("D"),
+            Subject=envelope.Type,ContentType="application/json",TimeToLive=TimeSpan.FromHours(1)};
+        message.ApplicationProperties["type"]=envelope.Type;message.ApplicationProperties["schemaVersion"]=envelope.Version;
+        message.ApplicationProperties["replayId"]=replayId.ToString("D");message.ApplicationProperties["originalLogicalMessageId"]=envelope.MessageId.ToString("D");
+        return sender.SendMessageAsync(message,ct);
     }
     public async ValueTask DisposeAsync()
     {
@@ -67,10 +81,11 @@ public sealed class OutboxDispatcher(SqlOutboxLeases leases, IMessageTransport t
         return true;
     }
 }
-public sealed class OutboxWorker(IServiceScopeFactory scopes, IOptions<MessagingOptions> options, ILogger<OutboxWorker> logger) : BackgroundService
+public sealed class OutboxWorker(IServiceScopeFactory scopes, IOptions<MessagingOptions> options, ILogger<OutboxWorker> logger, WorkerStatus status) : BackgroundService
 {
     protected override async Task ExecuteAsync(CancellationToken stop)
     {
+        status.Update("outbox",options.Value.Enabled,options.Value.Enabled?"Starting":"Disabled");
         if (!options.Value.Enabled) return;
         while (!stop.IsCancellationRequested)
         {
@@ -79,15 +94,21 @@ public sealed class OutboxWorker(IServiceScopeFactory scopes, IOptions<Messaging
                 await using var scope = scopes.CreateAsyncScope();
                 using var budget = CancellationTokenSource.CreateLinkedTokenSource(stop);
                 budget.CancelAfter(TimeSpan.FromSeconds(25));
-                if (await scope.ServiceProvider.GetRequiredService<OutboxDispatcher>().DispatchOneAsync(budget.Token)) continue;
+
+                if(await scope.ServiceProvider.GetRequiredService<ServiceOperations>().TakeFaultAsync("PauseOutbox",budget.Token)){
+                    status.Update("outbox",true,"Paused");
+                }else{
+                    var dispatched=await scope.ServiceProvider.GetRequiredService<OutboxDispatcher>().DispatchOneAsync(budget.Token);
+                    status.Update("outbox",true,"Running");if(dispatched)continue;
+                }
             }
-            catch (Exception error) when (!stop.IsCancellationRequested) { logger.LogWarning("Outbox intent retained: {FailureType}", error.GetType().Name); }
+            catch (Exception error) when (!stop.IsCancellationRequested) { status.Update("outbox",true,"Failure",error.GetType().Name); logger.LogWarning("Outbox intent retained: {FailureType}", error.GetType().Name); }
             await Task.Delay(TimeSpan.FromMilliseconds(300), stop);
         }
     }
 }
 public sealed class InboxWorker(IServiceScopeFactory scopes, IOptions<MessagingOptions> options, ServiceBusTransport transport,
-    string schema, ILogger<InboxWorker> logger)
+    string schema, ILogger<InboxWorker> logger, WorkerStatus status)
 {
     public async Task RunAsync(CancellationToken stop)
     {
@@ -111,7 +132,14 @@ public sealed class InboxWorker(IServiceScopeFactory scopes, IOptions<MessagingO
                 await using var scope = scopes.CreateAsyncScope();
                 using var budget = CancellationTokenSource.CreateLinkedTokenSource(args.CancellationToken);
                 budget.CancelAfter(TimeSpan.FromSeconds(40));
+                while(await scope.ServiceProvider.GetRequiredService<ServiceOperations>().TakeFaultAsync("PauseConsumption",budget.Token))
+                    await Task.Delay(TimeSpan.FromSeconds(1),budget.Token);
+                using var activity=LabTelemetry.Start("inbox.consume",ActivityKind.Consumer,envelope.Traceparent,envelope.Tracestate);
+                using var logScope=logger.BeginScope(new Dictionary<string,object?>{["messageId"]=envelope.MessageId,["sagaId"]=envelope.SagaId,
+                    ["traceId"]=Activity.Current?.TraceId.ToString()});
                 await scope.ServiceProvider.GetRequiredService<IInboxConsumer>().ConsumeAsync(envelope, budget.Token);
+                scope.ServiceProvider.GetRequiredService<WorkerStatus>().Update("inbox",true,"Running");
+                logger.LogInformation("Committed message {MessageType}",envelope.Type);
                 await args.CompleteMessageAsync(args.Message, args.CancellationToken); // only after the Inbox transaction commits
             }
             catch (PoisonMessageException poison)
@@ -120,14 +148,15 @@ public sealed class InboxWorker(IServiceScopeFactory scopes, IOptions<MessagingO
             }
             // Other failures escape: SDK abandons/retries under MaxDeliveryCount. No settlement before commit.
         }
-        Task Error(ProcessErrorEventArgs args) { logger.LogWarning("Service Bus processing deferred: {FailureType}", args.Exception.GetType().Name); return Task.CompletedTask; }
+        Task Error(ProcessErrorEventArgs args) { status.Update("inbox",true,"Failure",args.Exception.GetType().Name); logger.LogWarning("Service Bus processing deferred: {FailureType}", args.Exception.GetType().Name); return Task.CompletedTask; }
         commands.ProcessMessageAsync += args => Handle(args, false);
         events.ProcessMessageAsync += args => Handle(args, true);
         commands.ProcessErrorAsync += Error; events.ProcessErrorAsync += Error;
-        await commands.StartProcessingAsync(stop); await events.StartProcessingAsync(stop);
+        status.Update("inbox",true,"Starting");
+        await commands.StartProcessingAsync(stop); await events.StartProcessingAsync(stop); status.Update("inbox",true,"Running");
         try { await Task.Delay(Timeout.InfiniteTimeSpan, stop); }
         catch (OperationCanceledException) when (stop.IsCancellationRequested) { }
-        finally { await commands.StopProcessingAsync(CancellationToken.None); await events.StopProcessingAsync(CancellationToken.None); }
+        finally { using var shutdown=new CancellationTokenSource(TimeSpan.FromSeconds(45)); await commands.StopProcessingAsync(shutdown.Token); await events.StopProcessingAsync(shutdown.Token); status.Update("inbox",true,"Stopped"); }
     }
 }
 public static class MessagingRegistration
@@ -147,10 +176,10 @@ public static class MessagingRegistration
     {
         protected override async Task ExecuteAsync(CancellationToken stop)
         {
-            if (!services.GetRequiredService<IOptions<MessagingOptions>>().Value.Enabled) return;
+            if (!services.GetRequiredService<IOptions<MessagingOptions>>().Value.Enabled) { services.GetRequiredService<WorkerStatus>().Update("inbox",false,"Disabled"); return; }
             var inner = new InboxWorker(services.GetRequiredService<IServiceScopeFactory>(),
                 services.GetRequiredService<IOptions<MessagingOptions>>(), services.GetRequiredService<ServiceBusTransport>(),
-                schema, services.GetRequiredService<ILogger<InboxWorker>>());
+                schema, services.GetRequiredService<ILogger<InboxWorker>>(), services.GetRequiredService<WorkerStatus>());
             await inner.RunAsync(stop);
         }
     }

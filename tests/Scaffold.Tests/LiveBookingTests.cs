@@ -12,23 +12,24 @@ public sealed class WorkflowFactAttribute:FactAttribute
 [Collection("SQL Identity")]
 public sealed class LiveBookingTests
 {
-    private static HttpClient Client()
+    internal static HttpClient Client()
     {
         var handler=new SocketsHttpHandler{UseCookies=true,AllowAutoRedirect=false,ConnectTimeout=TimeSpan.FromSeconds(3)};
         handler.SslOptions.CertificateChainPolicy=new X509ChainPolicy{TrustMode=X509ChainTrustMode.CustomRootTrust,RevocationMode=X509RevocationMode.NoCheck};
         handler.SslOptions.CertificateChainPolicy.CustomTrustStore.Add(X509CertificateLoader.LoadCertificateFromFile(Path.Combine(TestSettings.Root,".local","certificates","ca.crt")));
         return new(handler){BaseAddress=new Uri("https://localhost:9443"),Timeout=TimeSpan.FromSeconds(15)};
     }
-    private static async Task<HttpResponseMessage> Post(HttpClient client,string path,object body,string? key=null)
+    internal static async Task<HttpResponseMessage> Post(HttpClient client,string path,object body,string? key=null,string? traceparent=null)
     {
         var csrf=await client.GetFromJsonAsync<JsonElement>("/auth/csrf");
         using var request=new HttpRequestMessage(HttpMethod.Post,path){Content=JsonContent.Create(body)};
         request.Headers.Add("Origin","https://localhost:9443");
         request.Headers.Add("X-AZURELAB-XSRF-TOKEN",csrf.GetProperty("requestToken").GetString());
         if(key is not null)request.Headers.Add("Idempotency-Key",key);
+        if(traceparent is not null)request.Headers.Add("traceparent",traceparent);
         return await client.SendAsync(request);
     }
-    private static async Task Login(HttpClient client,string name)
+    internal static async Task Login(HttpClient client,string name)
     {
         var seed=TestSettings.Configuration.Users.Single(x=>x.UserName==name);
         using var result=await Post(client,"/auth/login",new LoginRequest(seed.UserName,seed.Password));

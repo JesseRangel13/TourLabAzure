@@ -137,6 +137,7 @@ public sealed class ReservationCreator(
             HoldId = Guid.NewGuid(),
             PaymentOperationId = Guid.NewGuid(),
             RefundOperationId = Guid.NewGuid(),
+            Traceparent=System.Diagnostics.Activity.Current?.Id, Tracestate=System.Diagnostics.Activity.Current?.TraceStateString,
             DeadlineUtc = now.AddSeconds(options?.AvailabilitySeconds ?? 30)
         };
 

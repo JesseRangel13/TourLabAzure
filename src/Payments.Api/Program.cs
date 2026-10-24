@@ -22,7 +22,7 @@ public partial class Program
         builder.Services.AddBackendSecurity("Payments");
 
         builder.Services.AddSingleton(TimeProvider.System);
-        builder.Services.AddSingleton<WorkerStatus>();
+        builder.Services.AddServiceOperations(builder.Configuration,builder.Environment,"payments");
         builder.Services.Configure<MessagingOptions>(builder.Configuration.GetSection("Messaging"));
         builder.Services.AddLabMessaging("payments");
         builder.Services.AddScoped<IInboxConsumer, PaymentConsumer>();
@@ -36,6 +36,7 @@ public partial class Program
         app.MapScaffold("Payments");
         app.UseAuthentication();
         app.UseAuthorization();
+        app.MapServiceOperations("payments");
         app.MapDatabaseReadiness(BackendSecurity.Human);
         app.MapBackendBoundary("Payments");
 

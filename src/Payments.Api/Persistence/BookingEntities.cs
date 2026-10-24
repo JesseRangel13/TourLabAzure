@@ -1,6 +1,8 @@
 namespace TourLab.Azure.Payments.Persistence;
 public sealed class PaymentOperation
 {
+    public string? Traceparent {get;set;}
+    public string? Tracestate {get;set;}
     public Guid Id { get; set; }
     public Guid SagaId { get; set; }
     public Guid ReservationId { get; set; }
@@ -33,6 +35,8 @@ public sealed class ProviderEffect
 
 public sealed class RefundOperation
 {
+    public string? Traceparent {get;set;}
+    public string? Tracestate {get;set;}
     public Guid Id { get; set; }
     public Guid PaymentOperationId { get; set; }
     public Guid SagaId { get; set; }

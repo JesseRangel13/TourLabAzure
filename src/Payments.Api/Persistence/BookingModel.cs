@@ -9,4 +9,6 @@ internal static class BookingModel { public static void Configure(ModelBuilder m
         model.Entity<ProviderRefund>(b => { b.ToTable("ProviderRefunds"); b.HasKey(x=>x.Id); b.HasIndex(x=>x.PaymentOperationId).IsUnique(); });
         model.Entity<PaymentFault>(b => { b.ToTable("Faults"); b.HasKey(x=>x.Id); b.HasData(new PaymentFault()); });
 
+        model.Entity<PaymentOperation>().Property(x=>x.Traceparent).HasMaxLength(512); model.Entity<PaymentOperation>().Property(x=>x.Tracestate).HasMaxLength(512);
+        model.Entity<RefundOperation>().Property(x=>x.Traceparent).HasMaxLength(512); model.Entity<RefundOperation>().Property(x=>x.Tracestate).HasMaxLength(512);
 } }

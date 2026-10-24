@@ -25,16 +25,16 @@ AZ-001 isolation/scaffold; AZ-002 SQL Server/Identity; AZ-003 Catalog + Angular/
 
 Read specs/07-acceptance.md and tasks/implementation-plan.md for scope and gates. Local functionality comes before cloud spending. All payments, notification deliveries, and booking receipts are explicitly simulated.
 
-## Current implementation — AZ-004 (2026-10-24)
+## Current implementation — AZ-005 (2026-10-24)
 
-AZ-003 has an independent PASS. AZ-004 is **Implemented Awaiting Review**:
-Service Bus routing, SQL Outbox/Inbox, idempotent bookings, durable simulated payments/notifications,
-and basic Angular booking/detail/payment/notification pages.
-Start with [booking execution](docs/booking-execution.md), [learning walkthrough](docs/booking-learning.md),
-[actual routing](docs/servicebus-routing-v1.md) and [AZ-004 evidence](docs/evidence/AZ-004.md).
-Real SQL and the authorized local Service Bus emulator completed the live HTTPS booking checks.
-Browser CA trust and all cloud execution remain separate NOT VERIFIED gaps.
-The original AWS/Blazor repository remains read-only. Next: Antigravity AZ-004 review, then AZ-005.
+AZ-004 has an independent PASS. AZ-005 is **Implemented Awaiting Review**:
+full Saga recovery/cancellation/refunds, uncertain fictional-provider reconciliation, backend Admin
+fault/diagnostic/DLQ replay controls, durable tracing and baseline Angular/API parity.
+Start with [recovery execution](docs/recovery-execution.md), [learning](docs/recovery-learning.md),
+[human action/API map](docs/recovery-api-map.md) and [actual AZ-005 evidence](docs/evidence/AZ-005.md).
+Real SQL, broker/HTTPS recovery and Angular checks pass. Chromium and Azure cloud execution remain
+NOT VERIFIED. Existing local broker/data are retained; the original AWS/Blazor repository is unchanged.
+Next: independent Antigravity AZ-005 review, then AZ-006 Blob tour images.
 
 ## AZ-001 implementation status (2026-10-23)
 

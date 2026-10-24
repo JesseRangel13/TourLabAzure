@@ -23,7 +23,8 @@ public static class ScaffoldHosting
             builder.Configuration.AddJsonFile(Path.GetFullPath(privatePath), optional: false, reloadOnChange: false);
         builder.Configuration.AddEnvironmentVariables("AZURELAB_");
         builder.Logging.ClearProviders();
-        builder.Logging.AddJsonConsole();
+        builder.Logging.AddJsonConsole(o=>o.IncludeScopes=true);
+        builder.Logging.Configure(o=>o.ActivityTrackingOptions=ActivityTrackingOptions.TraceId|ActivityTrackingOptions.SpanId|ActivityTrackingOptions.ParentId);
         builder.Logging.AddFilter("Microsoft.EntityFrameworkCore.Database.Command", LogLevel.Warning);
         builder.Logging.AddFilter("Microsoft.EntityFrameworkCore.Update", LogLevel.None);
         builder.Logging.AddFilter("Microsoft.AspNetCore.Hosting.Diagnostics", LogLevel.Warning);
@@ -52,7 +53,14 @@ public static class ScaffoldHosting
             context.Response.Headers["X-Content-Type-Options"] = "nosniff";
             context.Response.Headers["Referrer-Policy"] = "same-origin";
             context.Response.Headers["X-Frame-Options"] = "DENY";
-            await next(context);
+            Exception? failure=null;
+            try { await next(context); }
+            catch(Exception error){failure=error;throw;}
+            finally {
+                var route=(context.GetEndpoint() as Microsoft.AspNetCore.Routing.RouteEndpoint)?.RoutePattern.RawText??"unmatched";
+                var log=context.RequestServices.GetRequiredService<ILoggerFactory>().CreateLogger("TourLab.Azure.Http");
+                log.LogInformation("HTTP {Method} {Route} {Outcome} {StatusCode}",context.Request.Method,route,failure is null?"Completed":"DeferredToErrorHandler",failure is null?context.Response.StatusCode:(int?)null);
+            }
         });
         app.MapGet("/health/live", () => new Liveness(service, "Alive", "AZ-002")).AllowAnonymous();
     }

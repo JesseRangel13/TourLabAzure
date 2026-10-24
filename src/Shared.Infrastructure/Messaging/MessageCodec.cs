@@ -36,6 +36,7 @@ public static class MessageCodec
                 throw new PoisonMessageException("InvalidEnvelope");
             }
 
+            if(envelope.Tracestate?.Length>512) throw new PoisonMessageException("InvalidTracestate");
             if (envelope.Traceparent is not null && !ActivityContext.TryParse(envelope.Traceparent, null, out _))
             {
                 throw new PoisonMessageException("InvalidTraceparent");

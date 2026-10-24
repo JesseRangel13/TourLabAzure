@@ -152,6 +152,7 @@ public sealed class SagaRecovery(ReservationsDb db, TimeProvider clock, SagaReco
             return false;
         }
 
+        using var activity=TourLab.Azure.Infrastructure.LabTelemetry.Start("saga.deadline",System.Diagnostics.ActivityKind.Internal,saga.Traceparent,saga.Tracestate);
         var reservation = await db.Reservations.SingleAsync(x => x.Id == saga.ReservationId, ct);
         var from = saga.State;
         var cause = Guid.NewGuid();

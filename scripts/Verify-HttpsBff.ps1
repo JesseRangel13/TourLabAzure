@@ -1,5 +1,5 @@
 [CmdletBinding()]
-param([string]$ConfigurationDirectory = '.local/sql', [switch]$IncludeBooking)
+param([string]$ConfigurationDirectory = '.local/sql', [switch]$IncludeBooking, [switch]$IncludeRecovery)
 $ErrorActionPreference = 'Stop'
 . "$PSScriptRoot/Use-Toolchain.ps1"
 $root = Split-Path $PSScriptRoot
@@ -51,6 +51,12 @@ try {
     if ($IncludeBooking) {
         & dotnet test tests/Scaffold.Tests -c Release --no-build --filter 'FullyQualifiedName~LiveBookingTests' --logger 'trx;LogFileName=AZ-004-live-booking.trx'
         if ($LASTEXITCODE -ne 0) { throw 'Live Service Bus booking/ownership checks failed.' }
+    }
+    if ($IncludeRecovery) {
+        Write-Host 'Waiting for the unchanged 60-second credential rate window before the additional synthetic login phase.'
+        Start-Sleep -Seconds 60
+        & dotnet test tests/Scaffold.Tests -c Release --no-build --filter 'FullyQualifiedName~LiveRecoveryTests' --logger 'trx;LogFileName=AZ-005-live-recovery.trx'
+        if ($LASTEXITCODE -ne 0) { throw 'Actual recovery workflow checks failed.' }
     }
     Stop-LabHost $processes['Gateway']
     Start-LabHost 'Gateway'

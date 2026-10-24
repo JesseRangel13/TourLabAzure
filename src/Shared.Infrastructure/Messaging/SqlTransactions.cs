@@ -47,6 +47,7 @@ public static class InboxTransaction
             await db.SaveChangesAsync(ct);
         }
         await transaction.CommitAsync(ct);
+        LabTelemetry.Count("inbox",existing.Count==0?"processed":"duplicate");
         return existing.Count == 0;
     }
 }
