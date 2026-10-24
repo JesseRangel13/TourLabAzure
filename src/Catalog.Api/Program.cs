@@ -1,3 +1,4 @@
+using TourLab.Azure.Catalog.Application;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using TourLab.Azure.Infrastructure;
@@ -18,16 +19,23 @@ public partial class Program
             sql => { sql.MigrationsHistoryTable("__EFMigrationsHistory", "catalog"); sql.CommandTimeout(5); }));
         builder.Services.AddBackendSecurity("Catalog");
 
+        builder.Services.ConfigureHttpJsonOptions(o => o.SerializerOptions.RespectRequiredConstructorParameters = true);
+        builder.Services.AddSingleton(TimeProvider.System);
+        builder.Services.AddOpenApi();
+        builder.Services.AddScoped<CatalogQueries>();
+        builder.Services.AddScoped<CatalogCommands>();
+        builder.Services.AddScoped<QuoteHandler>();
+        builder.Services.AddScoped<InventoryHandlers>();
+        builder.Services.AddHostedService<HoldExpiryWorker>();
         var app = builder.Build();
         app.MapScaffold("Catalog");
         app.UseAuthentication();
         app.UseAuthorization();
         app.MapDatabaseReadiness(BackendSecurity.Human);
         app.MapBackendBoundary("Catalog");
-        app.MapPost("/v1/internal/quotes", () => Results.Problem(statusCode: 503,
-            title: "Catalog quote workflow is scheduled in AZ-003",
-            extensions: new Dictionary<string, object?> { ["code"] = "QuoteWorkflowNotImplemented" }))
-            .RequireAuthorization(BackendSecurity.Quote);
+        app.MapCatalog();
+        if (app.Environment.IsDevelopment())
+            app.MapOpenApi("/v1/openapi/{documentName}.json").RequireAuthorization(BackendSecurity.Human);
         await app.RunAsync();
     }
 }

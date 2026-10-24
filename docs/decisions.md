@@ -78,3 +78,41 @@ D22 — Initial restore detected current .NET crypto advisories. Verify Microsof
 install SHA-512-checked SDK10.0.402 privately under Azure.local/dotnet (runtime/ASP.NET10.0.13),
 pin EF/Identity/JWT/EF tools10.0.13 and crypto Pkcs10.0.13, and update .NET container digests.
 The original/global SDK remains unchanged. Do not disable NuGet audit or upgrade Angular.
+
+## AZ-003 decisions (2026-10-23)
+
+D23 — AZ-002 independent PASS is present in reviews/AZ-002.md. Its default SQL file collision and
+Chromium trust gap remain environmental limitations, not reasons to weaken isolation. AZ-003
+verifies a new tagged LocalDB database via Verify-Catalog.ps1 and preserves all existing SQL files/data.
+
+D24 — Preserve inspected source CatalogOperations/InventoryHandlers/contracts and their invariants.
+PostgreSQL advisory locks become finite transaction-owned SQL Server application locks scoped to
+the Catalog runtime role. FOR UPDATE becomes UPDLOCK/HOLDLOCK; conditional UPDATE remains the
+allocation boundary. UTC datetime2 conversion, filtered nullable QuoteId uniqueness, SQL decimal
+checks and separate business versions are explicit. No provider-specific migration reuse.
+
+D25 — Catalog HTTP DTOs stay in its Application namespace; only integration messages/envelope belong
+in Shared.Contracts. Queries/commands/quote/inventory remain explicit concrete typed handlers.
+Internal inventory has no public endpoints. Outbox intents and scoped expiry are implemented;
+broker dispatch and Inbox consumption remain AZ-004, fault selection AZ-005. This is not a claim
+of exactly-once message delivery.
+
+D26 — Source Catalog has create/read/edit/activation, not destructive delete. Preserve inactivation
+rather than inventing deletion of quotes/holds or historical sessions. Source quote snapshots
+survive price/name updates while valid; inactivity still prevents new holds. No business-rule
+contradiction affecting money/inventory was found; no accepted-price rule was silently changed.
+
+D27 — CatalogState uses request sequence plus account generation guards and immutable updates.
+Mutations are serialized in one feature store and never automatically retried. Forms are local;
+Admin navigation is an aid, backend authorization remains mandatory. Signals render selectors;
+NGXS and RxJS own shared state and cancellation. Known browser TLS failure is not bypassed.
+
+D28 — Required JSON constructor fields uncovered BadHttpRequestException being mapped to 500
+by the existing safe handler in Development. Classify it with its safe HTTP status and generic
+InvalidRequest ProblemDetails; retain no parser/body detail in responses.
+D29 — The source Catalog Outbox addresses SQS consumer queues, but specs/03-service-bus.md
+requires one domain-events topic in Azure. All Catalog outcomes and TourSessionChanged intents
+therefore target tourlab-azure-domain-events exactly once per logical event, not separate queues
+or per-subscriber copies. This routing difference is resolved before activating a dispatcher.
+AZ-004 will add the topic/subscriptions/filters and actual broker evidence; AZ-003 asserts only
+durable intent destination, not delivery.

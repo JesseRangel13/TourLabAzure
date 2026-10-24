@@ -40,7 +40,7 @@ jobs:
       - name: Build and execute non-relational tests
         run: |
           dotnet build TourLab.Azure.slnx -c Release --no-restore
-          dotnet test tests/Scaffold.Tests -c Release --no-build --filter "FullyQualifiedName!~SqlIsolationTests&FullyQualifiedName!~IdentityHttpTests&FullyQualifiedName!~LiveBffTests"
+          dotnet test tests/Scaffold.Tests -c Release --no-build --filter "FullyQualifiedName!~SqlIsolationTests&FullyQualifiedName!~IdentityHttpTests&FullyQualifiedName!~LiveBffTests&FullyQualifiedName!~CatalogTests&FullyQualifiedName!~CatalogHttpTests"
       - name: Angular locked install and tests
         working-directory: web/tours-angular
         run: |
@@ -80,8 +80,8 @@ jobs:
         run: |
           ./scripts/New-LocalConfiguration.ps1
           ./scripts/Start-Sql.ps1 -AcceptSqlDeveloperLicense
-      - name: Real SQL permission, concurrency and Identity checks
-        run: ./scripts/Verify-SqlIdentity.ps1 -Profile Docker
+      - name: Real SQL permission, Identity and Catalog inventory checks
+        run: ./scripts/Verify-Catalog.ps1 -Profile Docker
       - name: Stop this run SQL without deleting data
         if: always()
         run: |

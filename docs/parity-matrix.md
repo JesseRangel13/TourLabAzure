@@ -9,14 +9,14 @@ Source paths below are relative to the original repository (Gateway UI paths abb
 | Current user/account: Identity/AuthEndpoints.cs; Pages/Account.razor | AZ-002 | GET /auth/me; /account | HTTP session replaces Blazor circuit | AC-A04/06 | Yes; code paths in Gateway/Identity, Browser and web/src/auth | SQL HTTP/BFF/NGXS verified; Chromium NOT VERIFIED | NOT VERIFIED | Pending AZ-002 review |
 | API-tool credential token issuance: Identity/AuthEndpoints.cs /auth/token | AZ-002 | POST /auth/token (tool only) | Retain credential/rate-limit boundary; no browser export | AC-A05 | Yes; code paths in Gateway/Identity, Browser and web/src/auth | SQL HTTP/BFF/NGXS verified; Chromium NOT VERIFIED | NOT VERIFIED | Pending AZ-002 review |
 | CSRF token acquisition: Browser/BrowserEndpoints.cs /bff/session | AZ-002 | GET /auth/csrf | New specified SPA token contract | AC-A04 | Yes; code paths in Gateway/Identity, Browser and web/src/auth | SQL HTTP/BFF/NGXS verified; Chromium NOT VERIFIED | NOT VERIFIED | Pending AZ-002 review |
-| Tour search/list/page: CatalogEndpoints.cs; Pages/Tours.razor | AZ-003 | GET /api/catalog/v1/tours; /tours | Typed HTTP/NGXS | AC-A07/20 | No; scheduled | NOT VERIFIED | NOT VERIFIED | Pending |
-| Tour detail: CatalogEndpoints.cs; Pages/TourDetail.razor | AZ-003 | GET /api/catalog/v1/tours/{id}; /tours/:id | Preserve active/Admin visibility | AC-A07 | No; scheduled | NOT VERIFIED | NOT VERIFIED | Pending |
-| Session prices/availability: CatalogEndpoints.cs; TourDetail.razor | AZ-003 | GET /api/catalog/v1/tours/{id}/sessions | SQL Server atomic inventory | AC-A07/08 | No; scheduled | NOT VERIFIED | NOT VERIFIED | Pending |
-| Create tour: CatalogEndpoints.cs; CatalogAdmin.razor | AZ-003 | POST /api/catalog/v1/admin/tours; /admin/catalog | Backend Admin enforcement | AC-A07 | No; scheduled | NOT VERIFIED | NOT VERIFIED | Pending |
-| Edit/activate/inactivate tour: CatalogEndpoints.cs; CatalogEdit.razor | AZ-003 | PUT /api/catalog/v1/admin/tours/{id}; /admin/catalog/:id | Expected version; inactive prevents holds | AC-A07/08 | No; scheduled | NOT VERIFIED | NOT VERIFIED | Pending |
-| Create session: CatalogEndpoints.cs; Components/Catalog/SessionEditor.razor | AZ-003 | POST /api/catalog/v1/admin/tours/{id}/sessions | Future departure/capacity | AC-A07 | No; scheduled | NOT VERIFIED | NOT VERIFIED | Pending |
-| Change session price: CatalogEndpoints.cs; SessionEditor.razor | AZ-003 | PUT /api/catalog/v1/admin/sessions/{id}/price | Snapshot and price version | AC-A07/08 | No; scheduled | NOT VERIFIED | NOT VERIFIED | Pending |
-| Change session capacity: CatalogEndpoints.cs; SessionEditor.razor | AZ-003 | PUT /api/catalog/v1/admin/sessions/{id}/capacity | Never below occupied | AC-A07/08 | No; scheduled | NOT VERIFIED | NOT VERIFIED | Pending |
+| Tour search/list/page: CatalogEndpoints.cs; Pages/Tours.razor | AZ-003 | GET /api/catalog/v1/tours; /tours | Typed HTTP/NGXS | AC-A07/20 | Yes; Catalog/Application and web/src/catalog | SQL/HTTP and Angular tests executed; Chromium NOT VERIFIED | NOT VERIFIED | Awaiting AZ-003 review |
+| Tour detail: CatalogEndpoints.cs; Pages/TourDetail.razor | AZ-003 | GET /api/catalog/v1/tours/{id}; /tours/:id | Preserve active/Admin visibility | AC-A07 | Yes; Catalog/Application and web/src/catalog | SQL/HTTP and Angular tests executed; Chromium NOT VERIFIED | NOT VERIFIED | Awaiting AZ-003 review |
+| Session prices/availability: CatalogEndpoints.cs; TourDetail.razor | AZ-003 | GET /api/catalog/v1/tours/{id}/sessions | SQL Server atomic inventory | AC-A07/08 | Yes; Catalog/Application and web/src/catalog | SQL/HTTP and Angular tests executed; Chromium NOT VERIFIED | NOT VERIFIED | Awaiting AZ-003 review |
+| Create tour: CatalogEndpoints.cs; CatalogAdmin.razor | AZ-003 | POST /api/catalog/v1/admin/tours; /admin/catalog | Backend Admin enforcement | AC-A07 | Yes; Catalog/Application and web/src/catalog | SQL/HTTP and Angular tests executed; Chromium NOT VERIFIED | NOT VERIFIED | Awaiting AZ-003 review |
+| Edit/activate/inactivate tour: CatalogEndpoints.cs; CatalogEdit.razor | AZ-003 | PUT /api/catalog/v1/admin/tours/{id}; /admin/catalog/:id | Expected version; inactive prevents holds | AC-A07/08 | Yes; Catalog/Application and web/src/catalog | SQL/HTTP and Angular tests executed; Chromium NOT VERIFIED | NOT VERIFIED | Awaiting AZ-003 review |
+| Create session: CatalogEndpoints.cs; Components/Catalog/SessionEditor.razor | AZ-003 | POST /api/catalog/v1/admin/tours/{id}/sessions | Future departure/capacity | AC-A07 | Yes; Catalog/Application and web/src/catalog | SQL/HTTP and Angular tests executed; Chromium NOT VERIFIED | NOT VERIFIED | Awaiting AZ-003 review |
+| Change session price: CatalogEndpoints.cs; SessionEditor.razor | AZ-003 | PUT /api/catalog/v1/admin/sessions/{id}/price | Snapshot and price version | AC-A07/08 | Yes; Catalog/Application and web/src/catalog | SQL/HTTP and Angular tests executed; Chromium NOT VERIFIED | NOT VERIFIED | Awaiting AZ-003 review |
+| Change session capacity: CatalogEndpoints.cs; SessionEditor.razor | AZ-003 | PUT /api/catalog/v1/admin/sessions/{id}/capacity | Never below occupied | AC-A07/08 | Yes; Catalog/Application and web/src/catalog | SQL/HTTP and Angular tests executed; Chromium NOT VERIFIED | NOT VERIFIED | Awaiting AZ-003 review |
 | Create reservation: ReservationEndpoints.cs; Reservations/ReservationSubmission.razor | AZ-004 | POST /api/reservations/v1/reservations; tour booking form | Original idempotency/accepted price | AC-A09/10 | No; scheduled | NOT VERIFIED | NOT VERIFIED | Pending |
 | List/filter reservations: ReservationEndpoints.cs; Pages/Reservations.razor | AZ-004 | GET /api/reservations/v1/reservations; /reservations | Owner claims; Admin filter | AC-A06/19 | No; scheduled | NOT VERIFIED | NOT VERIFIED | Pending |
 | Reservation detail/status: ReservationEndpoints.cs; ReservationDetail.razor | AZ-004 | GET /api/reservations/v1/reservations/{id}; /reservations/:id | Authoritative SQL detail | AC-A10/19 | No; scheduled | NOT VERIFIED | NOT VERIFIED | Pending |
@@ -75,3 +75,13 @@ and AC-A04/05 HTTP/JWT/key-restart evidence are in evidence/AZ-002.md.
 AC-A06 account/claim/role isolation is exercised; reservation/payment ownership404 remains its actual
 resource tasks. Angular auth/guard unit evidence is distinct from unexecuted Chromium UI verification.
 No later business capability row is advanced by an auth test.
+
+## AZ-003 evidence boundary
+
+AC-A07 Catalog actions now have secured HTTP handlers and Angular reactive controls.
+AC-A08 includes real SQL Server final-seat contention, quote reuse/price snapshots, hold/confirm/
+expiry/release/tombstone, rollback and actual hosted expiry worker checks. AC-A20 includes Catalog
+selectors, stale/cancelled loads, account resets, mutation conflict/errors and typed forms.
+See evidence/AZ-003.md and catalog-execution.md for exact executed results.
+Playwright Catalog smoke is implemented and discovered, but Chromium TLS trust still blocks
+browser execution. No AC-A21/33 browser pass, broker delivery, booking, images or cloud proof is implied.

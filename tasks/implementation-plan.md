@@ -1,6 +1,6 @@
 # Azure companion implementation plan
 
-Status as of 2026-10-23: AZ-001 Verified (independent review: docs/reviews/AZ-001.md); AZ-002 Verified (independent review: docs/reviews/AZ-002.md); AZ-003 through AZ-012 Not Started. See docs/evidence/AZ-002.md for executed checks and explicit environment gaps. Work on ONE task per implementation turn; each has an independent Antigravity review gate. Task completion is not mastery or proof of Azure deployment.
+Status as of 2026-10-23: AZ-001 Verified (independent review: docs/reviews/AZ-001.md); AZ-002 Verified (independent review: docs/reviews/AZ-002.md); AZ-003 Verified (independent review: docs/reviews/AZ-003.md); AZ-004 through AZ-012 Not Started. See docs/evidence/AZ-003.md for Catalog checks and docs/evidence/AZ-002.md for prerequisite evidence and environment gaps. Work on ONE task per implementation turn; each has an independent Antigravity review gate. Task completion is not mastery or proof of Azure deployment.
 
 | ID | Scope | Prerequisites | Exit evidence |
 |---|---|---|---|

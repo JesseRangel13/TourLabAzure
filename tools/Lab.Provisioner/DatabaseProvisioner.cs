@@ -89,6 +89,8 @@ public static class DatabaseProvisioner
         foreach (var schema in SqlRules.Schemas)
             await ExecuteAsync(database, $"DENY SELECT,INSERT,UPDATE,DELETE ON OBJECT::[{schema}].[__EFMigrationsHistory] TO [tourlab_azure_{schema}_runtime];", ct);
         await SeedAsync(config, ct);
+        await using var catalogSeed = new CatalogDb(Options<CatalogDb>(config.Runtime["catalog"], "catalog"));
+        await CatalogSeed.RunAsync(catalogSeed, TimeProvider.System, ct);
     }
 
     private static async Task MigrateAsync(ProvisioningConfiguration config, CancellationToken ct)

@@ -61,7 +61,7 @@ public sealed class BackendJwtTests
         }).Build();
         using var issuer = new QuoteServiceTokens(config, TimeProvider.System);
         client.DefaultRequestHeaders.Authorization = new("Bearer", issuer.Issue());
-        using (var service = await client.PostAsync("/v1/internal/quotes", null)) Assert.Equal(HttpStatusCode.ServiceUnavailable, service.StatusCode);
+        using (var service = await client.PostAsJsonAsync("/v1/internal/quotes", new TourLab.Azure.Catalog.Application.CreateQuote(Guid.Empty, Guid.Empty, 0, null, 0, null))) Assert.Equal(HttpStatusCode.BadRequest, service.StatusCode);
         using (var humanRoute = await client.GetAsync("/v1/status")) Assert.Equal(HttpStatusCode.Unauthorized, humanRoute.StatusCode);
         await using var gateway = new AzureFactory<TourLab.Azure.Gateway.Program>("identity");
         using var browser = gateway.CreateClient();

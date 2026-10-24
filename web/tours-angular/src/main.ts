@@ -1,3 +1,6 @@
+import { adminGuard } from "./catalog/admin.guard";
+import { CatalogState } from "./catalog/catalog.state";
+import { CatalogListPage, CatalogDetailPage } from "./catalog/catalog.pages";
 import { Component, inject, provideAppInitializer } from '@angular/core';
 import { bootstrapApplication } from '@angular/platform-browser';
 import { provideHttpClient, withInterceptors, withXsrfConfiguration } from '@angular/common/http';
@@ -14,10 +17,10 @@ import { AccountPage } from './auth/account.page';
 @Component({
   standalone: true,
   template: `<main>
-    <p>EDUCATIONAL LAB · AZ-002</p>
+    <p>EDUCATIONAL LAB · AZ-003</p>
     <h1>TourLab Azure</h1>
     <p>An independent Angular 21 and .NET 10 microservices companion.</p>
-    <p>Sign in to inspect your lab account. Booking, payment and receipt workflows arrive in later tasks.
+    <p>Sign in to browse tours, sessions and availability. Booking, payment and receipt workflows arrive in later tasks.
        All payments, notifications and booking confirmations are simulated.</p>
     <section class="status" aria-live="polite">
       <h2>Gateway process</h2>
@@ -38,7 +41,7 @@ class FoundationPage {
   selector: 'app-root', standalone: true, imports: [RouterOutlet, RouterLink],
   template: `<nav aria-label="Main navigation"><a routerLink="/">Home</a>
     @if (auth().user) {
-      <a routerLink="/account">My account</a><button (click)="logout()" [disabled]="auth().loading">Sign out</button>
+      <a routerLink="/tours">Tours</a>@if (auth().user?.role === 'Admin') { <a routerLink="/admin/catalog">Admin catalog</a> }<a routerLink="/account">My account</a><button (click)="logout()" [disabled]="auth().loading">Sign out</button>
     } @else { <a routerLink="/login">Sign in</a> }
   </nav>
   @if (auth().error) { <p role="alert" class="session-message">{{ auth().error }}</p> }
@@ -56,9 +59,9 @@ class App {
 bootstrapApplication(App, {
   providers: [
     provideHttpClient(withXsrfConfiguration({ cookieName: 'AZURELAB-XSRF-TOKEN', headerName: 'X-AZURELAB-XSRF-TOKEN' }), withInterceptors([sessionExpiryInterceptor])),
-    provideStore([ScaffoldState, AuthState]),
+    provideStore([ScaffoldState, AuthState, CatalogState]),
     provideRouter([{ path: '', component: FoundationPage }, { path: 'login', component: LoginPage },
-      { path: 'account', component: AccountPage, canActivate: [authGuard] }, { path: '**', redirectTo: '' }]),
+      { path: 'tours', component: CatalogListPage, canActivate: [authGuard] }, { path: 'tours/:id', component: CatalogDetailPage, canActivate: [authGuard] }, { path: 'admin/catalog', component: CatalogListPage, canActivate: [authGuard, adminGuard] }, { path: 'account', component: AccountPage, canActivate: [authGuard] }, { path: '**', redirectTo: '' }]),
     provideAppInitializer(() => firstValueFrom(inject(Store).dispatch(new LoadCurrentUser())).catch(() => undefined))
   ]
 }).catch(() => console.error('Angular bootstrap failed'));

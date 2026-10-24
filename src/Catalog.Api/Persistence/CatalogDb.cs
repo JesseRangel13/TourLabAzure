@@ -31,6 +31,10 @@ public sealed class InboxEntry
 
 public sealed class CatalogDb(DbContextOptions<CatalogDb> options) : DbContext(options)
 {
+    public DbSet<Tour> Tours => Set<Tour>();
+    public DbSet<TourSession> Sessions => Set<TourSession>();
+    public DbSet<Quote> Quotes => Set<Quote>();
+    public DbSet<SeatHold> Holds => Set<SeatHold>();
     public DbSet<OutboxEntry> Outbox => Set<OutboxEntry>();
     public DbSet<InboxEntry> Inbox => Set<InboxEntry>();
 
@@ -38,6 +42,7 @@ public sealed class CatalogDb(DbContextOptions<CatalogDb> options) : DbContext(o
     {
         model.HasDefaultSchema("catalog");
         model.UseCollation("Latin1_General_100_BIN2");
+        CatalogModel.Configure(model);
         model.Entity<OutboxEntry>(b =>
         {
             b.ToTable("Outbox", table => table.HasCheckConstraint("CK_Outbox_Json", "ISJSON([EnvelopeJson])=1"));

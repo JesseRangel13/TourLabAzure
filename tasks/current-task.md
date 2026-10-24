@@ -1,34 +1,26 @@
 # Current task
 
-AZ-002 — **Verified** (2026-10-23).
+AZ-003 — **Verified** (2026-10-23).
+Branch: codex/az003-catalog. Baseline: f4a49fa050285f0909d0fedf7e9a7ad426547b71.
+Antigravity independent PASS is recorded in docs/reviews/AZ-003.md.
 
-Antigravity verdict: PASS in docs/reviews/AZ-002.md (re-review complete).
-Both requested script findings were fixed and independently verified.
+Delivered: Catalog tour search/detail/create/edit/activation, future sessions, versioned price/capacity,
+service-only five-minute quote snapshots, atomic SQL inventory, hold/confirm/release/tombstone,
+scoped expiry workers, idempotent Azure-only synthetic seeds and durable single-topic Outbox intents.
+Angular typed clients, shared NGXS selectors/actions, stale/cancelled-load/account reset handling,
+tour search/pagination/detail and reactive Admin controls are implemented.
+Authenticated Development-only OpenAPI describes the typed contract.
 
-Review fixes: Windows PowerShell 5.1-compatible private SDK platform selection; current-shell
-HTTPS host launching; necessary 5.1 process-tree shutdown and startup-readiness compatibility.
-The unchanged foundation security audit also required a scoped undici 7.30.1 build-tool override;
-Angular remains 21.2.x. No security invariant, test assertion or isolation boundary was weakened.
+Executed: Windows PowerShell 5.1 foundation (0 build warnings/errors, 18 .NET tests,
+22 Angular tests, 0 npm vulnerabilities, production build, Compose validation);
+real SQL/security/Catalog 52 passed / 3 intentional separate live skips;
+live HTTPS Catalog/CSRF/roles, bearer transformation and Gateway restart/TLS tests passed.
+Migration/model consistency, PowerShell parsing, pinned actionlint and NuGet audit passed.
 
-Executed in Windows PowerShell 5.1.26100.9444 with SDK 10.0.402:
-foundation passed (Release build 0 warnings/errors, 18 .NET tests, 12 Angular tests,
-0 npm vulnerabilities, production build, Compose config);
-real SQL/Identity 32 passed / 2 intentional live-suite skips;
-separate live HTTPS roundtrip and restart/TLS tests both passed.
-Live tests used -ConfigurationDirectory .local/verify-c2a320b8c49a4db4a45c15df9e95390b.
-All HTTPS listeners were released after cleanup.
+NOT VERIFIED: Chromium UI (known CA-trust gap; Catalog Playwright smoke is implemented and discovered),
+Docker SQL/container image execution, actual Azure SQL/managed identity or cloud deployment.
+The existing default .local/sql file collision is preserved; use the fresh profile printed by Verify-Catalog.
+No source mutation, existing-data deletion, remote push or cloud operation.
 
-Limitation: the pre-existing default .local/sql profile fails authentication and its idempotent
-setup reports SQL error 5170 (existing database-file collision). Existing files/data were preserved.
-The no-argument live check is not claimed passed. Chromium auth UI/CA trust, Docker SQL/container
-execution and Azure SQL/managed identity/cloud deployment remain NOT VERIFIED.
-Functions host remains a later-task prerequisite.
-
-Original source commit/status/all 416 tracked SHA-256 fingerprints are unchanged, confirmed
-by docs/evidence/AZ-002-fixes-source-before.json and AZ-002-fixes-source-after.json.
-No source mutation, data deletion, push or cloud operation occurred.
-
-Exact commands, fixes, results and limitations: docs/evidence/AZ-002.md.
-Execution guide: docs/sql-identity-execution.md.
-Next: independent AZ-002 re-review; resolve the default lab database-file collision separately.
-Then AZ-003 Catalog/quotes/inventory and Angular controls after the review gate.
+Read docs/evidence/AZ-003.md, docs/catalog-execution.md and docs/catalog-learning.md.
+Next: independent Antigravity AZ-003 review, then AZ-004 Service Bus and reservation success slice.

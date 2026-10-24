@@ -9,3 +9,12 @@ nav a { color: white; }
 label { display: block; margin-top: 1rem; }
 input { display: block; padding: .6rem; margin: .3rem 0 1rem; max-width: 22rem; width: 90%; }
 .session-message { max-width: 52rem; margin: 1rem auto; }
+
+textarea { display: block; box-sizing: border-box; width: 100%; max-width: 36rem; min-height: 6rem; padding: .6rem; font: inherit; }
+input[type=checkbox] { display: inline-block; width: auto; margin-right: .5rem; }
+section { margin-block: 1.5rem; padding: 1rem; border: 1px solid #cddbe5; border-radius: .5rem; }
+form { margin-bottom: 1.25rem; }
+button { margin: .25rem .5rem .25rem 0; }
+small { display: block; margin-top: .75rem; }
+[role=alert] { color: #9b2828; }
+@media (max-width: 640px) { main { margin: 1rem .5rem; padding: 1rem; } nav { flex-wrap: wrap; gap: 1rem; } }

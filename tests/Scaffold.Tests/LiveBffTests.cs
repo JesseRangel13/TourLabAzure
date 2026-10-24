@@ -77,6 +77,48 @@ public sealed class LiveBffTests
         await Assert.ThrowsAsync<HttpRequestException>(() => wrong.GetAsync("/health/live"));
     }
 
+    [LiveFact]
+    public async Task RoundTripCatalogAdminCrudUsesCsrfAndTouristCannotMutate()
+    {
+        using var admin = Client();
+        using var alice = Client();
+        await Login(admin, "Admin");
+        await Login(alice, "Alice");
+        var name = "Live Catalog " + Guid.NewGuid();
+        async Task<HttpResponseMessage> Mutate(HttpClient client, HttpMethod method, string path, object body)
+        {
+            using var request = new HttpRequestMessage(method, path) { Content = JsonContent.Create(body) };
+            request.Headers.Add("Origin", Origin.ToString().TrimEnd('/'));
+            request.Headers.Add("X-AZURELAB-XSRF-TOKEN", await Csrf(client));
+            return await client.SendAsync(request);
+        }
+        const string root = "/api/catalog/v1";
+        using (var noCsrf = await admin.PostAsJsonAsync(root + "/admin/tours", new { name, description = "" }))
+            Assert.Equal(HttpStatusCode.BadRequest, noCsrf.StatusCode);
+        using (var forbidden = await Mutate(alice, HttpMethod.Post, root + "/admin/tours", new { name, description = "" }))
+            Assert.Equal(HttpStatusCode.Forbidden, forbidden.StatusCode);
+        using var create = await Mutate(admin, HttpMethod.Post, root + "/admin/tours", new { name, description = "Real HTTPS evidence" });
+        Assert.Equal(HttpStatusCode.Created, create.StatusCode);
+        var tour = (await create.Content.ReadFromJsonAsync<TourLab.Azure.Catalog.Application.TourView>())!;
+        using var sessionResponse = await Mutate(admin, HttpMethod.Post, root + $"/admin/tours/{tour.Id}/sessions",
+            new { startsAtUtc = DateTimeOffset.UtcNow.AddDays(3), unitAmountMinor = 12345, capacity = 3 });
+        Assert.Equal(HttpStatusCode.Created, sessionResponse.StatusCode);
+        var session = (await sessionResponse.Content.ReadFromJsonAsync<TourLab.Azure.Catalog.Application.SessionView>())!;
+        Assert.Equal(3, session.AvailableSeats);
+        using var price = await Mutate(admin, HttpMethod.Put, root + $"/admin/sessions/{session.Id}/price",
+            new { unitAmountMinor = 15000, expectedVersion = session.Version });
+        Assert.Equal(HttpStatusCode.OK, price.StatusCode);
+        using var conflict = await Mutate(admin, HttpMethod.Put, root + $"/admin/sessions/{session.Id}/capacity",
+            new { capacity = 4, expectedVersion = session.Version });
+        Assert.Equal(HttpStatusCode.Conflict, conflict.StatusCode);
+        var detail = await alice.GetFromJsonAsync<TourLab.Azure.Catalog.Application.TourView>(root + $"/tours/{tour.Id}");
+        Assert.Equal(tour.Id, detail!.Id);
+        using var inactive = await Mutate(admin, HttpMethod.Put, root + $"/admin/tours/{tour.Id}",
+            new { name, description = "", active = false, expectedVersion = tour.Version });
+        Assert.Equal(HttpStatusCode.OK, inactive.StatusCode);
+        using var hidden = await alice.GetAsync(root + $"/tours/{tour.Id}");
+        Assert.Equal(HttpStatusCode.NotFound, hidden.StatusCode);
+    }
     private static SocketsHttpHandler? bobHandler;
     private static HttpClient Client(X509Certificate2? trust = null, bool captureBob = false)
     {

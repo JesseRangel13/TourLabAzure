@@ -69,6 +69,12 @@ public sealed class SafeExceptionHandler(ILogger<SafeExceptionHandler> logger) :
     public async ValueTask<bool> TryHandleAsync(HttpContext context, Exception exception, CancellationToken ct)
     {
         if (exception is OperationCanceledException && context.RequestAborted.IsCancellationRequested) return false;
+        if (exception is BadHttpRequestException invalid)
+        {
+            await Results.Problem(statusCode: invalid.StatusCode, title: "Invalid request",
+                extensions: new Dictionary<string, object?> { ["code"] = "InvalidRequest" }).ExecuteAsync(context);
+            return true;
+        }
         var dependency = exception is SqlException or DbUpdateException;
         logger.LogWarning("Request failed with classified type {FailureType}", exception.GetType().Name);
         await Results.Problem(statusCode: dependency ? 503 : 500,

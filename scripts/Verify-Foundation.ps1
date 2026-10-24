@@ -13,7 +13,7 @@ try {
     if ($LASTEXITCODE -ne 0) { throw 'Functions extension restore failed' }
     & dotnet build TourLab.Azure.slnx -c Release --no-restore
     if ($LASTEXITCODE -ne 0) { throw '.NET build failed' }
-    & dotnet test tests/Scaffold.Tests -c Release --no-build --filter 'FullyQualifiedName!~SqlIsolationTests&FullyQualifiedName!~IdentityHttpTests&FullyQualifiedName!~LiveBffTests' --logger 'trx;LogFileName=AZ-001-hosts.trx'
+    & dotnet test tests/Scaffold.Tests -c Release --no-build --filter 'FullyQualifiedName!~SqlIsolationTests&FullyQualifiedName!~IdentityHttpTests&FullyQualifiedName!~LiveBffTests&FullyQualifiedName!~CatalogTests&FullyQualifiedName!~CatalogHttpTests' --logger 'trx;LogFileName=AZ-001-hosts.trx'
     if ($LASTEXITCODE -ne 0) { throw 'Host tests failed' }
     Push-Location web/tours-angular
     try {
