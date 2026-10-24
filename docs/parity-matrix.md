@@ -119,3 +119,23 @@ competing leases and restarted hosted recovery are implemented. No broad purge o
 AC-A20 image state/account/navigation/reset/error tests execute. The eighth browser smoke is
 implemented/discovered; Chromium and complete AC-A21/33 remain NOT VERIFIED.
 Cosmos and receipt Functions remain AZ-007/008. Independent AZ-006 review is pending.
+
+## AZ-007 evidence boundary
+
+Original Bookings/BookingProjection.cs and BookingStore.cs actions are covered by Cosmos SDK,
+Reservations transactional snapshots and the typed Angular/NGXS dashboard:
+
+| Original action/capability | Azure implementation | Acceptance/evidence |
+|---|---|---|
+| GET /v1/my-bookings | GET /v1/dashboard/bookings; /dashboard first/next page | AC-A24, protected own-partition keyset pages |
+| GET /v1/my-bookings/{id} | GET /v1/dashboard/bookings/{id}; /dashboard/{id} | AC-A06/24, owner404 and authoritative link |
+| POST /v1/admin/my-bookings/rebuild | POST /v1/admin/dashboard/rebuild; Admin start/continue controls | AC-A26, bounded/audited normal Outbox snapshots |
+| Conditional newer-version projection | Cosmos create409 / IfMatchEtag412 re-read guard | AC-A25/26, actual emulator/SDK + broker redelivery |
+| Dashboard stale/unavailable/user reset | DashboardState typed clients/selectors/actions/error/trace state | AC-A19/20, Angular unit/render checks |
+
+Source maximum20 page rows and4KiB cursor limits remain. Departure DESC/id ASC follows the explicit
+Azure specification instead of the source creation-key ordering. Original repo remains unchanged.
+Cosmos/SQL, broker settlement, HTTPS booking/cancel/rebuild/poison/restart and browser discovery are
+separate in evidence/AZ-007.md. Normal reads never cross partitions or silently fall back to SQL.
+Actual Azure index enforcement/RBAC/authentication and Chromium remain NOT VERIFIED.
+AZ-006 has independent PASS; independent AZ-007 review is pending. Receipts/Functions remain AZ-008.

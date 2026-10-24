@@ -126,7 +126,7 @@ public static class MessageRoutes
         "SeatsHeld" or "SeatsHoldRejected" or "SeatsConfirmed" or "SeatsConfirmationRejected" or
         "SeatsHoldExpired" or "SeatsReleased" or "TourSessionChanged" or
         "PaymentSucceeded" or "PaymentDeclined" or "PaymentOutcomeUnknown" or "PaymentRefunded" or
-        "RefundNeedsReview" or "ReservationConfirmed" or "ReservationFailed" or "ReservationCancelled" => [Topic],
+        "BookingSnapshotChanged" or "RefundNeedsReview" or "ReservationConfirmed" or "ReservationFailed" or "ReservationCancelled" => [Topic],
         _ => throw new PoisonMessageException("UnknownRoute")
     };
     public static string Serialize<T>(

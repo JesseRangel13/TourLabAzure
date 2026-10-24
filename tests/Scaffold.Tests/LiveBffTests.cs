@@ -120,9 +120,9 @@ public sealed class LiveBffTests
         Assert.Equal(HttpStatusCode.NotFound, hidden.StatusCode);
     }
     private static SocketsHttpHandler? bobHandler;
-    internal static HttpClient Client(X509Certificate2? trust = null, bool captureBob = false)
+    internal static HttpClient Client(X509Certificate2? trust = null, bool captureBob = false, CookieContainer? captureCookies = null)
     {
-        var handler = new SocketsHttpHandler { UseCookies = true, AllowAutoRedirect = false, ConnectTimeout = TimeSpan.FromSeconds(3) };
+        var handler = new SocketsHttpHandler { CookieContainer = captureCookies ?? new CookieContainer(), UseCookies = true, AllowAutoRedirect = false, ConnectTimeout = TimeSpan.FromSeconds(3) };
         handler.SslOptions.CertificateChainPolicy = new X509ChainPolicy
         {
             TrustMode = X509ChainTrustMode.CustomRootTrust, RevocationMode = X509RevocationMode.NoCheck

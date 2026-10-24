@@ -23,7 +23,7 @@ public static class ReservationIntents
         T payload,
         string key,
         DateTimeOffset now,
-        Guid sagaId,
+        Guid? sagaId,
         Guid correlationId,
         Guid causationId)
     {
@@ -154,6 +154,7 @@ public sealed class ReservationCreator(
         };
 
         db.Reservations.Add(reservation);
+        TourLab.Azure.Reservations.Dashboard.BookingSnapshots.Add(db, reservation, now, requestId);
         db.Sagas.Add(saga);
         db.Idempotency.Add(result);
 

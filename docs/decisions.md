@@ -198,3 +198,38 @@ D43 — Keep existing broker/data untouched. Verify images using fresh retained 
 actual SDK/Azurite, plus helper-owned Catalog stop/start recovery fixtures. Angular state/render tests,
 browser discovery and Chromium/cloud verification are separate evidence. Known browser CA gap remains
 NOT VERIFIED; no TLS bypass, cloud deployment, commit/push or resource destruction.
+
+D44 — AZ-007 publishes a full BookingSnapshotChanged atomically with creation and every existing Saga
+Record transition. Existing numeric Reservation.Version is the monotonic businessVersion, separate
+from SQL rowversion bytes. ProjectionSequence is a new indexed SQL identity for rebuild keyset only.
+Accepted price/name/departure/participants remain immutable. All snapshots use the existing single
+domain-events topic and existing explicit dashboard-events filter; no duplicate workflow handler.
+
+D45 — Preserve original dashboard maximum20 rows and4KiB cursor input, with15minute owner/size/query
+binding and a separate Reservations certificate-encrypted Data Protection ring. Azure spec05 overrides
+the source creation-key ordering with departure DESC,id ASC. The pinned emulator ignored MaxItemCount;
+use server TOP(size+1), bounded keyset continuation and four SDK response pages instead of weakening
+page-size assertions. Native SDK continuation behavior/composite-index enforcement are not claimed.
+
+D46 — Actual Cosmos SDK gateway writes point-read version/ETag, create with409 re-read or replace
+with IfMatchEtag/412 re-read, at most five attempts within20s. Old/equal-safe versions do not regress;
+contradictory equal or changed immutable fields are poison. Validate read owner/key/canonical UTC/
+money/status/version before returning data. Never unconditional Upsert or SQL Inbox-before-Cosmos.
+Dedicated PeekLock worker completes only after durable Cosmos success or verified safe no-op.
+
+D47 — Admin rebuild reads only bounded Reservations SQL snapshots via protected run/position/upper
+bound cursor, audits actor, and transactionally enqueues same-type Outbox work with stable retry keys.
+Live changes race rebuild safely through the same ETag/version path. No container/Inbox reset or
+cross-schema read. Source /v1/my-bookings read/rebuild actions map to new explicit dashboard API/UI
+paths; /v1/reservations remains authoritative and separate. Projection outage returns safe503/traceId;
+Angular explicitly labels lag and never substitutes SQL results for a Cosmos success.
+
+D48 — Use existing digest-pinned vNext emulator in HTTPS/gateway mode with the Azure lab CA/leaf and
+fresh private custom emulator key. SDK3.63.2 plus explicit Newtonsoft.Json13.0.4 are pinned/locked;
+System.Text.Json is still used for documents. vNext auth/composite-index enforcement, RU/cloud RBAC/
+managed identity and restart durability remain NOT VERIFIED. No paid account or TLS bypass.
+
+D49 — Preserve existing broker/Azurite data and containers. Isolate relational staged work from a
+fresh live SQL profile before broker/host tests. Consume retained legitimate lab events through the
+normal projection path, never discard/purge. Keep poison in built-in dashboard DLQ and support repair
+through explicit version-safe rebuild. Stop/restart only helper-owned API process trees.

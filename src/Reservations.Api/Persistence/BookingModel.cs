@@ -4,6 +4,7 @@ internal static class BookingModel { public static void Configure(ModelBuilder m
         model.Entity<Reservation>(b =>
         {
             b.ToTable("Reservations", t => t.HasCheckConstraint("CK_Reservation", "[Participants] BETWEEN 1 AND 6 AND [UnitAmountMinor] > 0 AND CONVERT(decimal(38,0),[TotalAmountMinor]) = CONVERT(decimal(38,0),[UnitAmountMinor]) * [Participants] AND [Currency]='MXN' AND [Version]>0"));
+            b.Property(x => x.ProjectionSequence).UseIdentityColumn(); b.HasIndex(x => x.ProjectionSequence).IsUnique();
             b.HasKey(x => x.Id); b.Property(x => x.UserId).HasMaxLength(128); b.Property(x => x.Currency).HasMaxLength(3);
             b.Property(x => x.TourName).HasMaxLength(200);
             b.Property(x => x.Status).HasMaxLength(40); b.Property(x => x.Reason).HasMaxLength(100); b.Property(x => x.Version).IsConcurrencyToken();

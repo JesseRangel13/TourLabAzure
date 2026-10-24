@@ -12,6 +12,11 @@ try
 
         Console.WriteLine("Fresh Azure-only credentials and signing/Data Protection keys generated privately.");
     }
+    else if (args.Length == 2 && args[0] == "dashboard-local")
+    {
+        await LocalDashboard.InitializeAsync(Directory.GetCurrentDirectory(), args[1], shutdown.Token);
+        Console.WriteLine("Owned Cosmos booking container initialized; isolated encrypted dashboard key ring configured.");
+    }
     else if (args.Length == 2 && args[0] == "images-local")
     {
         await LocalImages.InitializeAsync(Directory.GetCurrentDirectory(), args[1], shutdown.Token);

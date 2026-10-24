@@ -1,5 +1,5 @@
 [CmdletBinding()]
-param([string]$ConfigurationDirectory = '.local/sql', [switch]$IncludeBooking, [switch]$IncludeRecovery, [switch]$IncludeImages)
+param([string]$ConfigurationDirectory = '.local/sql', [switch]$IncludeBooking, [switch]$IncludeRecovery, [switch]$IncludeImages, [switch]$IncludeDashboard)
 $ErrorActionPreference = 'Stop'
 . "$PSScriptRoot/Use-Toolchain.ps1"
 $root = Split-Path $PSScriptRoot
@@ -67,6 +67,14 @@ try {
         Start-LabHost 'Catalog'
         & dotnet test tests/Scaffold.Tests -c Release --no-build --filter 'FullyQualifiedName~LiveImageTests.Restarted' --logger 'trx;LogFileName=AZ-006-worker-restart.trx'
         if ($LASTEXITCODE -ne 0) { throw 'Catalog process restart recovery failed.' }
+    }
+    if ($IncludeDashboard) {
+        & dotnet test tests/Scaffold.Tests -c Release --no-build --filter 'FullyQualifiedName~LiveDashboardTests.RoundTrip' --logger 'trx;LogFileName=AZ-007-https-dashboard.trx'
+        if ($LASTEXITCODE -ne 0) { throw 'Actual booking/Cosmos dashboard checks failed.' }
+        Stop-LabHost $processes['Reservations']
+        Start-LabHost 'Reservations'
+        & dotnet test tests/Scaffold.Tests -c Release --no-build --filter 'FullyQualifiedName~LiveDashboardTests.Restarted' --logger 'trx;LogFileName=AZ-007-dashboard-restart.trx'
+        if ($LASTEXITCODE -ne 0) { throw 'Dashboard cursor restart check failed.' }
     }
     Stop-LabHost $processes['Gateway']
     Start-LabHost 'Gateway'

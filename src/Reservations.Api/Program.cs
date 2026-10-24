@@ -1,3 +1,4 @@
+using TourLab.Azure.Reservations.Dashboard;
 using TourLab.Azure.Reservations.Application;
 using TourLab.Azure.Infrastructure.Messaging;
 using TourLab.Azure.Infrastructure.Operations;
@@ -21,6 +22,7 @@ public partial class Program
             services.GetRequiredService<IOptions<RuntimeDatabase>>().Value.ConnectionString,
             sql => { sql.MigrationsHistoryTable("__EFMigrationsHistory", "reservations"); sql.CommandTimeout(5); }));
         builder.Services.AddBackendSecurity("Reservations");
+        builder.Services.AddDashboard();
         builder.Services.AddSingleton<QuoteServiceTokens>();
         builder.Services.AddSingleton(TimeProvider.System);
         builder.Services.AddServiceOperations(builder.Configuration,builder.Environment,"reservations");
@@ -54,7 +56,7 @@ public partial class Program
         app.MapDatabaseReadiness(BackendSecurity.Human);
         app.MapBackendBoundary("Reservations");
 
-        app.MapReservations();
+        app.MapReservations(); app.MapDashboard();
         await app.RunAsync();
     }
 }

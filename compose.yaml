@@ -37,9 +37,11 @@ services:
     networks: [application]
   cosmos:
     image: mcr.microsoft.com/cosmosdb/linux/azure-cosmos-emulator:vnext-latest@sha256:db53613dae19d0a3d5ad50688d14aa6e957af082dafea56b52e1bd3a6b3f1406
-    command: ["--protocol", "http", "--enable-explorer", "false"]
+    command: ["--protocol", "https", "--enable-explorer", "false", "--cert-path", "/certificates/localhost.pfx", "--key-file", "/secrets/account.key"]
     ports: ["127.0.0.1:8089:8081"]
-    volumes: [cosmos-data:/data]
+    environment:
+      CERT_SECRET: ${AZURELAB_COSMOS_CERT_PASSWORD:-}
+    volumes: [cosmos-data:/data, ./.local/certificates/localhost.pfx:/certificates/localhost.pfx:ro, ./.local/cosmos-account.key:/secrets/account.key:ro]
     networks: [application]
 volumes:
   sql-data:

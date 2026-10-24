@@ -1,6 +1,7 @@
 namespace TourLab.Azure.Reservations.Persistence;
 public sealed class Reservation
 {
+    public long ProjectionSequence { get; set; }
     public string TourName { get; set; } = "Tour name unavailable (legacy)";
     public Guid Id { get; set; }
     public string UserId { get; set; } = "";

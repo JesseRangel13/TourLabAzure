@@ -119,6 +119,7 @@ public sealed class SagaRecovery(ReservationsDb db, TimeProvider clock, SagaReco
         reservation.Version = checked(reservation.Version + 1);
         reservation.Status = saga.State;
         reservation.Reason = saga.FailureReason;
+        TourLab.Azure.Reservations.Dashboard.BookingSnapshots.Add(db, reservation, clock.GetUtcNow(), cause);
 
         db.History.Add(new TransitionHistory
         {

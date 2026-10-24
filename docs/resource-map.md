@@ -47,3 +47,20 @@ Fresh account key remains ignored/private; no source AWS bucket, source data, sh
 running source resource is used. Existing broker containers/volume are retained unchanged.
 Real Azure account creation/public-access denial and container-scoped managed-identity RBAC
 remain separately authorized future cloud verification; local account-key emulator is not that proof.
+
+## AZ-007 Cosmos projection ownership
+
+Reservations alone owns database tourlab-azure-dashboard / container bookings, partition /userId,
+id=reservationId and declared departureUtc DESC,id ASC composite index. No default TTL.
+Cosmos gateway uses loopback8089 via existing digest-pinned container tourlab-azure-cosmos-1 and
+retained dedicated tourlab-azure_cosmos-data volume; explorer is disabled. Local .NET uses HTTPS
+with the existing Azure lab CA/leaf, read-only certificate/key mounts and a fresh ignored custom
+emulator account key. No original Dynamo table, volume, endpoint, credential or dataset is used.
+The emulator's internal PostgreSQL implementation is not a business relational provider or shared DB.
+
+Only Reservations DashboardWorker consumes existing dashboard-events (BookingSnapshotChanged);
+workflow reservations-events excludes it. Existing broker containers/configured filter are reused.
+Fresh relational/live profiles have separate credentials, SQL databases and Reservations cursor
+certificate/key ring; Gateway Identity keys are not reused by Dashboard.
+Real cloud account/container-scoped roles, composite-index enforcement and emulator restart
+durability remain separate evidence. No cloud resources or unrestricted endpoints were provisioned.

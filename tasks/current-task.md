@@ -1,27 +1,29 @@
 # Current task
 
-AZ-006 — **Verified** (2026-10-24).
-Branch: codex/az006-images.
-Baseline: dda226bed182e792a093e09ff031b607bc6ff8e4.
-Prerequisite: actual independent Antigravity AZ-005 PASS in docs/reviews/AZ-005.md; independent Antigravity AZ-006 PASS in docs/reviews/AZ-006.md.
+AZ-007 — **Verified** (2026-10-24).
+Branch: codex/az007-dashboard.
+Baseline: 5ddddd5928cd8848b0ff398910ec865b332c641e.
+Prerequisites: actual independent Antigravity AZ-005/AZ-006 PASS in docs/reviews/; independent Antigravity AZ-007 PASS in docs/reviews/AZ-007.md.
 
-Delivered: private Blob tour images with preserved2MiB/three-image/2048x2048 validation;
-service-owned SQL intents/metadata/history and guarded leases; immutable conditional upload,
-success-before-SQL recovery, delete races/tombstones, bounded scoped recovery and authorized
-no-store downloads. Angular/NGXS Admin upload/remove/reload/recover and user placeholders,
-state reset/stale-response/mutation guards. No storage credentials in browser.
+Delivered: transactional versioned booking snapshots; dedicated filtered Service Bus dashboard
+subscription; Cosmos SDK user partitions, immutable snapshot/ETag guards and bounded protected
+pagination; audited keyset SQL rebuild using the same version-safe event path; Angular/NGXS dashboard,
+point detail, eventual-consistency/outage states, authoritative links and Admin bounded rebuild UI.
+No Cosmos-dependent booking transaction, cross-schema business read or SQL fallback.
 
-Executed: Windows PowerShell5.1 foundation31 .NET tests,56Angular tests,0buildwarnings/errors,
-0npm vulnerabilities,403.99kB SPA. Real SQL/Azurite suite104passed/13separate live skips.
-Six actual HTTPS/staging/restart assertions passed,0skips, including restarted hosted image recovery.
-Catalog model snapshot/actionlint/NuGet audit pass; eight browser tests discovered.
-Source HEAD/status/all416tracked hashes unchanged, including pre-existing dirty source CI.
-Private SQL profiles, test objects and existing broker/Azurite data retained; helper API trees stopped.
+Executed: Windows PowerShell5.1 foundation35 .NET tests/0skips,66Angular tests,0buildwarnings/errors,
+0npm vulnerabilities,412.88kB SPA. Real SQL/Cosmos regression110passed/24separate category skips.
+Two actual broker/Cosmos checks plus five HTTPS/restart checks passed with0skips.
+Focused SDK outage check additionally proves booking/charge/cancel/refund/release.
+Reservations model snapshot/actionlint/NuGet audit pass; nine browser tests discovered.
+Source HEAD/status/all416tracked hashes unchanged, including pre-existing source CI modification.
 
-NOT VERIFIED: Chromium (known CA gap), application Docker SQL/images, remote CI, actual Azure
-Blob/MI/RBAC, Cosmos/Functions receipts and emulator restart durability. No cloud deployment,
-source mutation, data purge, commit/push or independent AZ-006 review claim.
+Retained: all original resources, existing Azure broker/Azurite, dedicated Cosmos volume, SQL profiles,
+document/DLQ evidence and private encrypted cursor keys. Only helper-owned host trees stopped.
+NOT VERIFIED: Chromium (known CA gap), real Cosmos composite-index/auth/RBAC/managed-identity/RU
+enforcement, emulator restart durability, application Docker SQL/images, remote CI and receipt Functions.
+No source mutation, data purge, cloud deployment, commit/push or independent AZ-007 review claim.
 
-Read docs/evidence/AZ-006.md, docs/images-execution.md, docs/images-learning.md,
-docs/parity-matrix.md and docs/decisions.md(D40..43).
-Next: independent Antigravity AZ-006 review, resolve findings, then AZ-007 Cosmos dashboard.
+Read docs/evidence/AZ-007.md, docs/dashboard-execution.md, docs/dashboard-learning.md,
+docs/parity-matrix.md and docs/decisions.md(D44..49).
+Next: independent Antigravity AZ-007 review, resolve findings, then AZ-008 receipt Functions.
