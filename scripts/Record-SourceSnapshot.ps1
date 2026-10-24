@@ -1,5 +1,5 @@
 [CmdletBinding()]
-param([Parameter(Mandatory)][string]$SourcePath,[Parameter(Mandatory)][ValidateSet('before','after')][string]$Phase)
+param([Parameter(Mandatory)][string]$SourcePath,[Parameter(Mandatory)][ValidateSet('before','after')][string]$Phase, [ValidatePattern('^AZ-[0-9]{3}$')][string]$TaskId = 'AZ-001')
 $ErrorActionPreference = 'Stop'
 $root = [IO.Path]::GetFullPath((Split-Path $PSScriptRoot)).TrimEnd([IO.Path]::DirectorySeparatorChar,[IO.Path]::AltDirectorySeparatorChar)
 $source = [IO.Path]::GetFullPath((Resolve-Path -LiteralPath $SourcePath).Path).TrimEnd([IO.Path]::DirectorySeparatorChar,[IO.Path]::AltDirectorySeparatorChar)
@@ -20,11 +20,11 @@ $snapshot = [ordered]@{
     status=@(& git --no-optional-locks -C $source status --porcelain=v1 --untracked-files=all)
     files=@($entries)
 }
-$output = "$root/docs/evidence/AZ-001-source-$Phase.json"
+$output = "$root/docs/evidence/$TaskId-source-$Phase.json"
 if ($Phase -eq 'before' -and (Test-Path -LiteralPath $output)) { throw 'Initial source snapshot already exists; preserve it.' }
 $snapshot | ConvertTo-Json -Depth 5 | Set-Content -LiteralPath $output
 if ($Phase -eq 'after') {
-    $before = Get-Content -Raw "$root/docs/evidence/AZ-001-source-before.json" | ConvertFrom-Json
+    $before = Get-Content -Raw "$root/docs/evidence/$TaskId-source-before.json" | ConvertFrom-Json
     $changes = @(Compare-Object ($before.files | ForEach-Object {"$($_.path):$($_.sha256)"}) ($entries | ForEach-Object {"$($_.path):$($_.sha256)"}))
     $sameStatus = ($before.status -join "`n") -ceq ($snapshot.status -join "`n")
     if ($changes.Count -or !$sameStatus -or $before.commit -ne $snapshot.commit) {

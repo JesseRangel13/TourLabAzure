@@ -1,3 +1,4 @@
+import { UserSessionChanged } from './auth/auth.state';
 import { inject, Injectable } from '@angular/core';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Action, Selector, State, StateContext } from '@ngxs/store';
@@ -14,6 +15,11 @@ export interface ScaffoldModel { loading: boolean; status: string; error: string
 export class ScaffoldState {
   private readonly http = inject(HttpClient);
   @Selector() static view(state: ScaffoldModel) { return state; }
+
+  @Action(UserSessionChanged)
+  reset(ctx: StateContext<ScaffoldModel>) {
+    ctx.setState({ loading: false, status: 'Not checked', error: null });
+  }
 
   @Action(LoadGatewayStatus, { cancelUncompleted: true })
   load(ctx: StateContext<ScaffoldModel>) {

@@ -3,3 +3,9 @@ main { max-width: 52rem; margin: 4rem auto; padding: 2rem; background: white; bo
 button { padding: .6rem 1rem; background: #125e94; color: white; border: 0; border-radius: .3rem; cursor: pointer; }
 button:disabled { opacity: .6; }
 .status { padding: 1rem; border-left: 4px solid #125e94; background: #eef5fb; }
+
+nav { display: flex; align-items: center; gap: 1.5rem; padding: 1rem 2rem; background: #193449; }
+nav a { color: white; }
+label { display: block; margin-top: 1rem; }
+input { display: block; padding: .6rem; margin: .3rem 0 1rem; max-width: 22rem; width: 90%; }
+.session-message { max-width: 52rem; margin: 1rem auto; }

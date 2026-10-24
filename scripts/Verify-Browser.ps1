@@ -5,6 +5,7 @@ $root = Split-Path $PSScriptRoot
 $env:NODE_EXTRA_CA_CERTS = Join-Path $root '.local/certificates/ca.crt'
 $env:PLAYWRIGHT_BROWSERS_PATH = Join-Path $root '.local/playwright'
 $env:PLAYWRIGHT_SKIP_BROWSER_GC = '1'
+$env:AZURELAB_IDENTITY_SEEDS = Join-Path $root '.local/sql/provisioner.json'
 Push-Location "$root/tests/browser"
 try {
     & npm ci --ignore-scripts

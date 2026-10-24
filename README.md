@@ -25,6 +25,13 @@ AZ-001 isolation/scaffold; AZ-002 SQL Server/Identity; AZ-003 Catalog + Angular/
 
 Read specs/07-acceptance.md and tasks/implementation-plan.md for scope and gates. Local functionality comes before cloud spending. All payments, notification deliveries, and booking receipts are explicitly simulated.
 
+## Current implementation — AZ-002 (2026-10-23)
+
+SQL Server/Identity/BFF and Angular login/logout/account are implemented, awaiting independent review.
+Start with [SQL/Identity execution](docs/sql-identity-execution.md) and [actual AZ-002 evidence](docs/evidence/AZ-002.md).
+.NET SDK10.0.402 / runtime10.0.13 is pinned; use the private toolchain helper if needed.
+The executed relational profile is a separate SQL Server2025 LocalDB instance; Docker/Azure verification is distinct.
+Catalog and booking workflows remain AZ-003 onward. The source AWS/Blazor repository is unchanged.
 ## AZ-001 implementation status (2026-10-23)
 
 The independent scaffold is now present: five API processes, isolated Functions, Angular21/NGXS,

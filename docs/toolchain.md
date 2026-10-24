@@ -5,8 +5,8 @@ is not proof a container starts on this host. Lockfiles belong to this new proje
 
 | Dependency | Pin | Evidence |
 |---|---|---|
-| .NET SDK |10.0.401, rollForward disabled | installed; restore/build pass |
-| ASP.NET runtime/container |10.0.12 | installed runtime; MCR digest pinned in Dockerfile |
+| .NET SDK |10.0.402, rollForward disabled | installed; restore/build pass |
+| ASP.NET runtime/container |10.0.13 | installed runtime; MCR digest pinned in Dockerfile |
 | Functions SDK/worker | Azure.Functions.Sdk1.0.1 / Worker2.52.0 / Http3.3.0 | NuGet availability; net10 build/metadata pass |
 | Functions Core Tools | no verified installed pin | NOT VERIFIED: command missing; install compatible4.x via official instructions before host checks |
 | Node/npm |24.18.0 /12.0.1 | installed; package engines and .nvmrc enforce |
@@ -41,3 +41,23 @@ References:
 
 Functions .NET10 requires isolated worker2.50+ and a supported host. No Linux classic Consumption
 deployment is implied. Regional platform/SKU compatibility remains AZ-011/012 verification.
+
+## AZ-002 additions
+
+EF Core SqlServer, Identity EF, Data Protection EF, JwtBearer and EF tool10.0.13; YARP2.3.0;
+crypto Pkcs10.0.13; Angular forms21.2.25. Installed real SQL2025 LocalDB17.0.4025.3 is an independent
+local execution profile; SQL2022 Docker image pin remains unchanged and is separately NOT VERIFIED.
+Microsoft release metadata/SHA-512 verified private SDK10.0.402 with runtime/ASP.NET10.0.13.
+MCR SDK10.0.402 and aspnet10.0.13 digests are pinned in Dockerfile; image execution is NOT VERIFIED.
+All10projects report no vulnerable NuGet packages at the observed audit; npm audit also reports0.
+No advisory suppression or global/source SDK upgrade was used.
+
+References:
+https://builds.dotnet.microsoft.com/dotnet/release-metadata/10.0/releases.json
+https://github.com/advisories/GHSA-2fmv-rv2c-59x7
+https://github.com/advisories/GHSA-846f-f764-76mx
+https://github.com/advisories/GHSA-r955-8q5j-3h83
+
+The first private SDK invocation automatically created a standard ASP.NET development certificate
+in the current-user store. It is not the lab CA, was not trusted/used for these hosts and did not
+replace source certificates. Use-Toolchain now disables that first-run behavior for future invocations.
