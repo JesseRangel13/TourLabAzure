@@ -1,8 +1,15 @@
-name: Azure companion foundation
+name: Azure companion
 on:
   pull_request:
   push:
     branches: [main]
+  workflow_dispatch:
+    inputs:
+      accept_sql_developer_eula:
+        description: Explicitly accept SQL Server Developer license for this disposable local CI run
+        type: boolean
+        required: true
+        default: false
 permissions:
   contents: read
 concurrency:
@@ -14,41 +21,73 @@ jobs:
     timeout-minutes: 20
     steps:
       - uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5
-        with:
-          persist-credentials: false
+        with: { persist-credentials: false }
       - uses: actions/setup-dotnet@d4c94342e560b34958eacfc5d055d21461ed1c5d
-        with:
-          global-json-file: global.json
+        with: { global-json-file: global.json }
       - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020
         with:
           node-version-file: web/tours-angular/.nvmrc
           cache: npm
           cache-dependency-path: web/tours-angular/package-lock.json
-      - name: Locked .NET restore
+      - name: Restore pinned dependencies
         run: |
+          dotnet tool restore
           dotnet restore TourLab.Azure.slnx --locked-mode
           dotnet msbuild src/Receipts.Functions/Receipts.Functions.csproj -t:GenerateFunctionsExtensionProject
-      - name: Compile and test five hosts plus Functions scaffold
+      - name: Prepare fresh private local certificate/configuration
+        shell: pwsh
+        run: ./scripts/New-LocalConfiguration.ps1
+      - name: Build and execute non-relational tests
         run: |
           dotnet build TourLab.Azure.slnx -c Release --no-restore
-          dotnet test tests/Scaffold.Tests -c Release --no-build --logger trx
+          dotnet test tests/Scaffold.Tests -c Release --no-build --filter "FullyQualifiedName!~SqlIsolationTests&FullyQualifiedName!~IdentityHttpTests&FullyQualifiedName!~LiveBffTests"
       - name: Angular locked install and tests
         working-directory: web/tours-angular
         run: |
           npm ci --ignore-scripts
           npm test
+          npm audit --audit-level=moderate
       - name: Build production SPA
         shell: pwsh
         run: ./scripts/Build-Web.ps1
-      - name: Verify dependency Compose structure only
-        shell: pwsh
-        run: |
-          ./scripts/New-LocalConfiguration.ps1
-          docker compose --env-file .local/dependencies.env config --quiet
-          if ($LASTEXITCODE -ne 0) { throw 'Compose validation failed' }
+      - name: Validate Compose structure
+        run: docker compose --env-file .local/dependencies.env config --quiet
       - name: Build five independent images; no publish
         run: |
           for service in Gateway Catalog Reservations Payments Notifications; do
             docker build --build-arg SERVICE="$service" -t "tourlab-azure-${service,,}:ci" .
           done
-      # AZ-010 adds actual SQL/emulator/Functions integration. No cloud credentials or CD.
+  sql-integration:
+    if: github.event_name == 'workflow_dispatch' && inputs.accept_sql_developer_eula
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    defaults:
+      run: { shell: pwsh }
+    steps:
+      - uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5
+        with: { persist-credentials: false }
+      - uses: actions/setup-dotnet@d4c94342e560b34958eacfc5d055d21461ed1c5d
+        with: { global-json-file: global.json }
+      - name: Restore and compile
+        run: |
+          dotnet restore TourLab.Azure.slnx --locked-mode
+          if ($LASTEXITCODE -ne 0) { throw 'Restore failed' }
+          dotnet msbuild src/Receipts.Functions/Receipts.Functions.csproj -t:GenerateFunctionsExtensionProject
+          if ($LASTEXITCODE -ne 0) { throw 'Functions extension restore failed' }
+          dotnet build TourLab.Azure.slnx -c Release --no-restore
+          if ($LASTEXITCODE -ne 0) { throw 'Build failed' }
+      - name: Start only isolated SQL after explicit license acceptance
+        run: |
+          ./scripts/New-LocalConfiguration.ps1
+          ./scripts/Start-Sql.ps1 -AcceptSqlDeveloperLicense
+      - name: Real SQL permission, concurrency and Identity checks
+        run: ./scripts/Verify-SqlIdentity.ps1 -Profile Docker
+      - name: Stop this run SQL without deleting data
+        if: always()
+        run: |
+          if (Test-Path .local/dependencies.env) {
+            docker compose --env-file .local/dependencies.env stop sql
+            if ($LASTEXITCODE -ne 0) { throw 'SQL stop failed' }
+          }
+      # No raw auth test traces, private config, credentials, token responses or cookies are uploaded.
+      # No cloud credentials, provisioning, image publish or deployment.

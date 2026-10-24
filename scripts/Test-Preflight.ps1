@@ -1,12 +1,13 @@
 [CmdletBinding()]
 param([switch]$BuildOnly)
 $ErrorActionPreference = 'Stop'
+. "$PSScriptRoot/Use-Toolchain.ps1"
 $root = Split-Path $PSScriptRoot
 Push-Location $root
 $failures = [Collections.Generic.List[string]]::new()
 try {
     $sdk = & dotnet --version
-    if ($LASTEXITCODE -ne 0 -or $sdk -ne '10.0.401') { $failures.Add('.NET SDK 10.0.401 required') }
+    if ($LASTEXITCODE -ne 0 -or $sdk -ne '10.0.402') { $failures.Add('.NET SDK 10.0.402 required') }
     $node = & node --version
     if ($LASTEXITCODE -ne 0 -or $node -ne 'v24.18.0') { $failures.Add('Node 24.18.0 required') }
     $npm = & npm --version

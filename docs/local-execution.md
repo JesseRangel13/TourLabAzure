@@ -1,3 +1,5 @@
+> AZ-002 supersedes the foundation-only host instructions below. Use [SQL/Identity execution](sql-identity-execution.md) for SDK10.0.402, provisioning and authenticated hosts. The remaining text records AZ-001's historical scaffold.
+
 # AZ-001 local execution and review
 
 Run all commands in C:\Users\JesseRangel\Documents\ChatGPT\TourLab Azure.

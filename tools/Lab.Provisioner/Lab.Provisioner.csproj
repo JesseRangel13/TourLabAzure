@@ -1,0 +1,10 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup><OutputType>Exe</OutputType></PropertyGroup>
+  <ItemGroup>
+    <ProjectReference Include="../../src/Gateway.Api/Gateway.Api.csproj" />
+    <ProjectReference Include="../../src/Catalog.Api/Catalog.Api.csproj" />
+    <ProjectReference Include="../../src/Reservations.Api/Reservations.Api.csproj" />
+    <ProjectReference Include="../../src/Payments.Api/Payments.Api.csproj" />
+    <ProjectReference Include="../../src/Notifications.Api/Notifications.Api.csproj" />
+  </ItemGroup>
+</Project>

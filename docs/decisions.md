@@ -46,3 +46,35 @@ Container engines are not automatically started or original resources modified t
 D17 — Official current Functions docs use Azure.Functions.Sdk; use verified1.0.1 and worker2.52.0
 for net10. Explicit generated-extension restore accompanies locked solution restore. No obsolete
 in-process scaffold or direct-handler substitute is presented as actual Functions host evidence.
+
+## AZ-002 decisions (2026-10-23)
+
+D18 — AZ-001 has an actual independent PASS in docs/reviews/AZ-001.md; its old current-task file was
+stale. Docker is still unavailable. Installed SQL Server2025 Express LocalDB17.0.4025.3 can provide
+real SQL Server evidence in a new private tourlab-azure instance. It is not an in-memory substitute.
+Use a new contained database and separate password-authenticated schema principals, not the owner's
+integrated credential in runtime hosts. Named-pipe local connections are a Development-only profile;
+Docker SQL2022 and actual Azure SQL/TLS/managed identities remain separate evidence categories.
+
+D19 — AZ-002 ports persistence foundations (owned Inbox/Outbox, leases, concurrency, Identity and
+Data Protection) and fresh SQL Server migrations. Domain tables/handlers arrive with AZ-003 onward;
+do not prematurely implement business success paths. SQL rowversion is separate from future businessVersion.
+Transport JSON uses checked nvarchar(max), UTC datetime2, explicit binary collation and unique indexes.
+No automatic EF transaction retries duplicate external effects. Claim uses UPDATE OUTPUT with
+UPDLOCK/READPAST/READCOMMITTEDLOCK so it is also valid with READ_COMMITTED_SNAPSHOT enabled.
+
+D20 — Human JWTs are short-lived and audience-bound to each backend; Gateway signs each proxied
+request from its validated cookie identity. The separate Reservations quote signer cannot create
+human roles and Gateway never possesses that private key. The specified internal quote path remains
+service-only and explicitly503 until AZ-003 implements it; no fabricated quote is returned.
+All browser mutations (including login/logout and proxy mutations) enforce CSRF and allowed Origin.
+API-tool /auth/token remains credential-based/rate-limited and rejects browser Origin/Fetch headers.
+
+D21 — Use unique AZURELAB-XSRF-TOKEN / X-AZURELAB-XSRF-TOKEN names alongside
+__Host-tourlab-azure and __Host-tourlab-azure-csrf. Cookies are not isolated by TCP port;
+unique names protect concurrent localhost labs. Refresh the request token after login.
+
+D22 — Initial restore detected current .NET crypto advisories. Verify Microsoft's release metadata,
+install SHA-512-checked SDK10.0.402 privately under Azure.local/dotnet (runtime/ASP.NET10.0.13),
+pin EF/Identity/JWT/EF tools10.0.13 and crypto Pkcs10.0.13, and update .NET container digests.
+The original/global SDK remains unchanged. Do not disable NuGet audit or upgrade Angular.

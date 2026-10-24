@@ -4,11 +4,11 @@ Source paths below are relative to the original repository (Gateway UI paths abb
 
 | Original capability/file or contract | Azure task | New endpoint/UI/code | Compatibility decision | Acceptance ID | Implemented | Locally verified | Azure verified | Reviewer evidence |
 |---|---|---|---|---|---|---|---|---|
-| Login: Gateway.Web/Identity/AuthEndpoints.cs; Pages/Login.razor | AZ-002 | POST /auth/login; /login | Cookie/CSRF BFF; fresh identities | AC-A04/06 | No; scheduled | NOT VERIFIED | NOT VERIFIED | Pending |
-| Logout: Identity/AuthEndpoints.cs; Pages/Logout.razor | AZ-002 | POST /auth/logout; header logout | Reset all user state | AC-A04/20 | No; scheduled | NOT VERIFIED | NOT VERIFIED | Pending |
-| Current user/account: Identity/AuthEndpoints.cs; Pages/Account.razor | AZ-002 | GET /auth/me; /account | HTTP session replaces Blazor circuit | AC-A04/06 | No; scheduled | NOT VERIFIED | NOT VERIFIED | Pending |
-| API-tool credential token issuance: Identity/AuthEndpoints.cs /auth/token | AZ-002 | POST /auth/token (tool only) | Retain credential/rate-limit boundary; no browser export | AC-A05 | No; scheduled | NOT VERIFIED | NOT VERIFIED | Pending |
-| CSRF token acquisition: Browser/BrowserEndpoints.cs /bff/session | AZ-002 | GET /auth/csrf | New specified SPA token contract | AC-A04 | No; scheduled | NOT VERIFIED | NOT VERIFIED | Pending |
+| Login: Gateway.Web/Identity/AuthEndpoints.cs; Pages/Login.razor | AZ-002 | POST /auth/login; /login | Cookie/CSRF BFF; fresh identities | AC-A04/06 | Yes; code paths in Gateway/Identity, Browser and web/src/auth | SQL HTTP/BFF/NGXS verified; Chromium NOT VERIFIED | NOT VERIFIED | Pending AZ-002 review |
+| Logout: Identity/AuthEndpoints.cs; Pages/Logout.razor | AZ-002 | POST /auth/logout; header logout | Reset all user state | AC-A04/20 | Yes; code paths in Gateway/Identity, Browser and web/src/auth | SQL HTTP/BFF/NGXS verified; Chromium NOT VERIFIED | NOT VERIFIED | Pending AZ-002 review |
+| Current user/account: Identity/AuthEndpoints.cs; Pages/Account.razor | AZ-002 | GET /auth/me; /account | HTTP session replaces Blazor circuit | AC-A04/06 | Yes; code paths in Gateway/Identity, Browser and web/src/auth | SQL HTTP/BFF/NGXS verified; Chromium NOT VERIFIED | NOT VERIFIED | Pending AZ-002 review |
+| API-tool credential token issuance: Identity/AuthEndpoints.cs /auth/token | AZ-002 | POST /auth/token (tool only) | Retain credential/rate-limit boundary; no browser export | AC-A05 | Yes; code paths in Gateway/Identity, Browser and web/src/auth | SQL HTTP/BFF/NGXS verified; Chromium NOT VERIFIED | NOT VERIFIED | Pending AZ-002 review |
+| CSRF token acquisition: Browser/BrowserEndpoints.cs /bff/session | AZ-002 | GET /auth/csrf | New specified SPA token contract | AC-A04 | Yes; code paths in Gateway/Identity, Browser and web/src/auth | SQL HTTP/BFF/NGXS verified; Chromium NOT VERIFIED | NOT VERIFIED | Pending AZ-002 review |
 | Tour search/list/page: CatalogEndpoints.cs; Pages/Tours.razor | AZ-003 | GET /api/catalog/v1/tours; /tours | Typed HTTP/NGXS | AC-A07/20 | No; scheduled | NOT VERIFIED | NOT VERIFIED | Pending |
 | Tour detail: CatalogEndpoints.cs; Pages/TourDetail.razor | AZ-003 | GET /api/catalog/v1/tours/{id}; /tours/:id | Preserve active/Admin visibility | AC-A07 | No; scheduled | NOT VERIFIED | NOT VERIFIED | Pending |
 | Session prices/availability: CatalogEndpoints.cs; TourDetail.razor | AZ-003 | GET /api/catalog/v1/tours/{id}/sessions | SQL Server atomic inventory | AC-A07/08 | No; scheduled | NOT VERIFIED | NOT VERIFIED | Pending |
@@ -68,3 +68,10 @@ Source paths below are relative to the original repository (Gateway UI paths abb
 
 Later-task business acceptance IDs are mappings, not passes. Foundational browser smoke does not establish
 booking/login/Admin parity. Source planned/absent features are explicitly identified above.
+## AZ-002 evidence boundary
+
+Foundation auth/SQL capability is implemented. AC-A03 real SQL permission/concurrency/migration evidence
+and AC-A04/05 HTTP/JWT/key-restart evidence are in evidence/AZ-002.md.
+AC-A06 account/claim/role isolation is exercised; reservation/payment ownership404 remains its actual
+resource tasks. Angular auth/guard unit evidence is distinct from unexecuted Chromium UI verification.
+No later business capability row is advanced by an auth test.
