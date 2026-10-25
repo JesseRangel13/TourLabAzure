@@ -28,24 +28,11 @@ public sealed class BrokerDashboardTests
         var c=new ConfigurationBuilder().AddJsonFile(Path.Combine(TestSettings.Output,"reservations.json")).Build();
         return new(Options.Create(c.GetSection("Messaging").Get<MessagingOptions>()!),new Development());
     }
-    private static async Task<ServiceBusReceivedMessage> Own(ServiceBusReceiver receiver,string id,DashboardConsumer consumer,CancellationToken ct)
-    {
-        for(var i=0;i<50;i++)
-        {
-            var message=await receiver.ReceiveMessageAsync(TimeSpan.FromSeconds(3),ct);
-            if(message is null)continue;
-            if(message.MessageId==id)return message;
-            // Apply legitimate retained lab traffic through the same consumer; never discard unrelated messages.
-            await consumer.ConsumeAsync(MessageCodec.Parse(message.Body.ToString()),ct);
-            await receiver.CompleteMessageAsync(message,ct);
-        }
-        throw new InvalidOperationException("Bounded dashboard receive exhausted.");
-    }
     [CosmosBrokerFact]
     public async Task ActualOutboxPublishAndCosmosSuccessBeforeCompleteRedeliveryHaveOneVersionedEffectWithoutSqlInbox()
     {
         await using var transport=Transport();using var store=CosmosIntegrationTests.Store();var consumer=new DashboardConsumer(store);
-        await using var receiver=transport.Client.CreateReceiver(MessageRoutes.Topic,"dashboard-events");
+        await using var receiver=transport.Client.CreateReceiver(MessageRoutes.Topic,"dashboard-events");await using var selection=new BrokerSelection(receiver);
         var row=DashboardSqlTests.Row("broker-dashboard-"+Guid.NewGuid());
         Guid delivery;Guid messageId;
         await using(var db=BookingSqlTests.Reservations())
@@ -59,15 +46,15 @@ public sealed class BrokerDashboardTests
         var claimed=Assert.Single(await leases.ClaimAsync(owner,1,TimeSpan.FromSeconds(60),MessageRoutes.Topic,budget.Token));
         Assert.Equal(delivery,claimed.DeliveryId);await transport.SendAsync(claimed,budget.Token);
         Assert.True(await leases.MarkPublishedAsync(delivery,owner,budget.Token));
-        var first=await Own(receiver,messageId.ToString("D"),consumer,budget.Token);
+        var first=await selection.ReceiveAsync(messageId.ToString("D"),TimeSpan.FromSeconds(10),budget.Token);Assert.NotNull(first);
         await consumer.ConsumeAsync(MessageCodec.Parse(first.Body.ToString()),budget.Token);
         // Cosmos is committed; process loses Complete. No SQL Inbox can suppress the retry.
         await receiver.AbandonMessageAsync(first,cancellationToken:budget.Token);
-        var again=await Own(receiver,messageId.ToString("D"),consumer,budget.Token);
+        var again=await selection.ReceiveAsync(messageId.ToString("D"),TimeSpan.FromSeconds(10),budget.Token);Assert.NotNull(again);
         Assert.True(again.DeliveryCount>first.DeliveryCount);
         await consumer.ConsumeAsync(MessageCodec.Parse(again.Body.ToString()),budget.Token);await receiver.CompleteMessageAsync(again,budget.Token);
         await transport.SendAsync(claimed,budget.Token);
-        var duplicate=await Own(receiver,messageId.ToString("D"),consumer,budget.Token);
+        var duplicate=await selection.ReceiveAsync(messageId.ToString("D"),TimeSpan.FromSeconds(10),budget.Token);Assert.NotNull(duplicate);
         await consumer.ConsumeAsync(MessageCodec.Parse(duplicate.Body.ToString()),budget.Token);await receiver.CompleteMessageAsync(duplicate,budget.Token);
         var page=await store.QueryAsync(row.UserId,10,null,budget.Token);Assert.Single(page.Items);Assert.Equal(1,page.Items[0].BusinessVersion);
         await using var verify=BookingSqlTests.Reservations();Assert.False(await verify.Inbox.AnyAsync(x=>x.MessageId==messageId));
@@ -79,11 +66,11 @@ public sealed class BrokerDashboardTests
         var s=CosmosIntegrationTests.Snapshot();var id=Guid.NewGuid();
         var body=MessageRoutes.Serialize(s,id,Guid.NewGuid(),DateTimeOffset.UtcNow,null,id,id);
         await using var sender=transport.Client.CreateSender(MessageRoutes.Topic);
-        await using var receiver=transport.Client.CreateReceiver(MessageRoutes.Topic,"dashboard-events");
+        await using var receiver=transport.Client.CreateReceiver(MessageRoutes.Topic,"dashboard-events");await using var selection=new BrokerSelection(receiver);
         var message=new ServiceBusMessage(body){MessageId=id.ToString("D"),Subject="BookingSnapshotChanged"};
         message.ApplicationProperties["type"]="BookingSnapshotChanged";await sender.SendMessageAsync(message);
         using var budget=new CancellationTokenSource(TimeSpan.FromSeconds(40));
-        var first=await Own(receiver,id.ToString("D"),consumer,budget.Token);
+        var first=await selection.ReceiveAsync(id.ToString("D"),TimeSpan.FromSeconds(10),budget.Token);Assert.NotNull(first);
         Assert.DoesNotContain(System.Net.NetworkInformation.IPGlobalProperties.GetIPGlobalProperties().GetActiveTcpListeners(),e=>e.Port==18089);
         var options=CosmosIntegrationTests.Settings();options.Endpoint="https://localhost:18089/";
         using(var failed=new CosmosBookingProjection(Options.Create(options),TimeProvider.System))
@@ -96,7 +83,7 @@ public sealed class BrokerDashboardTests
         Assert.Null(await good.ReadAsync(s.UserId,s.ReservationId,budget.Token));
         await using(var db=BookingSqlTests.Reservations())Assert.False(await db.Inbox.AnyAsync(x=>x.MessageId==id));
         await receiver.AbandonMessageAsync(first,cancellationToken:budget.Token);
-        var retry=await Own(receiver,id.ToString("D"),consumer,budget.Token);Assert.True(retry.DeliveryCount>first.DeliveryCount);
+        var retry=await selection.ReceiveAsync(id.ToString("D"),TimeSpan.FromSeconds(10),budget.Token);Assert.NotNull(retry);Assert.True(retry.DeliveryCount>first.DeliveryCount);
         await consumer.ConsumeAsync(MessageCodec.Parse(retry.Body.ToString()),budget.Token);await receiver.CompleteMessageAsync(retry,budget.Token);
         Assert.NotNull(await good.ReadAsync(s.UserId,s.ReservationId,budget.Token));
     }

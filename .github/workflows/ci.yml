@@ -6,7 +6,12 @@ on:
   workflow_dispatch:
     inputs:
       accept_sql_developer_eula:
-        description: Explicitly accept SQL Server Developer license for this disposable local CI run
+        description: Accept SQL Developer license for disposable local CI only
+        type: boolean
+        required: true
+        default: false
+      accept_servicebus_eula:
+        description: Accept Service Bus emulator license for disposable local CI only
         type: boolean
         required: true
         default: false
@@ -18,7 +23,9 @@ concurrency:
 jobs:
   foundation:
     runs-on: ubuntu-24.04
-    timeout-minutes: 20
+    timeout-minutes: 30
+    defaults:
+      run: { shell: pwsh }
     steps:
       - uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5
         with: { persist-credentials: false }
@@ -29,38 +36,28 @@ jobs:
           node-version-file: web/tours-angular/.nvmrc
           cache: npm
           cache-dependency-path: web/tours-angular/package-lock.json
-      - name: Restore pinned dependencies
-        run: |
-          dotnet tool restore
-          dotnet restore TourLab.Azure.slnx --locked-mode
-          dotnet msbuild src/Receipts.Functions/Receipts.Functions.csproj -t:GenerateFunctionsExtensionProject
-      - name: Prepare fresh private local certificate/configuration
-        shell: pwsh
+      - name: Fresh restricted configuration; no cloud credentials
         run: ./scripts/New-LocalConfiguration.ps1
-      - name: Build and execute non-relational tests
+      - name: Locked build, actual unit tests, audit and production SPA
+        run: ./scripts/Verify-Foundation.ps1
+      - name: Build five separate application images; never publish
+        shell: bash
         run: |
-          dotnet build TourLab.Azure.slnx -c Release --no-restore
-          dotnet test tests/Scaffold.Tests -c Release --no-build --filter "FullyQualifiedName!~SqlIsolationTests&FullyQualifiedName!~IdentityHttpTests&FullyQualifiedName!~LiveBffTests&FullyQualifiedName!~CatalogTests&FullyQualifiedName!~CatalogHttpTests&FullyQualifiedName!~BookingSqlTests&FullyQualifiedName!~BrokerIntegrationTests&FullyQualifiedName!~LiveBookingTests&FullyQualifiedName!~RecoverySqlTests&FullyQualifiedName!~RecoveryHttpTests&FullyQualifiedName!~BrokerRecoveryTests&FullyQualifiedName!~LiveRecoveryTests"
-      - name: Angular locked install and tests
-        working-directory: web/tours-angular
-        run: |
-          npm ci --ignore-scripts
-          npm test
-          npm audit --audit-level=moderate
-      - name: Build production SPA
-        shell: pwsh
-        run: ./scripts/Build-Web.ps1
-      - name: Validate Compose structure
-        run: docker compose --env-file .local/dependencies.env config --quiet
-      - name: Build five independent images; no publish
-        run: |
+          set -euo pipefail
           for service in Gateway Catalog Reservations Payments Notifications; do
             docker build --build-arg SERVICE="$service" -t "tourlab-azure-${service,,}:ci" .
           done
-  sql-integration:
-    if: github.event_name == 'workflow_dispatch' && inputs.accept_sql_developer_eula
+      - name: Package the isolated Functions application; never deploy
+        run: |
+          dotnet publish src/Receipts.Functions -c Release --no-restore -o .local/packages/receipts
+          if ($LASTEXITCODE -ne 0) { throw 'Functions packaging failed' }
+  full-stack:
+    needs: foundation
+    if: github.event_name == 'workflow_dispatch' && inputs.accept_sql_developer_eula && inputs.accept_servicebus_eula
     runs-on: ubuntu-24.04
-    timeout-minutes: 20
+    timeout-minutes: 45
+    env:
+      COMPOSE_PROJECT_NAME: tourlab-azure-ci-${{ github.run_id }}-${{ github.run_attempt }}
     defaults:
       run: { shell: pwsh }
     steps:
@@ -68,26 +65,71 @@ jobs:
         with: { persist-credentials: false }
       - uses: actions/setup-dotnet@d4c94342e560b34958eacfc5d055d21461ed1c5d
         with: { global-json-file: global.json }
-      - name: Restore and compile
-        run: |
-          dotnet restore TourLab.Azure.slnx --locked-mode
-          if ($LASTEXITCODE -ne 0) { throw 'Restore failed' }
-          dotnet msbuild src/Receipts.Functions/Receipts.Functions.csproj -t:GenerateFunctionsExtensionProject
-          if ($LASTEXITCODE -ne 0) { throw 'Functions extension restore failed' }
-          dotnet build TourLab.Azure.slnx -c Release --no-restore
-          if ($LASTEXITCODE -ne 0) { throw 'Build failed' }
-      - name: Start only isolated SQL after explicit license acceptance
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020
+        with:
+          node-version-file: web/tours-angular/.nvmrc
+          cache: npm
+          cache-dependency-path: web/tours-angular/package-lock.json
+      - name: Fresh build and synthetic private credentials
         run: |
           ./scripts/New-LocalConfiguration.ps1
+          ./scripts/Verify-Foundation.ps1
+      - name: Trust only this run's generated CA in OS and Chromium NSS
+        shell: bash
+        run: |
+          set -euo pipefail
+          sudo apt-get update
+          sudo apt-get install -y libnss3-tools unzip
+          sudo install -m 644 .local/certificates/ca.crt /usr/local/share/ca-certificates/tourlab-azure-ci.crt
+          sudo update-ca-certificates
+          mkdir -p "$HOME/.pki/nssdb"
+          if [ ! -f "$HOME/.pki/nssdb/cert9.db" ]; then
+            certutil -N --empty-password -d "sql:$HOME/.pki/nssdb"
+          fi
+          certutil -A -d "sql:$HOME/.pki/nssdb" -n tourlab-azure-ci -t 'C,,' -i .local/certificates/ca.crt
+      - name: Install pinned Chromium and its Linux dependencies
+        working-directory: tests/browser
+        run: |
+          npm ci --ignore-scripts
+          if ($LASTEXITCODE -ne 0) { throw 'Browser locked install failed' }
+          $env:PLAYWRIGHT_BROWSERS_PATH=Join-Path $env:GITHUB_WORKSPACE '.local/playwright'
+          npx --no-install playwright install --with-deps chromium
+          if ($LASTEXITCODE -ne 0) { throw 'Pinned browser installation failed' }
+      - name: Start actual isolated SQL, Service Bus, Blob and Cosmos emulators
+        run: |
           ./scripts/Start-Sql.ps1 -AcceptSqlDeveloperLicense
-      - name: Real SQL permission, Identity, Catalog and booking recovery checks
-        run: ./scripts/Verify-Recovery.ps1 -Profile Docker
-      - name: Stop this run SQL without deleting data
+          ./scripts/Start-Broker.ps1 -AcceptSqlDeveloperLicense -AcceptServiceBusLicense
+          ./scripts/Start-Images.ps1
+          ./scripts/Start-Cosmos.ps1
+          ./scripts/Wait-Dependencies.ps1 -SkipBroker
+      - name: Actual relational, broker and storage regression; no skipped tests
+        run: ./scripts/Verify-Integration.ps1 -Profile Docker -IsolatedBroker -AcceptSqlDeveloperLicense -AcceptServiceBusLicense
+      - name: Actual Angular, five APIs, durable workers and Functions trigger in Chromium
+        run: ./scripts/Verify-FullStack.ps1 -Profile Docker -IsolatedBroker -AcceptSqlDeveloperLicense -AcceptServiceBusLicense
+      - name: Export count-only summary; raw authenticated evidence stays private
+        if: always()
+        run: ./scripts/Write-TestSummary.ps1
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        if: always()
+        with:
+          name: tourlab-azure-counts-${{ github.run_id }}-${{ github.run_attempt }}
+          path: .local/ci-summary.json
+          include-hidden-files: true # Only the exact count-only file above; never the private directory.
+          if-no-files-found: error
+          retention-days: 3
+      - name: Stop only this run's containers; retain volumes
         if: always()
         run: |
-          if (Test-Path .local/dependencies.env) {
-            docker compose --env-file .local/dependencies.env stop sql
-            if ($LASTEXITCODE -ne 0) { throw 'SQL stop failed' }
+          $root=(Get-Location).Path
+          . ./scripts/Test-BrokerProfile.ps1
+          foreach ($folder in Get-ChildItem .local/isolatedbroker-* -Directory -ErrorAction SilentlyContinue) {
+            $run=$folder.Name.Replace('isolatedbroker-','')
+            if ($run -notmatch '^[a-f0-9]{32}$') { throw 'Invalid owned test run directory' }
+            Stop-IsolatedTestBroker @{Project="tourlab-azure-az010-$run";File=(Join-Path $folder.FullName 'credentials.env')}
           }
-      # No raw auth test traces, private config, credentials, token responses or cookies are uploaded.
-      # No cloud credentials, provisioning, image publish or deployment.
+          if (Test-Path .local/dependencies.env) {
+            docker compose --env-file .local/dependencies.env stop
+            if ($LASTEXITCODE -ne 0) { throw 'Owned container stop failed' }
+          }
+      # No secrets, auth state, traces, screenshots, raw logs or reports are uploaded.
+      # No Azure login, paid resources, cloud role assignment, publish or deployment.

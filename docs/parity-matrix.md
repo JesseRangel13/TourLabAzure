@@ -170,3 +170,21 @@ Full Chromium execution and real Azure managed-identity/RBAC/Functions hosting r
 No new human action or secret/configuration UI was introduced. Existing user/Admin features and browser
 security boundaries remain intact. Actual independent AZ-008 PASS exists; AZ-009 is Implemented
 Awaiting Review. Full Chromium and actual Azure identity/RBAC/Key Vault/hosting remain NOT VERIFIED.
+## AZ-010 current verification boundary
+
+Earlier NOT VERIFIED browser statements record the earlier task's execution state. Current named
+browser flows are executed12/12 with strict TLS against actual APIs, SQL/emulators and Functions;
+see browser-coverage.md and evidence/AZ-010.md for the exact action-to-test map. This does not
+retroactively make every historic UI fault permutation or real Azure deployment verified.
+
+| Capability | Current local proof | Independent review / cloud |
+|---|---|---|
+| Human baseline plus Blob/Cosmos/receipt extensions |190 selected .NET cases,74 Angular unit tests and12 actual Chromium cases | AZ001..009 actual PASS; AZ010 awaiting review; Azure NOT VERIFIED |
+| Session/navigation and ownership | Concurrent Alice/Bob contexts, secure cookie, refresh/back/deep links, account change, real401 reset, owner404 | AC-A04/06/20/21/33; no browser JWT/state persistence |
+| Full success/cancel and historical document | Actual broker workers/Functions, one simulated refund, immutable downloaded bytes after cancellation, Bob404 | AC-A10/13/27/29/33/34; trace confirmed in actual Function log |
+| Repeatable isolated CI artifacts | Pinned build/test/image/package steps, fresh per-phase broker, explicit two-license gates, private reports/count summaries | AC-A32; actual local execution; remote hosted run NOT VERIFIED |
+| Study preparation | Angular19/21 comparison, study map, interview demo and reproducible commands | Learning material, not proof of mastery or cloud readiness |
+
+No original resource was used as a writable fixture. Before/after commit, status and all416tracked
+source hashes match. No test assertion, business deadline, authorization policy or TLS validation
+was relaxed. See decisionsD64..67 for fixture isolation and the observed corrections.

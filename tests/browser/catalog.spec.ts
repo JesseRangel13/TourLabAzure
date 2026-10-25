@@ -1,23 +1,12 @@
 import { expect, test, Page } from '@playwright/test';
-import { readFileSync } from 'node:fs';
+import { login, logout } from './support';
 
 // Authentication snapshots and traces are never retained.
-test.use({ trace: 'off', screenshot: 'off' });
-test.setTimeout(60_000);
-async function signIn(page: Page, name: string) {
-  const file = process.env['AZURELAB_IDENTITY_SEEDS'];
-  if (!file) throw new Error('Use Verify-Browser.ps1 with an initialized Azure lab configuration.');
-  const config = JSON.parse(readFileSync(file, 'utf8')) as { users: { userName: string; password: string }[] };
-  const user = config.users.find(value => value.userName === name)!;
-  await page.goto('/login?returnUrl=/tours');
-  await page.getByLabel('User name', { exact: true }).fill(user.userName);
-  await page.getByLabel('Password', { exact: true }).fill(user.password);
-  await page.getByRole('button', { name: 'Sign in', exact: true }).click();
-  await expect(page.getByRole('heading', { name: 'Tours', exact: true })).toBeVisible();
-}
+test.setTimeout(120_000);
+
 test('Admin edits Catalog through Angular and tourist sees current availability without Admin controls', async ({ page, browser }) => {
   const name = 'Browser Catalog ' + crypto.randomUUID();
-  await signIn(page, 'Admin');
+  await login(page, 'Admin');
   await page.getByLabel('Tour name', { exact: true }).fill(name);
   await page.getByLabel('Description', { exact: true }).fill('Synthetic Catalog browser evidence.');
   await page.getByRole('button', { name: 'Create tour', exact: true }).click();
@@ -41,15 +30,15 @@ test('Admin edits Catalog through Angular and tourist sees current availability 
   await page.reload();
   await expect(session).toContainText('4 / 4 seats available');
   const detailUrl = page.url();
-  const other = await browser.newContext({ ignoreHTTPSErrors: false });
+  const other = await browser.newContext({baseURL:process.env['AZURELAB_BASE_URL'] ?? 'https://localhost:9443',ignoreHTTPSErrors: false });
   try {
     const tourist = await other.newPage();
-    await signIn(tourist, 'Alice');
+    await login(tourist, 'Alice');
     await tourist.goto(detailUrl);
     await expect(tourist.getByRole('heading', { name, exact: true })).toBeVisible();
     await expect(tourist.getByText('4 / 4 seats available', { exact: false })).toBeVisible();
     await expect(tourist.getByRole('button', { name: 'Save tour', exact: true })).toHaveCount(0);
-    await tourist.getByRole('button', { name: 'Sign out' }).click();
+    await logout(tourist);
     await tourist.goto(detailUrl);
     await expect(tourist.getByRole('heading', { name: 'Sign in', exact: true })).toBeVisible();
   } finally { await other.close(); }

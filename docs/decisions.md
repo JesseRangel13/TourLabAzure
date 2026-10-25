@@ -314,3 +314,30 @@ D63 — Pin Secrets4.11.2, DataProtection.Keys1.6.5/Blobs1.5.5 and existing Iden
 Keys extension requires Core1.63.0, so update Catalog's direct Core pin from1.62.0 and regenerate locks.
 Retain SqlClient6.1.7 supplied by EF10.0.13; its built-in AD managed identity path requires no v7 extension.
 No package/identity provider upgrade is taken as actual cloud verification or deployment authorization.
+D64 — AZ-010 must run broker probes without clearing the retained development namespace. The first
+combined runner exposed cross-profile traffic and an unsafe broad test selector (Live also matched
+Redelivery). Separate SQL/HTTP and broker physical profiles, explicit class filters and zero-skip TRX
+checks replace that runner. Unique-ID broker selection holds at most64 unrelated PeekLocks and
+abandons them without completing/applying/dead-lettering unrelated traffic. Backlogs above that bound
+fail explicitly; do not increase limits or purge existing queues to get green results.
+
+D65 — Add an opt-in, run-specific local test emulator on127.0.0.1:5674/5302 with its own SQL, volume,
+network, project name and fresh private credential. The normal Development5673 guard remains its
+default. Only explicit LocalTestBroker=true selects the reserved5674 test endpoint; mismatches,
+foreign hosts and cloud test flags fail closed. APIs and Functions use the same technical endpoint
+validator. This strengthens fixture isolation while retaining loopback-only access, entity routes,
+manual settlement, Inbox/Outbox assertions and cloud managed-identity enforcement. Existing broker
+containers/data are never restarted or recreated. Each test project is stopped, retaining its data.
+
+D66 — Chromium uses one worker and no test retries, with real cookie actions paced below the unchanged
+credential limiter. Separate contexts test Alice/Bob isolation; expired cookies exercise real401 state
+reset. Authenticated captures/state files stay disabled. Local HTML/JUnit/TRX are private; only fixed
+integer/category summaries and Functions-trace status may be uploaded, with3-day retention.
+CI full-stack requires both explicit license inputs; foundation/image/package checks never deploy.
+
+D67 — Process startup checks HTTPS liveness without credentials; authenticated readiness remains
+protected and is asserted through the real browser session/BFF, plus anonymous401 checks on each
+backend. A document becoming Ready cannot authorize cancellation: the browser receipt test must
+refresh and assert the authoritative Confirmed status before clicking the existing guarded action.
+Pacing metadata persists timestamps across worker recycling, never authentication material. Every
+browser assertion and business timeout remains; no rejected request is retried to hide a failure.

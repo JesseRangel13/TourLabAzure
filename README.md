@@ -25,17 +25,20 @@ AZ-001 isolation/scaffold; AZ-002 SQL Server/Identity; AZ-003 Catalog + Angular/
 
 Read specs/07-acceptance.md and tasks/implementation-plan.md for scope and gates. Local functionality comes before cloud spending. All payments, notification deliveries, and booking receipts are explicitly simulated.
 
-## Current implementation — AZ-009 (2026-10-24)
+## Current implementation — AZ-010 (2026-10-24)
 
-AZ-008 has an actual independent PASS. AZ-009 is **Implemented Awaiting Review**:
-explicit managed identity/Key Vault/strict Azure SQL security paths, durable protected key handling,
-public configuration/permissions artifacts, offline validation and cloud verification checklist.
-Start with [security execution](docs/security-execution.md), [cloud prerequisites](docs/cloud-security-checklist.md)
-and [actual AZ-009 evidence](docs/evidence/AZ-009.md).
-Local security/SQL/Azurite/Cosmos, actual Functions and HTTPS regression checks pass.
-Real Azure identity/RBAC/Key Vault/hosting and Chromium remain NOT VERIFIED.
-The original AWS/Blazor repository is unchanged. No cloud resources were provisioned or deployed.
-Next: independent Antigravity AZ-009 review, then AZ-010 full Playwright/CI.
+AZ-001 through AZ-009 have actual independent PASS reviews. AZ-010 is **Implemented Awaiting Review**.
+The full Chromium suite now executes against real SQL Server, Service Bus, Azurite, Cosmos, five HTTPS
+APIs and the actual receipt Functions listener:12passes/0skips. Final selected .NET categories pass190
+cases/0skips; Angular passes74tests. Five images and an isolated Functions package build locally.
+The user accepted the generated lab CA; TLS validation remains enabled. No cloud deployment occurred.
+
+Start with [testing execution](docs/testing-execution.md), [browser coverage](docs/browser-coverage.md),
+[study map](docs/study-map.md), [Angular19/21 comparison](docs/angular19-to21.md),
+[interview demo](docs/interview-demo.md) and [actual AZ-010 evidence](docs/evidence/AZ-010.md).
+The original AWS/Blazor repository is unchanged. Raw authenticated reports stay private; CI exports
+only count summaries after explicit local emulator license gates. Remote hosted CI and actual Azure
+identity/RBAC/hosting remain NOT VERIFIED. Next: independent Antigravity AZ-010 review, then AZ-011.
 ## AZ-001 implementation status (2026-10-23)
 
 The independent scaffold is now present: five API processes, isolated Functions, Angular21/NGXS,

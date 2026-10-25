@@ -32,9 +32,9 @@ public sealed class BrokerRecoveryTests {
   var id=Guid.NewGuid();var session=Guid.NewGuid();var delivery=Guid.NewGuid();
   var body=MessageRoutes.Serialize(new TourSessionChanged(session,"Synthetic replay evidence",true,1,12345,"MXN"),id,delivery,DateTimeOffset.UtcNow,null,id,id);
   await using var active=transport.Client.CreateReceiver(MessageRoutes.Topic,"reservations-events");
-  using var budget=new CancellationTokenSource(TimeSpan.FromSeconds(50));
+  using var budget=new CancellationTokenSource(TimeSpan.FromSeconds(50));await using var selection=new BrokerSelection(active);
   await transport.SendAsync(new(delivery,id,MessageRoutes.Topic,body),budget.Token);
-  var original=await active.ReceiveMessageAsync(TimeSpan.FromSeconds(5),budget.Token);Assert.NotNull(original);
+  var original=await selection.ReceiveAsync(id.ToString("D"),TimeSpan.FromSeconds(5),budget.Token);Assert.NotNull(original);
   await active.DeadLetterMessageAsync(original,"ControlledReplayBoundary",cancellationToken:budget.Token);
   var inspected=Assert.Single(await operations.InspectAsync("events",10,original.SequenceNumber,"test-admin",budget.Token),x=>x.SequenceNumber==original.SequenceNumber);
   Assert.True(inspected.Replayable);Assert.Equal(id,inspected.LogicalMessageId);
@@ -55,17 +55,17 @@ public sealed class BrokerRecoveryTests {
   }finally{release.SetResult();}
   await Assert.ThrowsAsync<BookingSqlTests.Crash>(()=>first);
   Assert.Equal(original.SequenceNumber,(await dlq.PeekMessageAsync(original.SequenceNumber,budget.Token))!.SequenceNumber);
-  var resent=await active.ReceiveMessageAsync(TimeSpan.FromSeconds(5),budget.Token);Assert.NotNull(resent);
+  var resent=await selection.ReceiveAsync(id.ToString("D"),TimeSpan.FromSeconds(5),budget.Token);Assert.NotNull(resent);
   Assert.NotEqual(original.MessageId,resent.MessageId);Assert.Equal(id.ToString("D"),resent.ApplicationProperties["originalLogicalMessageId"]);
   await using(var db=BookingSqlTests.Reservations())await new TourLab.Azure.Reservations.Messaging.ReservationConsumer(db,TimeProvider.System).ConsumeAsync(MessageCodec.Parse(resent.Body.ToString()),budget.Token);
   await active.CompleteMessageAsync(resent,budget.Token);
   Assert.Equal("SentAndCompleted",(await operations.ReplayAsync(inspected.Id,"test-admin",budget.Token)).Outcome);
-  var repeated=await active.ReceiveMessageAsync(TimeSpan.FromSeconds(5),budget.Token);Assert.NotNull(repeated);
+  var repeated=await selection.ReceiveAsync(id.ToString("D"),TimeSpan.FromSeconds(5),budget.Token);Assert.NotNull(repeated);
   Assert.NotEqual(resent.MessageId,repeated.MessageId);Assert.Equal(id,MessageCodec.Parse(repeated.Body.ToString()).MessageId);
   await using(var db=BookingSqlTests.Reservations())await new TourLab.Azure.Reservations.Messaging.ReservationConsumer(db,TimeProvider.System).ConsumeAsync(MessageCodec.Parse(repeated.Body.ToString()),budget.Token);
   await active.CompleteMessageAsync(repeated,budget.Token);
   Assert.Equal("SentAndCompleted",(await operations.ReplayAsync(inspected.Id,"test-admin",budget.Token)).Outcome);
-  Assert.Null(await active.ReceiveMessageAsync(TimeSpan.FromSeconds(1),budget.Token));
+  Assert.Null(await selection.ReceiveAsync(id.ToString("D"),TimeSpan.FromSeconds(1),budget.Token));
   await using(var db=BookingSqlTests.Reservations()){
    Assert.Equal(1,await db.Inbox.CountAsync(x=>x.MessageId==id,budget.Token));Assert.Equal(1,await db.Projections.CountAsync(x=>x.SessionId==session,budget.Token));
    var audit=await db.Set<TourLab.Azure.Reservations.Persistence.OperationsAudit>().Where(x=>x.ReplayId==inspected.Id).ToListAsync(budget.Token);
@@ -78,10 +78,10 @@ public sealed class BrokerRecoveryTests {
   var operations=scope.ServiceProvider.GetRequiredService<ServiceOperations>();var transport=provider.GetRequiredService<ServiceBusTransport>();
   await using var sender=transport.Client.CreateSender("tourlab-azure-catalog-commands");await using var active=transport.Client.CreateReceiver("tourlab-azure-catalog-commands");
   await using var dlq=transport.Client.CreateReceiver("tourlab-azure-catalog-commands",new ServiceBusReceiverOptions{SubQueue=SubQueue.DeadLetter});
-  using var budget=new CancellationTokenSource(TimeSpan.FromSeconds(35));
+  using var budget=new CancellationTokenSource(TimeSpan.FromSeconds(35));await using var selection=new BrokerSelection(active);
   foreach(var body in new[]{"{invalid",MessageRoutes.Serialize(new HoldSeats(Guid.NewGuid(),Guid.NewGuid(),Guid.NewGuid(),"synthetic"),Guid.NewGuid(),Guid.NewGuid(),DateTimeOffset.UtcNow.AddDays(-15),Guid.NewGuid(),Guid.NewGuid(),Guid.NewGuid())}){
    var message=new ServiceBusMessage(body){MessageId=Guid.NewGuid().ToString("D"),Subject="HoldSeats"};message.ApplicationProperties["type"]="HoldSeats";
-   await sender.SendMessageAsync(message,budget.Token);var original=await active.ReceiveMessageAsync(TimeSpan.FromSeconds(5),budget.Token);Assert.NotNull(original);Assert.Equal(message.MessageId,original.MessageId);
+   await sender.SendMessageAsync(message,budget.Token);var original=await selection.ReceiveAsync(message.MessageId,TimeSpan.FromSeconds(5),budget.Token);Assert.NotNull(original);Assert.Equal(message.MessageId,original.MessageId);
    await active.DeadLetterMessageAsync(original,"ControlledUnsafeReplay",cancellationToken:budget.Token);
    var inspected=Assert.Single(await operations.InspectAsync("commands",10,original.SequenceNumber,"test-admin",budget.Token),x=>x.SequenceNumber==original.SequenceNumber);
    Assert.False(inspected.Replayable);

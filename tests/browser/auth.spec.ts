@@ -1,23 +1,24 @@
 import { expect, test } from '@playwright/test';
-import { readFileSync } from 'node:fs';
+import { login, logout } from './support';
 
-test.use({ trace: 'off', screenshot: 'off' });
-test('Alice logs in, refreshes her account, then signs out', async ({ page }) => {
-  const path = process.env['AZURELAB_IDENTITY_SEEDS'];
-  test.skip(!path, 'Set AZURELAB_IDENTITY_SEEDS to this Azure lab private provisioner config.');
-  const config = JSON.parse(readFileSync(path!, 'utf8')) as { users: { userName: string; password: string }[] };
-  const alice = config.users.find(user => user.userName === 'Alice')!;
+test('Alice logs in, refreshes her account, then signs out', async ({page}) => {
+  await login(page, 'Alice');
+  const paths=['/health/ready',...['catalog','reservations','payments','notifications'].map(service=>'/api/'+service+'/health/ready')];
+  for(const path of paths){
+    const ready=await page.request.get(path);
+    expect(ready.status(),path).toBe(200);
+    expect((await ready.json()).status,path).toBe('Ready');
+  }
   await page.goto('/account');
-  await expect(page.getByRole('heading', { name: 'Sign in', exact: true })).toBeVisible();
-  await page.getByLabel('User name', { exact: true }).fill(alice.userName);
-  await page.getByLabel('Password', { exact: true }).fill(alice.password);
-  await page.getByRole('button', { name: 'Sign in', exact: true }).click();
-  await expect(page.getByRole('heading', { name: 'My account' })).toBeVisible();
-  await expect(page.getByText('Alice', { exact: true })).toBeVisible();
+  await expect(page.getByRole('heading', {name:'My account'})).toBeVisible();
+  await expect(page.getByText('Alice', {exact:true})).toBeVisible();
   await page.reload();
-  await expect(page.getByRole('heading', { name: 'My account' })).toBeVisible();
-  await page.getByRole('button', { name: 'Sign out' }).click();
-  await expect(page.getByRole('heading', { name: 'Sign in', exact: true })).toBeVisible();
+  await expect(page.getByRole('heading', {name:'My account'})).toBeVisible();
+  await logout(page);
+  expect((await page.request.get('/health/ready')).status()).toBe(401);
+  for(const port of [9444,9445,9446,9447]){
+    expect((await page.request.get('https://localhost:'+port+'/health/ready')).status()).toBe(401);
+  }
   await page.goto('/account');
-  await expect(page.getByRole('heading', { name: 'Sign in', exact: true })).toBeVisible();
+  await expect(page.getByRole('heading', {name:'Sign in',exact:true})).toBeVisible();
 });

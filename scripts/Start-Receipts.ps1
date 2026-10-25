@@ -6,6 +6,10 @@ $root=Split-Path $PSScriptRoot
 $privateRoot=[IO.Path]::GetFullPath((Join-Path $root $ConfigurationDirectory))
 if(!$privateRoot.StartsWith((Join-Path $root '.local')+[IO.Path]::DirectorySeparatorChar,[StringComparison]::OrdinalIgnoreCase)){throw 'Only private Azure lab configuration permitted.'}
 $func=Join-Path $root '.local/tools/functions-4.16.0/func.exe'
+if(!(Test-Path $func)){
+    $platform=if($env:OS -like '*Windows*'){'win-x64/func.exe'}else{'linux-x64/func'}
+    $func=Join-Path $root ".local/tools/functions-4.16.0-$platform"
+}
 if(!(Test-Path $func)){throw 'Install pinned Functions Core Tools via Install-Functions.ps1 first.'}
 $settings=Get-Content -Raw (Join-Path $privateRoot 'receipts-host.json')|ConvertFrom-Json
 foreach($property in $settings.PSObject.Properties){[Environment]::SetEnvironmentVariable($property.Name,$property.Value,'Process')}

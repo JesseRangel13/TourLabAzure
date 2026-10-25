@@ -1,19 +1,8 @@
 import { expect, test, Page } from '@playwright/test';
-import { readFileSync } from 'node:fs';
+import { login, logout } from './support';
 
-test.use({ trace: 'off', screenshot: 'off' });
-test.setTimeout(90_000);
-async function login(page: Page, name: string) {
-  const file = process.env['AZURELAB_IDENTITY_SEEDS'];
-  if (!file) throw new Error('Initialize the Azure lab and set AZURELAB_IDENTITY_SEEDS.');
-  const users = JSON.parse(readFileSync(file, 'utf8')).users as { userName: string; password: string }[];
-  const user = users.find(value => value.userName === name)!;
-  await page.goto('/login?returnUrl=/tours');
-  await page.getByLabel('User name', { exact: true }).fill(user.userName);
-  await page.getByLabel('Password', { exact: true }).fill(user.password);
-  await page.getByRole('button', { name: 'Sign in', exact: true }).click();
-  await expect(page.getByRole('heading', { name: 'Tours', exact: true })).toBeVisible();
-}
+test.setTimeout(120_000);
+
 test('Alice books, cancels with one simulated refund and Bob cannot open her booking', async ({ page, browser }) => {
   const name = 'Synthetic browser booking ' + crypto.randomUUID();
   await login(page, 'Admin');
@@ -29,7 +18,7 @@ test('Alice books, cancels with one simulated refund and Bob cannot open her boo
   await page.getByRole('button', { name: 'Create session', exact: true }).click();
   await expect(page.getByText('6 / 6 seats available', { exact: false })).toBeVisible();
   const tourUrl = page.url();
-  await page.getByRole('button', { name: 'Sign out', exact: true }).click();
+  await logout(page);
   await login(page, 'Alice');
   await page.goto(tourUrl);
   await page.getByLabel('Participants', { exact: true }).fill('2');
@@ -43,7 +32,7 @@ test('Alice books, cancels with one simulated refund and Bob cannot open her boo
   }).toPass({ timeout: 45_000, intervals: [1000] });
   await page.reload();
   await expect(page.getByRole('heading', { name: 'Confirmed', exact: true })).toBeVisible();
-  const other = await browser.newContext({ ignoreHTTPSErrors: false });
+  const other = await browser.newContext({baseURL:process.env['AZURELAB_BASE_URL'] ?? 'https://localhost:9443',ignoreHTTPSErrors: false });
   try {
     const bob = await other.newPage();
     await login(bob, 'Bob');

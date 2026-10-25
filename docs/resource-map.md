@@ -102,3 +102,22 @@ Exact entity/container/key/secret scopes are prepared in config/cloud/permission
 templates and the SQL generator assign no role and create no account, key, vault, database or endpoint.
 All real resource IDs, proxy topology, RBAC/Entra access and deployment/lifecycle proof remain AZ011/012.
 Existing local containers/volumes/data and all original AWS resources are retained.
+## AZ-010 verification resource additions
+
+Actual APIs use HTTPS9443..9447; actual Functions uses loopback9450 (replacing the initial planned7072).
+Application SQL can be the dedicated LocalDB instance or the pinned real SQL container at14339.
+Actual Cosmos uses HTTPS8089 with this checkout's lab CA. Historical scaffold/planned entries above
+are not current deployment claims; see per-task evidence for what actually ran.
+
+The optional isolated broker uses AMQP127.0.0.1:5674 and health127.0.0.1:5302. Each phase creates
+project tourlab-azure-az010-<GUID> with its own SQL infrastructure, broker network and retained broker-data
+volume. SQL has no host port and no business tables. Fresh credentials remain only in that run's
+.local/isolatedbroker-<GUID>/credentials.env. Both license switches are mandatory. Default5673/5301
+resources are preserved. API/Functions Development settings explicitly select this fixture; production
+rejects test settings. Port collisions fail without stopping existing resources. Stop retains volumes.
+
+Regression, broker and E2E each use fresh physical tourlab_azure_* databases/profiles. Never run live
+workers on the SQL regression database: it deliberately contains staged crash/outbox test intents.
+Full-stack owns only its recorded five API/Functions child process trees. Chromium package/runtime,
+private HTML/JUnit, logs, downloaded synthetic files, certificates and rings stay under ignored or
+framework-managed private directories. No auth state or private trace is uploaded to CI.

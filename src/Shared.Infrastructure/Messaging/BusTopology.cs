@@ -18,6 +18,7 @@ public static class BusTopology
 }
 public sealed class MessagingOptions
 {
+    public bool LocalTestBroker { get; set; }
     public bool Enabled { get; set; }
     public string ConnectionString { get; set; } = "";
     public string FullyQualifiedNamespace { get; set; } = "";

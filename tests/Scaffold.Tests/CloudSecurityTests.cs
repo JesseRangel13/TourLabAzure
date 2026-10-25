@@ -61,6 +61,8 @@ public sealed class CloudSecurityTests
     [InlineData("AzureSecurity:ClientId","developer-id")]
     [InlineData("Messaging:ConnectionString","Endpoint=sb://foreign")]
     [InlineData("LabFeaturesEnabled","true")]
+    [InlineData("Messaging:LocalTestBroker","true")]
+    [InlineData("ReceiptTestBroker","true")]
     [InlineData("Dashboard:Key","master-key")]
     [InlineData("ReceiptTestBarrier:JobId","test-only")]
     public void CloudRejectsStaticLocalOrDevelopmentSettingsBeforeSecretReader(string setting,string value)

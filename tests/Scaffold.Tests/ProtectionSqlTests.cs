@@ -19,7 +19,7 @@ public sealed class ProtectionSqlTests
     public async Task DurableSqlRingSurvivesProviderRestartAndCertificateRolloverWithoutPlaintextKeys()
     {
         var folder=Path.Combine(TestSettings.Root,".local","protection-"+Guid.NewGuid().ToString("N"));
-        PrivateConfiguration.Initialize(TestSettings.Root,folder,"tourlab_azure_protection_"+Guid.NewGuid().ToString("N"),"LocalDb");
+        PrivateConfiguration.Initialize(TestSettings.Root,folder,"tourlab_azure_protection_"+Guid.NewGuid().ToString("N"),TestSettings.Configuration.Profile);
         var configuration=PrivateConfiguration.Read(Path.Combine(folder,"provisioner.json"));
         await DatabaseProvisioner.BootstrapAsync(configuration,default);
         var activeSettings=new ConfigurationManager();activeSettings.AddJsonFile(Path.Combine(folder,"gateway.json"));

@@ -23,8 +23,8 @@ builder.Logging.Configure(o => o.ActivityTrackingOptions = ActivityTrackingOptio
 builder.Logging.AddFilter("Microsoft.EntityFrameworkCore.Database.Command", LogLevel.Warning);
 builder.Logging.AddFilter("Microsoft.EntityFrameworkCore.Update", LogLevel.None);
 builder.Services.AddOptions<TourLab.Azure.Receipts.ReceiptBusSettings>()
-    .Configure<IConfiguration>( (o, c) => { o.ConnectionString = c["ReceiptBus"] ?? ""; o.Cloud = TourLab.Azure.Infrastructure.Security.AzureSecurity.Cloud(c); })
-    .Validate(o => TourLab.Azure.Receipts.ReceiptBusSettings.Safe(o.ConnectionString, builder.Environment.IsDevelopment()) || o.Cloud, "Receipt binding requires validated local emulator or explicit managed identity settings.")
+    .Configure<IConfiguration>( (o, c) => { o.ConnectionString = c["ReceiptBus"] ?? ""; o.LocalTestBroker = c.GetValue<bool>("ReceiptTestBroker"); o.Cloud = TourLab.Azure.Infrastructure.Security.AzureSecurity.Cloud(c); })
+    .Validate(o => TourLab.Azure.Receipts.ReceiptBusSettings.Safe(o.ConnectionString, builder.Environment.IsDevelopment(), o.LocalTestBroker) || o.Cloud, "Receipt binding requires validated local emulator or explicit managed identity settings.")
     .ValidateOnStart();
 builder.Services.AddRuntimeDatabase("notifications");
 builder.Services.AddDbContext<NotificationsDb>((services, options) => options.UseSqlServer(

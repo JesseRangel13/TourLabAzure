@@ -1,6 +1,11 @@
 [CmdletBinding()]
 param()
-$ErrorActionPreference = 'Stop'
-if (!$IsWindows) { throw 'On Linux/macOS import .local/certificates/ca.crt into your user/browser trust store; never disable TLS validation.' }
-$certificate = Join-Path (Split-Path $PSScriptRoot) '.local/certificates/ca.crt'
-Import-Certificate -FilePath $certificate -CertStoreLocation ('Cert:' + [IO.Path]::DirectorySeparatorChar + 'CurrentUser' + [IO.Path]::DirectorySeparatorChar + 'Root') | Select-Object Subject, Thumbprint
+$ErrorActionPreference='Stop'
+$root=Split-Path $PSScriptRoot
+$isWin=$IsWindows -or ($env:OS -like '*Windows*') -or ([IO.Path]::DirectorySeparatorChar -eq '\')
+$certificate=Join-Path $root '.local/certificates/ca.crt'
+if($isWin){
+    Import-Certificate -FilePath $certificate -CertStoreLocation 'Cert:\CurrentUser\Root' | Select-Object Subject,Thumbprint
+}else{
+    throw 'Import this generated CA into both OS and Chromium NSS trust stores; see docs/testing-execution.md. Never disable TLS validation.'
+}

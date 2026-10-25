@@ -1,34 +1,30 @@
 # Current task
 
-AZ-009 — **Verified** (2026-10-24).
-Branch: codex/az009-security.
-Baseline: b9640fb1a14cc69095b3c48afd8bf5f66e1631ee.
-Prerequisite: actual independent Antigravity AZ-008 PASS in docs/reviews/AZ-008.md; independent Antigravity AZ-009 PASS in docs/reviews/AZ-009.md.
+AZ-010 — **Verified** (2026-10-25).
+Branch: codex/az010-automation. Baseline: fad0d4e.
+Independent review completed: PASS in docs/reviews/AZ-010.md.
+Next: commit and push codex/az010-automation, then begin AZ-011.
 
-Delivered: explicit system managed-identity cloud paths and strict configuration guards for five APIs/
-Functions; bounded versioned Key Vault signing secrets with public fingerprint matching; bounded JWT
-public-key rollover; Gateway SQL key ring with Key Vault encryption, separate protected dashboard Blob
-ring, local active/previous certificate support; exact proxy/origin/TLS guards; offline config validator,
-explicit object-ID Azure SQL principal generator, limited receipt job/audit grants and immutable-column
-denials; public templates, role map and real-cloud prerequisite checklist. No new user-facing secret UI.
+Delivered: real SQL/storage and isolated broker profiles, explicit test-category filters and zero-skip
+checks, bounded own-probe selection, dedicated run-specific broker5674/5302 with fresh SQL/credentials,
+full-stack Functions/five-HTTPS-API/Chromium orchestration, private reports and count-only CI artifacts,
+explicit license-gated CI, complete NGXS session-boundary tests, browser coverage, Angular19/21 notes,
+study map and interview demo. Normal transport defaults and cloud identity/security guards remain.
 
-Executed: Windows PowerShell5.1 foundation82 .NET tests/0skips,72Angular tests/13files,0warnings/errors,
-0npm vulnerabilities,418.29kB SPA. Real SQL/Azurite/Cosmos regression174passed/20separate-category skips.
-Actual Functions crash/restart/DLQ plus HTTPS booking/download/owner/cancel/cookie/TLS/trace checks:
-7passed/0skips. Final policy/protection follow-up38passed and immutable-column SQL follow-up2passed.
-Offline synthetic config/generator smoke passes; unresolved templates correctly rejected.
-Identity/Reservations models have no pending changes; NuGet audit/actionlint/whitespace pass.
-Ten browser tests discovered; Chromium remains NOT VERIFIED.
-Original HEAD/status/all416tracked hashes unchanged, including pre-existing source CI modification.
+Executed: final183 SQL/storage/unit cases plus7 actual broker cases =190 .NET passes/0skips.
+Final12 Chromium passes/0failed/0errors/0skips against actual SQL/Service Bus/Azurite/Cosmos/Functions,
+including authenticated readiness, strict TLS, concurrent users/navigation/401/CSRF, booking/cancel,
+Admin, images, dashboard and immutable historical receipt download/owner404. Browser trace verified
+in actual Functions output.74 Angular unit tests/14files passed;0npm vulnerabilities;418.29kB SPA.
+Five pinned application image builds, Functions package, final build, CI lint and script parsing pass.
+Focused43 security cases overlap the190 totals. Foundation ran in Windows PowerShell5.1; full-stack
+ran in PowerShell7.6.5. The user explicitly accepted the generated CA security prompt.
 
-Retained: all original resources, existing Azure containers/data, fresh SQL/protection profiles,
-certificates/encrypted rings and diagnostic evidence. Only helper-owned process trees stopped.
-No cloud authentication, provisioning, role assignment, deployment, purge, commit/push or review PASS.
+Original commit/status/all416 tracked hashes match before/after, including pre-existing source CI edit.
+Only owned verification process trees and test broker projects stopped; normal lab dependencies,
+all volumes/databases/private profiles/reports/certificates/rings remain. No purge or source mutation.
+Read docs/evidence/AZ-010.md for observed failures, exact commands/profiles and final verification.
 
-NOT VERIFIED: actual Azure managed identity/RBAC/Key Vault/SQL/Functions/broker/storage/Cosmos,
-App Service ingress topology, cloud rotation/scale/TLS/quota/lifecycle, Chromium, Docker SQL/images,
-remote CI. Local SDK mocks and SQL impersonation are explicitly separate from cloud proof.
-
-Read docs/evidence/AZ-009.md, docs/security-execution.md, docs/cloud-security-checklist.md,
-docs/security-learning.md, config/cloud/permissions.json and decisions D56..63.
-Next: independent Antigravity AZ-009 review, resolve findings, then AZ-010.
+NOT VERIFIED: remote GitHub hosted execution, Linux/Windows5.1 full-stack execution, real Azure
+identity/RBAC/Key Vault/hosting/quotas/lifecycle/costs. No cloud authentication/provisioning/deployment,
+image publish, commit/push or independent review PASS. Next: Antigravity review, then AZ-011.

@@ -30,14 +30,13 @@ public sealed class ServiceBusTransport : IMessageTransport, IAsyncDisposable
                 Delay = TimeSpan.FromMilliseconds(200), MaxDelay = TimeSpan.FromSeconds(1) }
         };
         if (environment.IsDevelopment()) {
-            var properties = ServiceBusConnectionStringProperties.Parse(config.ConnectionString);
-            if (properties.Endpoint.Host is not ("localhost" or "127.0.0.1") || properties.Endpoint.Port != 5673 ||
+            if (!LocalBrokerEndpoint.Safe(config.ConnectionString,true,config.LocalTestBroker) ||
                 !string.IsNullOrEmpty(config.FullyQualifiedNamespace) ||
                 !config.ConnectionString.Contains("UseDevelopmentEmulator=true", StringComparison.OrdinalIgnoreCase))
                 throw new InvalidOperationException("Only this lab's loopback emulator is permitted in Development.");
             client = new(config.ConnectionString, clientOptions);
         } else {
-            TourLab.Azure.Infrastructure.Security.AzureSecurity.Require(string.IsNullOrEmpty(config.ConnectionString) &&
+            TourLab.Azure.Infrastructure.Security.AzureSecurity.Require(!config.LocalTestBroker && string.IsNullOrEmpty(config.ConnectionString) &&
                 TourLab.Azure.Infrastructure.Security.AzureSecurity.Namespace(config.FullyQualifiedNamespace),"UnsafeCloudMessaging");
             client = new(config.FullyQualifiedNamespace,TourLab.Azure.Infrastructure.Security.AzureSecurity.Credential(),clientOptions);
         }

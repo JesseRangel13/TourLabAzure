@@ -33,25 +33,26 @@ public sealed class BrokerIntegrationTests
         await using var catalog=transport.Client.CreateReceiver(MessageRoutes.Topic,"catalog-events");
         await using var payments=transport.Client.CreateReceiver(MessageRoutes.Topic,"payments-events");
         await using var dashboard=transport.Client.CreateReceiver(MessageRoutes.Topic,"dashboard-events");
+        await using var reservationProbe=new BrokerSelection(reservations);await using var notificationProbe=new BrokerSelection(notifications);await using var catalogProbe=new BrokerSelection(catalog);await using var paymentProbe=new BrokerSelection(payments);await using var dashboardProbe=new BrokerSelection(dashboard);
         var id=Guid.NewGuid().ToString();
         var message=new ServiceBusMessage("Synthetic routing probe"){MessageId=id,Subject="TourSessionChanged",TimeToLive=TimeSpan.FromMinutes(2)};
         message.ApplicationProperties["type"]="TourSessionChanged";
         using var timeout=new CancellationTokenSource(TimeSpan.FromSeconds(30));
         await sender.SendMessageAsync(message,timeout.Token);
-        var delivered=await reservations.ReceiveMessageAsync(TimeSpan.FromSeconds(8),timeout.Token);
+        var delivered=await reservationProbe.ReceiveAsync(id,TimeSpan.FromSeconds(8),timeout.Token);
         Assert.NotNull(delivered);Assert.Equal(id,delivered.MessageId);
         await reservations.CompleteMessageAsync(delivered,timeout.Token);
-        Assert.Null(await notifications.ReceiveMessageAsync(TimeSpan.FromSeconds(1),timeout.Token));
-        Assert.Null(await catalog.ReceiveMessageAsync(TimeSpan.FromSeconds(1),timeout.Token));
-        Assert.Null(await payments.ReceiveMessageAsync(TimeSpan.FromSeconds(1),timeout.Token));
-        Assert.Null(await dashboard.ReceiveMessageAsync(TimeSpan.FromSeconds(1),timeout.Token));
+        Assert.Null(await notificationProbe.ReceiveAsync(id,TimeSpan.FromSeconds(1),timeout.Token));
+        Assert.Null(await catalogProbe.ReceiveAsync(id,TimeSpan.FromSeconds(1),timeout.Token));
+        Assert.Null(await paymentProbe.ReceiveAsync(id,TimeSpan.FromSeconds(1),timeout.Token));
+        Assert.Null(await dashboardProbe.ReceiveAsync(id,TimeSpan.FromSeconds(1),timeout.Token));
         var notification=new ServiceBusMessage("Synthetic routing probe"){MessageId=Guid.NewGuid().ToString(),Subject="ReservationConfirmed",TimeToLive=TimeSpan.FromMinutes(2)};
         notification.ApplicationProperties["type"]="ReservationConfirmed";
         await sender.SendMessageAsync(notification,timeout.Token);
-        var notify=await notifications.ReceiveMessageAsync(TimeSpan.FromSeconds(8),timeout.Token);
+        var notify=await notificationProbe.ReceiveAsync(notification.MessageId,TimeSpan.FromSeconds(8),timeout.Token);
         Assert.NotNull(notify);Assert.Equal(notification.MessageId,notify.MessageId);
         await notifications.CompleteMessageAsync(notify,timeout.Token);
-        Assert.Null(await reservations.ReceiveMessageAsync(TimeSpan.FromSeconds(1),timeout.Token));
+        Assert.Null(await reservationProbe.ReceiveAsync(notification.MessageId,TimeSpan.FromSeconds(1),timeout.Token));
     }
     [BrokerFact]
     public async Task RealOutboxSendBeforeMarkCrashAndInboxCommitBeforeCompleteRedeliveryHaveOneEffect()
@@ -62,7 +63,7 @@ public sealed class BrokerIntegrationTests
         var body=MessageRoutes.Serialize(new TourLab.Azure.Contracts.TourSessionChanged(session,"Broker SQL redelivery probe",false,1,100,"MXN"),
             id,delivery,DateTimeOffset.UtcNow,null,id,id);
         await using var receiver=transport.Client.CreateReceiver(MessageRoutes.Topic,"reservations-events");
-        using var timeout=new CancellationTokenSource(TimeSpan.FromSeconds(30));
+        using var timeout=new CancellationTokenSource(TimeSpan.FromSeconds(30));await using var selection=new BrokerSelection(receiver);
         var clock=new BookingSqlTests.Clock();
         var leases=new SqlOutboxLeases(TestSettings.Configuration.Runtime["catalog"],"catalog",clock);
         await using(var db=BookingSqlTests.Catalog()){
@@ -76,12 +77,12 @@ public sealed class BrokerIntegrationTests
             var row=await db.Outbox.SingleAsync(x=>x.DeliveryId==delivery,timeout.Token);
             Assert.Null(row.PublishedAtUtc);oldOwner=row.LeaseOwner!.Value;
         }
-        var first=await receiver.ReceiveMessageAsync(TimeSpan.FromSeconds(8),timeout.Token);
+        var first=await selection.ReceiveAsync(id.ToString("D"),TimeSpan.FromSeconds(8),timeout.Token);
         Assert.NotNull(first);Assert.Equal(id.ToString("D"),first.MessageId);
         await using(var db=BookingSqlTests.Reservations())
             await new TourLab.Azure.Reservations.Messaging.ReservationConsumer(db,TimeProvider.System).ConsumeAsync(MessageCodec.Parse(first.Body.ToString()),timeout.Token);
         await receiver.AbandonMessageAsync(first,cancellationToken:timeout.Token); // commit succeeded; Complete was lost
-        var again=await receiver.ReceiveMessageAsync(TimeSpan.FromSeconds(8),timeout.Token);
+        var again=await selection.ReceiveAsync(id.ToString("D"),TimeSpan.FromSeconds(8),timeout.Token);
         Assert.NotNull(again);Assert.Equal(first.MessageId,again.MessageId);Assert.True(again.DeliveryCount>first.DeliveryCount);
         await using(var db=BookingSqlTests.Reservations())
             await new TourLab.Azure.Reservations.Messaging.ReservationConsumer(db,TimeProvider.System).ConsumeAsync(MessageCodec.Parse(again.Body.ToString()),timeout.Token);
@@ -89,7 +90,7 @@ public sealed class BrokerIntegrationTests
         clock.Now=clock.Now.AddSeconds(61);
         Assert.True(await new OutboxDispatcher(leases,transport).DispatchOneAsync(timeout.Token));
         Assert.False(await leases.MarkPublishedAsync(delivery,oldOwner,timeout.Token));
-        var resent=await receiver.ReceiveMessageAsync(TimeSpan.FromSeconds(8),timeout.Token);
+        var resent=await selection.ReceiveAsync(id.ToString("D"),TimeSpan.FromSeconds(8),timeout.Token);
         Assert.NotNull(resent);Assert.Equal(first.MessageId,resent.MessageId);
         await using(var db=BookingSqlTests.Reservations())
             await new TourLab.Azure.Reservations.Messaging.ReservationConsumer(db,TimeProvider.System).ConsumeAsync(MessageCodec.Parse(resent.Body.ToString()),timeout.Token);

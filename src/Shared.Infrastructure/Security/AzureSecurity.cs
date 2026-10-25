@@ -53,6 +53,7 @@ public static partial class AzureSecurity
             "Dashboard:KeyDirectory","Dashboard:Key","Dashboard:CaPath","ImageStorage:ConnectionString","ReceiptStorage:ConnectionString"})
             Require(string.IsNullOrEmpty(c[key]),"LocalOrStaticCredentialInCloud");
         Require(!c.GetSection("DataProtection:PreviousCertificates").GetChildren().Any(),"LocalCertificateInCloud");
+        Require(!c.GetValue<bool>("Messaging:LocalTestBroker") && !c.GetValue<bool>("ReceiptTestBroker"),"TestBrokerInCloud");
         Require(!c.GetValue<bool>("LabFeaturesEnabled"),"DevelopmentFaultsInCloud");
         Require(!c.GetSection("ReceiptTestBarrier").GetChildren().Any(),"TestBarrierInCloud");
         Require(SqlRules.RuntimeSafe(new() {Schema=Schema(workload),ConnectionString=c.GetConnectionString("Runtime")??"",

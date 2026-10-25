@@ -1,0 +1,24 @@
+services:
+  broker-sql:
+    image: mcr.microsoft.com/mssql/server:2022-CU24-ubuntu-22.04@sha256:49b45a911dc535e9345fbfd7101a1bd8a1e190a5f29b877ef75387a061e5fcf0
+    environment:
+      ACCEPT_EULA: ${AZURELAB_TEST_ACCEPT_EULA:-N}
+      MSSQL_PID: Developer
+      MSSQL_SA_PASSWORD: ${AZURELAB_TEST_BROKER_SQL_PASSWORD:?Explicit test broker startup required}
+    volumes: [broker-data:/var/opt/mssql]
+    networks: [broker]
+  servicebus:
+    image: mcr.microsoft.com/azure-messaging/servicebus-emulator:2.0.1@sha256:5a96d893b245031740f7d46e0fe5ff282d24b78c4b7d761dd57590f3f010a9b3
+    environment:
+      ACCEPT_EULA: ${AZURELAB_TEST_ACCEPT_EULA:-N}
+      SQL_SERVER: broker-sql
+      MSSQL_SA_PASSWORD: ${AZURELAB_TEST_BROKER_SQL_PASSWORD:?Explicit test broker startup required}
+      SQL_WAIT_INTERVAL: 60
+    volumes: [./config/servicebus.json:/ServiceBus_Emulator/ConfigFiles/Config.json:ro]
+    ports: ["127.0.0.1:5674:5672", "127.0.0.1:5302:5300"]
+    depends_on: [broker-sql]
+    networks: [broker]
+volumes:
+  broker-data:
+networks:
+  broker:
