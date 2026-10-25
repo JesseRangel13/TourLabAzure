@@ -23,17 +23,24 @@ public sealed class ServiceBusTransport : IMessageTransport, IAsyncDisposable
     public ServiceBusTransport(IOptions<MessagingOptions> options, IHostEnvironment environment)
     {
         var config = options.Value;
-        // This task authorizes local transport only. Cloud identity/configuration is a separate task.
-        if (!config.Enabled || !environment.IsDevelopment()) throw new InvalidOperationException("Local messaging requires explicit Development enablement.");
-        var properties = ServiceBusConnectionStringProperties.Parse(config.ConnectionString);
-        if (properties.Endpoint.Host is not ("localhost" or "127.0.0.1") || properties.Endpoint.Port != 5673 ||
-            !config.ConnectionString.Contains("UseDevelopmentEmulator=true", StringComparison.OrdinalIgnoreCase))
-            throw new InvalidOperationException("Only this lab's loopback Service Bus emulator is permitted.");
-        client = new(config.ConnectionString, new ServiceBusClientOptions {
+        if (!config.Enabled) throw new InvalidOperationException("Messaging is disabled.");
+        var clientOptions = new ServiceBusClientOptions {
             TransportType = ServiceBusTransportType.AmqpTcp,
             RetryOptions = new ServiceBusRetryOptions { MaxRetries = 2, TryTimeout = TimeSpan.FromSeconds(5),
                 Delay = TimeSpan.FromMilliseconds(200), MaxDelay = TimeSpan.FromSeconds(1) }
-        });
+        };
+        if (environment.IsDevelopment()) {
+            var properties = ServiceBusConnectionStringProperties.Parse(config.ConnectionString);
+            if (properties.Endpoint.Host is not ("localhost" or "127.0.0.1") || properties.Endpoint.Port != 5673 ||
+                !string.IsNullOrEmpty(config.FullyQualifiedNamespace) ||
+                !config.ConnectionString.Contains("UseDevelopmentEmulator=true", StringComparison.OrdinalIgnoreCase))
+                throw new InvalidOperationException("Only this lab's loopback emulator is permitted in Development.");
+            client = new(config.ConnectionString, clientOptions);
+        } else {
+            TourLab.Azure.Infrastructure.Security.AzureSecurity.Require(string.IsNullOrEmpty(config.ConnectionString) &&
+                TourLab.Azure.Infrastructure.Security.AzureSecurity.Namespace(config.FullyQualifiedNamespace),"UnsafeCloudMessaging");
+            client = new(config.FullyQualifiedNamespace,TourLab.Azure.Infrastructure.Security.AzureSecurity.Credential(),clientOptions);
+        }
     }
     public Task SendAsync(ClaimedDelivery delivery, CancellationToken ct)
     {

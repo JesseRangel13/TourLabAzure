@@ -1,0 +1,139 @@
+{
+  "verification": "STRUCTURAL ONLY. No role assignments or cloud access executed.",
+  "identitySelection": "System-assigned managed identity per workload; developer credential chains and user-assigned overrides are rejected.",
+  "workloads": {
+    "gateway": {
+      "sql": "identity runtime only; DataProtectionKeys durable SQL ring",
+      "keyVaultSecrets": [
+        "get:tourlab-azure-human-signing exact secret resource"
+      ],
+      "keyVaultKeys": [
+        "get,wrapKey,unwrapKey:tourlab-azure-gateway-protection exact key resource"
+      ],
+      "serviceBus": [],
+      "blob": [],
+      "cosmos": []
+    },
+    "catalog": {
+      "sql": "catalog runtime only",
+      "serviceBusReceive": [
+        "queues/tourlab-azure-catalog-commands",
+        "topics/tourlab-azure-domain-events/subscriptions/catalog-events"
+      ],
+      "serviceBusSend": [
+        "topics/tourlab-azure-domain-events"
+      ],
+      "blob": [
+        {
+          "container": "tourlab-azure-tour-images",
+          "role": "Storage Blob Data Contributor",
+          "reason": "upload/read/delete recovery"
+        }
+      ],
+      "keyVault": []
+    },
+    "reservations": {
+      "sql": "reservations runtime only",
+      "serviceBusReceive": [
+        "queues/tourlab-azure-reservations-commands",
+        "topics/tourlab-azure-domain-events/subscriptions/reservations-events",
+        "topics/tourlab-azure-domain-events/subscriptions/dashboard-events"
+      ],
+      "serviceBusSend": [
+        "queues/tourlab-azure-catalog-commands",
+        "queues/tourlab-azure-payments-commands",
+        "topics/tourlab-azure-domain-events"
+      ],
+      "cosmos": {
+        "scope": "/dbs/tourlab-azure-dashboard/colls/bookings",
+        "role": "Cosmos DB Built-in Data Contributor"
+      },
+      "blob": [
+        {
+          "container": "tourlab-azure-dashboard-keys",
+          "role": "TourLab Azure Blob Read Write (custom)"
+        }
+      ],
+      "keyVaultSecrets": [
+        "get:tourlab-azure-quote-signing exact secret resource"
+      ],
+      "keyVaultKeys": [
+        "get,wrapKey,unwrapKey:tourlab-azure-dashboard-protection exact key resource"
+      ]
+    },
+    "payments": {
+      "sql": "payments runtime only",
+      "serviceBusReceive": [
+        "queues/tourlab-azure-payments-commands",
+        "topics/tourlab-azure-domain-events/subscriptions/payments-events"
+      ],
+      "serviceBusSend": [
+        "topics/tourlab-azure-domain-events"
+      ],
+      "blob": [],
+      "keyVault": []
+    },
+    "notifications": {
+      "sql": "notifications runtime only",
+      "serviceBusReceive": [
+        "queues/tourlab-azure-notifications-commands",
+        "topics/tourlab-azure-domain-events/subscriptions/notifications-events"
+      ],
+      "serviceBusSend": [
+        "queues/tourlab-azure-receipt-jobs"
+      ],
+      "blob": [
+        {
+          "container": "tourlab-azure-booking-receipts",
+          "role": "Storage Blob Data Reader"
+        }
+      ],
+      "keyVault": []
+    },
+    "receipts": {
+      "sql": "separate contained external principal in Notifications-owned runtime role; object denials restrict to receipt jobs/audit",
+      "serviceBusReceive": [
+        "queues/tourlab-azure-receipt-jobs"
+      ],
+      "serviceBusSend": [],
+      "blob": [
+        {
+          "container": "tourlab-azure-booking-receipts",
+          "role": "TourLab Azure Blob Read Write (custom)"
+        }
+      ],
+      "hostStorage": {
+        "scope": "separate Functions host storage account",
+        "role": "Storage Blob Data Owner",
+        "reason": "documented minimum host coordination; no Blob trigger/Durable Functions used"
+      },
+      "keyVault": []
+    }
+  },
+  "roleNotes": {
+    "serviceBusReceive": "Azure Service Bus Data Receiver at each listed entity",
+    "serviceBusSend": "Azure Service Bus Data Sender at each listed entity",
+    "keyVaultSecrets": "Key Vault Secrets User scoped to each named secret",
+    "keyVaultKeys": "Key Vault Crypto Service Encryption User scoped to each named key; retain prior key versions",
+    "migrations": "Five separate schema migrator identities; no runtime grants or db_owner. Explicit authorized one-shot migration operation only.",
+    "emptySubscriptions": "Current workers attach to empty command queues/subscriptions too; receive roles reflect actual code. Do not broaden to namespace owner.",
+    "adminReplay": "Development-only broker inspection/replay stays disabled in cloud; no additional sender grants are requested."
+  },
+  "customRoles": [
+    {
+      "roleName": "TourLab Azure Blob Read Write",
+      "description": "Receipt generation or cursor-ring persistence. Container assignment only; no blob delete or account key listing.",
+      "permissions": [
+        {
+          "actions": [],
+          "notActions": [],
+          "dataActions": [
+            "Microsoft.Storage/storageAccounts/blobServices/containers/blobs/read",
+            "Microsoft.Storage/storageAccounts/blobServices/containers/blobs/write"
+          ],
+          "notDataActions": []
+        }
+      ]
+    }
+  ]
+}

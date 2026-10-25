@@ -16,7 +16,7 @@ public partial class Program
 {
     public static async Task Main(string[] args)
     {
-        var builder = ScaffoldHosting.Create(args);
+        var builder = await ScaffoldHosting.CreateAsync(args, "reservations");
         builder.Services.AddRuntimeDatabase("reservations");
         builder.Services.AddDbContext<ReservationsDb>((services, options) => options.UseSqlServer(
             services.GetRequiredService<IOptions<RuntimeDatabase>>().Value.ConnectionString,
@@ -35,7 +35,7 @@ public partial class Program
         builder.Services.AddSingleton<QuoteConcurrencyLimit>();
         builder.Services.Configure<CatalogClientOptions>(o => {
             o.BaseAddress=builder.Configuration["Catalog:BaseAddress"]??"https://localhost:9444/";
-            if(!Uri.TryCreate(o.BaseAddress,UriKind.Absolute,out var uri)||uri.Scheme!="https"||uri.Host is not ("localhost" or "127.0.0.1")||uri.Port!=9444)
+            if(builder.Environment.IsDevelopment() ? (!Uri.TryCreate(o.BaseAddress,UriKind.Absolute,out var uri)||uri.Scheme!="https"||uri.Host is not ("localhost" or "127.0.0.1")||uri.Port!=9444) : !TourLab.Azure.Infrastructure.Security.AzureSecurity.Endpoint(o.BaseAddress,"azurewebsites.net"))
                 throw new InvalidOperationException("Only the isolated HTTPS Catalog is permitted in the local profile.");
             o.TotalTimeoutSeconds=10;
         });

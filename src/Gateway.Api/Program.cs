@@ -9,12 +9,13 @@ public partial class Program
 {
     public static async Task Main(string[] args)
     {
-        var builder = ScaffoldHosting.Create(args);
+        var builder = await ScaffoldHosting.CreateAsync(args, "gateway");
         builder.AddLabIdentity();
         builder.Services.AddCredentialRateLimit();
         builder.Services.AddLabProxy(builder.Configuration, builder.Environment);
         var app = builder.Build();
-        _ = app.Services.GetRequiredService<System.Security.Cryptography.X509Certificates.X509Certificate2>();
+        if(!TourLab.Azure.Infrastructure.Security.AzureSecurity.Cloud(builder.Configuration))
+            _=app.Services.GetRequiredService<TourLab.Azure.Infrastructure.Security.ProtectionCertificates>();
         app.MapScaffold("Gateway");
         app.UseAuthentication();
         app.UseBrowserBoundary();

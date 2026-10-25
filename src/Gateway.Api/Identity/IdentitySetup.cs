@@ -49,12 +49,17 @@ public static class IdentitySetup
             options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
             options.Cookie.SameSite = SameSiteMode.Strict;
         });
-        var certificate = X509CertificateLoader.LoadPkcs12FromFile(
-            builder.Configuration["DataProtection:CertificatePath"] ?? throw new InvalidOperationException("Data Protection certificate is required."),
-            builder.Configuration["DataProtection:CertificatePassword"], X509KeyStorageFlags.EphemeralKeySet);
-        services.AddSingleton<X509Certificate2>(_ => certificate);
-        services.AddDataProtection().SetApplicationName("TourLab.Azure.Gateway")
-            .PersistKeysToDbContext<IdentityDb>().ProtectKeysWithCertificate(certificate);
+        var protection=services.AddDataProtection().SetApplicationName("TourLab.Azure.Gateway")
+            .PersistKeysToDbContext<IdentityDb>();
+        if(TourLab.Azure.Infrastructure.Security.AzureSecurity.Cloud(builder.Configuration)) {
+            protection.ProtectKeysWithAzureKeyVault(new Uri(builder.Configuration["DataProtection:KeyIdentifier"]!),
+                TourLab.Azure.Infrastructure.Security.AzureSecurity.KeyResolver());
+        } else {
+            var certificates=TourLab.Azure.Infrastructure.Security.ProtectionCertificates.Load(
+                builder.Configuration.GetSection("DataProtection"),builder.Environment.IsDevelopment());
+            services.AddSingleton(_=>certificates);
+            protection.ProtectKeysWithCertificate(certificates.Active).UnprotectKeysWithAnyCertificate(certificates.All);
+        }
         services.AddSingleton<HumanTokens>();
     }
 }

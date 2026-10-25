@@ -14,7 +14,7 @@ public partial class Program
 {
     public static async Task Main(string[] args)
     {
-        var builder = ScaffoldHosting.Create(args);
+        var builder = await ScaffoldHosting.CreateAsync(args, "notifications");
         builder.Services.AddRuntimeDatabase("notifications");
         builder.Services.AddDbContextFactory<NotificationsDb>((services, options) => options.UseSqlServer(
             services.GetRequiredService<IOptions<RuntimeDatabase>>().Value.ConnectionString,

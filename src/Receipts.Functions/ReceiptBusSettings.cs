@@ -2,6 +2,7 @@ using Azure.Messaging.ServiceBus;
 namespace TourLab.Azure.Receipts;
 public sealed class ReceiptBusSettings
 {
+    public bool Cloud { get; set; }
     public string ConnectionString { get; set; } = "";
     public static bool Safe(string connection, bool development)
     {

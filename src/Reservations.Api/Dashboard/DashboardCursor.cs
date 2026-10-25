@@ -27,6 +27,16 @@ public sealed class DashboardCursor : IDisposable
         protector=new(()=>{
             var o=options.Value;
             if(!o.Enabled)throw new ReservationProblem(503,"DashboardDisabled");
+            if(!o.Local) {
+                TourLab.Azure.Infrastructure.Security.AzureSecurity.Require(TourLab.Azure.Infrastructure.Security.AzureSecurity.Endpoint(o.KeyBlobUri,"blob.core.windows.net","/tourlab-azure-dashboard-keys/cursor-ring.xml") && TourLab.Azure.Infrastructure.Security.AzureSecurity.ProtectionKey(o.ProtectionKeyIdentifier,"tourlab-azure-dashboard-protection"),"UnsafeDashboardProtection");
+                var services=new ServiceCollection();
+                services.AddLogging();
+                services.AddDataProtection().SetApplicationName("TourLab.Azure.Reservations.Dashboard")
+                    .PersistKeysToAzureBlobStorage(new Uri(o.KeyBlobUri),TourLab.Azure.Infrastructure.Security.AzureSecurity.Credential())
+                    .ProtectKeysWithAzureKeyVault(new Uri(o.ProtectionKeyIdentifier),TourLab.Azure.Infrastructure.Security.AzureSecurity.KeyResolver());
+                var cloud=services.BuildServiceProvider();ownedProvider=cloud;
+                return cloud.GetRequiredService<IDataProtectionProvider>().CreateProtector("TourLab.Azure.Dashboard.Cursor.v1");
+            }
             var directory=Path.GetFullPath(o.KeyDirectory);
             // Local private key material must remain inside this companion's ignored .local area.
             var root=new DirectoryInfo(environment.ContentRootPath);

@@ -15,13 +15,15 @@ namespace TourLab.Azure.Infrastructure;
 
 public static class ScaffoldHosting
 {
-    public static WebApplicationBuilder Create(string[] args)
+    public static async Task<WebApplicationBuilder> CreateAsync(string[] args, string workload, CancellationToken ct = default)
     {
         var builder = WebApplication.CreateBuilder(args);
         var privatePath = Environment.GetEnvironmentVariable("AZURELAB_CONFIG");
         if (!string.IsNullOrWhiteSpace(privatePath))
             builder.Configuration.AddJsonFile(Path.GetFullPath(privatePath), optional: false, reloadOnChange: false);
         builder.Configuration.AddEnvironmentVariables("AZURELAB_");
+        await TourLab.Azure.Infrastructure.Security.StartupSecrets.LoadAsync(builder.Configuration, builder.Environment.IsDevelopment(), workload, ct);
+        builder.Configuration.AddInMemoryCollection(new Dictionary<string,string?> { ["AzureSecurity:Workload"] = workload });
         builder.Logging.ClearProviders();
         builder.Logging.AddJsonConsole(o=>o.IncludeScopes=true);
         builder.Logging.Configure(o=>o.ActivityTrackingOptions=ActivityTrackingOptions.TraceId|ActivityTrackingOptions.SpanId|ActivityTrackingOptions.ParentId);
@@ -42,6 +44,13 @@ public static class ScaffoldHosting
 
     public static void MapScaffold(this WebApplication app, string service)
     {
+        if(TourLab.Azure.Infrastructure.Security.AzureSecurity.Cloud(app.Configuration)) {
+            app.UseForwardedHeaders(TourLab.Azure.Infrastructure.Security.CloudIngress.Options(app.Configuration));
+            app.Use(async(context,next)=>{
+                if(!context.Request.IsHttps){context.Response.StatusCode=400;return;}
+                await next(context);
+            });
+        }
         app.UseExceptionHandler();
         app.UseStatusCodePages(async status =>
         {

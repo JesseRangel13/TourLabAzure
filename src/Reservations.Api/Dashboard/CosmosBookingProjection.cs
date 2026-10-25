@@ -18,6 +18,8 @@ public sealed class DashboardOptions
     public string Database { get; set; } = "tourlab-azure-dashboard";
     public string Container { get; set; } = "bookings";
     public string CaPath { get; set; } = "";
+    public string KeyBlobUri { get; set; } = "";
+    public string ProtectionKeyIdentifier { get; set; } = "";
     public string KeyDirectory { get; set; } = "";
     public string CertificatePath { get; set; } = "";
     public string CertificatePassword { get; set; } = "";
@@ -72,7 +74,7 @@ public static class DashboardRules
         if(o.Database!="tourlab-azure-dashboard"||o.Container!="bookings"||!Uri.TryCreate(o.Endpoint,UriKind.Absolute,out var uri)||uri.Scheme!="https"||
             !string.IsNullOrEmpty(uri.Query)||!string.IsNullOrEmpty(uri.UserInfo)||uri.AbsolutePath!="/")return false;
         return o.Local ? development&&uri.Host=="localhost"&&uri.Port==8089&&!string.IsNullOrEmpty(o.Key)&&!string.IsNullOrEmpty(o.CaPath)
-            : string.IsNullOrEmpty(o.Key)&&string.IsNullOrEmpty(o.CaPath)&&uri.Host.StartsWith("tourlabazure",StringComparison.Ordinal)&&uri.Host.EndsWith(".documents.azure.com",StringComparison.Ordinal);
+            : string.IsNullOrEmpty(o.Key)&&string.IsNullOrEmpty(o.CaPath)&&string.IsNullOrEmpty(o.KeyDirectory)&&string.IsNullOrEmpty(o.CertificatePath)&&string.IsNullOrEmpty(o.CertificatePassword)&&uri.IsDefaultPort&&uri.Host.StartsWith("tourlabazure",StringComparison.Ordinal)&&uri.Host.EndsWith(".documents.azure.com",StringComparison.Ordinal);
     }
 }
 public sealed class CosmosBookingProjection : IBookingProjection, IDisposable

@@ -20,4 +20,5 @@ public sealed class MessagingOptions
 {
     public bool Enabled { get; set; }
     public string ConnectionString { get; set; } = "";
+    public string FullyQualifiedNamespace { get; set; } = "";
 }

@@ -84,3 +84,21 @@ objects/credentials are used, and no Blob credentials reach Angular.
 Fresh receipts-* and receiptshost-* SQL databases/private profiles and their data are retained.
 The host profile is separate from regression Outbox staging. Only verification-owned process trees
 are killed/restarted; the existing broker, broker SQL, Azurite and Cosmos containers/data remain.
+## AZ-009 prepared cloud security ownership — no cloud resources created
+
+Each of Gateway/Catalog/Reservations/Payments/Notifications/Receipts has a separate prepared
+system-assigned identity. Azure SQL remains one lab database with owned schemas; explicit contained
+principal object IDs and separate migrator identities are generated as a review artifact only.
+Receipt identity shares the Notifications-owned lock role but receives additional table/immutable-
+column restrictions. This does not grant access to other schemas or the application's Outbox/Inbox.
+
+Gateway owns its Identity SQL protected ring, human-signing secret and Gateway wrapping key.
+Reservations owns its quote-signing secret, Cosmos dashboard, separate cursor-ring Blob and wrapping
+key. Catalog has its own image-container permissions. Notifications reads receipt documents;
+Functions conditionally writes/verifies that receipt container and uses a different host-storage
+account. Host storage is not a business database or receipt key ring.
+
+Exact entity/container/key/secret scopes are prepared in config/cloud/permissions.json. Public
+templates and the SQL generator assign no role and create no account, key, vault, database or endpoint.
+All real resource IDs, proxy topology, RBAC/Entra access and deployment/lifecycle proof remain AZ011/012.
+Existing local containers/volumes/data and all original AWS resources are retained.

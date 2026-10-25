@@ -25,18 +25,17 @@ AZ-001 isolation/scaffold; AZ-002 SQL Server/Identity; AZ-003 Catalog + Angular/
 
 Read specs/07-acceptance.md and tasks/implementation-plan.md for scope and gates. Local functionality comes before cloud spending. All payments, notification deliveries, and booking receipts are explicitly simulated.
 
-## Current implementation — AZ-008 (2026-10-24)
+## Current implementation — AZ-009 (2026-10-24)
 
-AZ-006/AZ-007 have actual independent PASS reviews. AZ-008 is **Implemented Awaiting Review**:
-Notifications-owned immutable simulated confirmations, actual .NET10 isolated Service Bus Functions,
-private Blob output, durable SQL lease/crash recovery, owner/Admin download and Angular/NGXS controls.
-Start with [receipt execution](docs/receipts-execution.md), [learning](docs/receipts-learning.md)
-and [actual AZ-008 evidence](docs/evidence/AZ-008.md).
-Real SQL/Azurite regression, actual Functions kill/restart/duplicate/DLQ and HTTPS booking/download/
-cancellation checks pass. Historical confirmation and current authoritative booking status are separate.
-Chromium and actual Azure identity/RBAC/hosting remain NOT VERIFIED.
-The original AWS/Blazor repository is unchanged; existing lab data/containers are retained.
-Next: independent Antigravity AZ-008 review, then AZ-009 managed identity/Key Vault readiness.
+AZ-008 has an actual independent PASS. AZ-009 is **Implemented Awaiting Review**:
+explicit managed identity/Key Vault/strict Azure SQL security paths, durable protected key handling,
+public configuration/permissions artifacts, offline validation and cloud verification checklist.
+Start with [security execution](docs/security-execution.md), [cloud prerequisites](docs/cloud-security-checklist.md)
+and [actual AZ-009 evidence](docs/evidence/AZ-009.md).
+Local security/SQL/Azurite/Cosmos, actual Functions and HTTPS regression checks pass.
+Real Azure identity/RBAC/Key Vault/hosting and Chromium remain NOT VERIFIED.
+The original AWS/Blazor repository is unchanged. No cloud resources were provisioned or deployed.
+Next: independent Antigravity AZ-009 review, then AZ-010 full Playwright/CI.
 ## AZ-001 implementation status (2026-10-23)
 
 The independent scaffold is now present: five API processes, isolated Functions, Angular21/NGXS,

@@ -269,3 +269,48 @@ with no HTTP crash endpoint. Verification kills only its own Functions child tre
 redelivery, ETag preservation, duplicate and poison/conflict DLQ. Fresh retained profiles separate
 SQL regression staging from live workers. Existing broker/Azurite/Cosmos/source resources stay intact.
 No cloud deployment, data purge, browser TLS bypass, commit/push or independent AZ008 review claim.
+D56 — AZ-009 supports explicit Local/Development and ManagedIdentity/non-Development modes.
+Cloud uses per-app system-assigned MI only; no DefaultAzureCredential, developer chain, client secret,
+SQL password, local CA/certificate override or user-assigned identity override is accepted. Local SQL
+is confined to dedicated LocalDB/Docker endpoints. Cloud SQL requires AD managed identity, no
+user/password, verified Strict TLS and bounded pool/timeout.
+
+D57 — Retrieve only each signer's allowlisted exact Key Vault secret version through the Secrets SDK.
+Offline validation happens before retrieval; one bounded startup GET, no vault list/config enumeration,
+no automatic refresh.3072+ RSA must match the public SPKI SHA256 fingerprint. Cache private PEM/RSA in
+memory only, sanitize failures, and fail startup without file/developer-credential fallback. Public
+validator allowlists support at most two keys; cloud requires matching key ID and existing JWT claims.
+
+D58 — Preserve Gateway's SQL Identity Data Protection ring and protect cloud keys with a versionless
+Gateway-only Key Vault key. Reservations separately uses a Blob cursor ring and its own vault key.
+Retain old wrapping versions; SDK crypto operations have bounded network timeout/no SDK retries.
+Local active/previous PFX handling supports provider recreation and certificate rollover without
+plaintext/volatile key-ring fallback. Real SQL/provider and actual process restart evidence stay distinct.
+
+D59 — Prepare idempotent Azure SQL artifacts from11explicit distinct managed-identity OBJECT IDs.
+SID/TYPE=E avoids display-name lookup/server-login assumptions; exact database/ownership marker,
+principal SID/type, schema owners and inherited runtime roles are checked. Runtime DDL/other schemas/
+history are denied; migrators remain separate. Receipt principal retains Notifications lock-role
+membership but object/column denials permit job SELECT/state-and-lease UPDATE and audit INSERT only; immutable accepted columns cannot be updated. Reapply after migrations
+before workers start. Actual Entra authentication remains AZ012; local SQL impersonation proves only
+effective database authorization.
+
+D60 — Cloud broker SDK clients use explicit namespace+system MI. Functions uses identity-based
+ReceiptBus and separately configured host storage with system-MI settings visible to HOST before
+startup. Business receipt account and host account must differ. Current queue/subscription attachment
+drives per-entity role preparation; development fault/replay controls remain disabled in cloud.
+
+D61 — Cloud APIs require exact lab host/origin/HTTPS endpoints and exact reviewed proxy IPs, one
+forwarded protocol hop, no blanket forwarding env flag or permissive TLS. Untrusted HTTP remains
+rejected; backend authentication/ownership remain independent. App Service trusted topology, network
+exposure and HTTPS-only deployment settings still need AZ011/012 evidence; no guessed production IP.
+
+D62 — Offline public templates, validator, SQL generator and permissions/checklist are review artifacts,
+not provisioning or role-assignment success. No new user-facing secret/configuration UI is appropriate;
+existing Angular workflows/security state remain unchanged and tested. Mocked HTTPS SDK tests, actual
+SQL/storage/emulator/Functions tests and real Azure proof are explicitly separate.
+
+D63 — Pin Secrets4.11.2, DataProtection.Keys1.6.5/Blobs1.5.5 and existing Identity1.21.0.
+Keys extension requires Core1.63.0, so update Catalog's direct Core pin from1.62.0 and regenerate locks.
+Retain SqlClient6.1.7 supplied by EF10.0.13; its built-in AD managed identity path requires no v7 extension.
+No package/identity provider upgrade is taken as actual cloud verification or deployment authorization.

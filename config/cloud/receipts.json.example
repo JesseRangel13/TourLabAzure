@@ -1,0 +1,24 @@
+{
+  "AzureSecurity": {
+    "Mode": "ManagedIdentity"
+  },
+  "ConnectionStrings": {
+    "Runtime": "Server=tcp:tourlabazure-REPLACE.database.windows.net,1433;Database=tourlab_azure_study;Authentication=Active Directory Managed Identity;Encrypt=Strict;TrustServerCertificate=False;Max Pool Size=5;Connect Timeout=5"
+  },
+  "ReceiptStorage": {
+    "Enabled": true,
+    "Local": false,
+    "ServiceUri": "https://tourlabazureRECEIPTSREPLACE.blob.core.windows.net/",
+    "Container": "tourlab-azure-booking-receipts"
+  },
+  "ReceiptBus": {
+    "fullyQualifiedNamespace": "tourlabazure-REPLACE.servicebus.windows.net",
+    "credential": "managedidentity"
+  },
+  "AzureWebJobsStorage": {
+    "credential": "managedidentity",
+    "blobServiceUri": "https://tourlabazureHOSTREPLACE.blob.core.windows.net/",
+    "queueServiceUri": "https://tourlabazureHOSTREPLACE.queue.core.windows.net/",
+    "tableServiceUri": "https://tourlabazureHOSTREPLACE.table.core.windows.net/"
+  }
+}

@@ -151,7 +151,22 @@ AZ-006 has independent PASS; independent AZ-007 review is pending. Receipts/Func
 | Historical confirmation UI | Booking detail ReceiptsPanel, ReceiptsState, typed API/download actions | AC-A19/20/29; Angular stale/reset/error/render checks |
 | Later cancellation | Current authoritative booking state shown separately; same historical document bytes retained | AC-A29; actual HTTPS booking/cancel plus normal simulated notifications |
 
-AZ-006 and AZ-007 have actual independent PASS reviews. AZ-008 is Implemented Awaiting Review.
+AZ-006, AZ-007 and AZ-008 have actual independent PASS reviews; see docs/reviews/.
 Legacy version1 events without accepted snapshot retain simulated notification behavior and a durable
 legacy audit; no historical receipt is invented. All new confirmed booking events carry the snapshot.
 Full Chromium execution and real Azure managed-identity/RBAC/Functions hosting remain NOT VERIFIED.
+
+## AZ-009 security readiness boundary
+
+| Capability | Implementation | Evidence boundary |
+|---|---|---|
+| Explicit workload identity | AzureSecurity + six host bootstraps + SDK/SQL/Functions identity paths | AC-A30; offline/framework tests; cloud NOT VERIFIED |
+| Versioned signing secrets | StartupSecrets/VaultSecretReader + public fingerprint and two-key validation | AC-A05/30; real SDK with MOCKED HTTPS; no real vault |
+| Durable protected keys | Gateway Identity SQL + vault key; separate dashboard Blob/vault ring; local previous certificate support | AC-A04/30; real SQL/provider rollover and actual local cookie restart |
+| SQL least privilege | explicit object-ID artifact generator; separate migrators; receipt state/audit and immutable-column denials | AC-A03/30; actual SQL impersonation/receipt work; Entra authentication NOT VERIFIED |
+| Cloud config/ingress | endpoint/mode/TLS/origin/proxy guards, offline helper and public templates | AC-A30; forged-header and negative-config checks |
+| Local regression | existing human APIs, Angular state, images, Cosmos dashboard and receipt Functions |174regression passes;7actual host/HTTPS passes;72Angular passes |
+
+No new human action or secret/configuration UI was introduced. Existing user/Admin features and browser
+security boundaries remain intact. Actual independent AZ-008 PASS exists; AZ-009 is Implemented
+Awaiting Review. Full Chromium and actual Azure identity/RBAC/Key Vault/hosting remain NOT VERIFIED.

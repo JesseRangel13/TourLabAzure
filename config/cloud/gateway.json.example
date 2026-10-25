@@ -1,0 +1,33 @@
+{
+  "AzureSecurity": {
+    "Mode": "ManagedIdentity"
+  },
+  "ConnectionStrings": {
+    "Runtime": "Server=tcp:tourlabazure-REPLACE.database.windows.net,1433;Database=tourlab_azure_study;Authentication=Active Directory Managed Identity;Encrypt=Strict;TrustServerCertificate=False;Max Pool Size=5;Connect Timeout=5"
+  },
+  "AllowedHosts": "tourlabazure-gateway-REPLACE.azurewebsites.net",
+  "Ingress": {
+    "KnownProxies": [
+      "REPLACE_WITH_EXACT_PLATFORM_PROXY_IP"
+    ]
+  },
+  "KeyVault": {
+    "VaultUri": "https://tourlabazure-REPLACE.vault.azure.net/",
+    "ExpectedSigningKeyId": "REPLACE_WITH_SHA256_OF_PUBLIC_SPKI",
+    "SigningSecretIdentifier": "https://tourlabazure-REPLACE.vault.azure.net/secrets/tourlab-azure-human-signing/REPLACE_WITH_EXACT_SECRET_VERSION"
+  },
+  "Browser": {
+    "AllowedOrigins": [
+      "https://tourlabazure-gateway-REPLACE.azurewebsites.net"
+    ]
+  },
+  "DataProtection": {
+    "KeyIdentifier": "https://tourlabazure-REPLACE.vault.azure.net/keys/tourlab-azure-gateway-protection"
+  },
+  "Backends": {
+    "catalog": "https://tourlabazure-catalog-REPLACE.azurewebsites.net/",
+    "reservations": "https://tourlabazure-reservations-REPLACE.azurewebsites.net/",
+    "payments": "https://tourlabazure-payments-REPLACE.azurewebsites.net/",
+    "notifications": "https://tourlabazure-notifications-REPLACE.azurewebsites.net/"
+  }
+}

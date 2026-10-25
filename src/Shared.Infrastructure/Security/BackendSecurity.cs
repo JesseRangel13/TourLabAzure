@@ -19,24 +19,17 @@ public static class BackendSecurity
 
     public static string Audience(string service) => $"tourlab-azure-{service.ToLowerInvariant()}-api";
 
-    public static TokenValidationParameters Parameters(string keyPath, string issuer, string audience)
+    public static TokenValidationParameters Parameters(IConfiguration config,string section,string issuer,string audience)
     {
-        using var rsa = RSA.Create();
-        rsa.ImportFromPem(File.ReadAllText(keyPath));
-        return new()
-        {
-            ValidateIssuerSigningKey = true,
-            IssuerSigningKey = new RsaSecurityKey(rsa.ExportParameters(false)),
-            RequireSignedTokens = true,
-            ValidAlgorithms = [SecurityAlgorithms.RsaSha256],
-            ValidateIssuer = true, ValidIssuer = issuer,
-            ValidateAudience = true, ValidAudience = audience,
-            ValidateLifetime = true, RequireExpirationTime = true,
-            ClockSkew = TimeSpan.FromSeconds(5),
-            NameClaimType = "name", RoleClaimType = "role"
+        var keys=SigningMaterial.Public(config,section);
+        return new() {
+            ValidateIssuerSigningKey=true, IssuerSigningKeys=keys, RequireSignedTokens=true,
+            IssuerSigningKeyResolver=(_,_,kid,_)=>AzureSecurity.Cloud(config)?keys.Where(k=>k.KeyId==kid):keys,
+            ValidAlgorithms=[SecurityAlgorithms.RsaSha256], ValidateIssuer=true,ValidIssuer=issuer,
+            ValidateAudience=true,ValidAudience=audience, ValidateLifetime=true,RequireExpirationTime=true,
+            ClockSkew=TimeSpan.FromSeconds(5), NameClaimType="name",RoleClaimType="role"
         };
     }
-
     public static void AddBackendSecurity(this IServiceCollection services, string service)
     {
         services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer();
@@ -46,7 +39,7 @@ public static class BackendSecurity
                 options.MapInboundClaims = false;
                 options.IncludeErrorDetails = false;
                 options.TokenValidationParameters = Parameters(
-                    config["Jwt:PublicKeyPath"] ?? throw new InvalidOperationException("Backend validation key is required."),
+                    config, "Jwt",
                     Issuer, Audience(service));
                 options.Events = new JwtBearerEvents
                 {
@@ -73,7 +66,7 @@ public static class BackendSecurity
                 options.MapInboundClaims = false;
                 options.IncludeErrorDetails = false;
                 options.TokenValidationParameters = Parameters(
-                    config["Quote:PublicKeyPath"] ?? throw new InvalidOperationException("Quote validation key is required."),
+                    config, "Quote",
                     "tourlab-azure-reservations", "tourlab-azure-catalog-quotes");
                 options.Events = new JwtBearerEvents
                 {

@@ -14,6 +14,8 @@ var privatePath = Environment.GetEnvironmentVariable("AZURELAB_RECEIPTS_CONFIG")
 if (!string.IsNullOrWhiteSpace(privatePath))
     builder.Configuration.AddJsonFile(Path.GetFullPath(privatePath), optional: false, reloadOnChange: false);
 builder.Configuration.AddEnvironmentVariables("AZURELAB_");
+await TourLab.Azure.Infrastructure.Security.StartupSecrets.LoadAsync(builder.Configuration, builder.Environment.IsDevelopment(), "receipts", CancellationToken.None);
+builder.Configuration.AddInMemoryCollection(new Dictionary<string,string?> { ["AzureSecurity:Workload"] = "receipts" });
 // Retain the Functions gRPC logging provider; clearing it hides worker logs from Core Tools.
 builder.Logging.AddFilter("TourLab.Azure", LogLevel.Information);
 builder.Logging.AddJsonConsole(o => o.IncludeScopes = true);
@@ -21,8 +23,8 @@ builder.Logging.Configure(o => o.ActivityTrackingOptions = ActivityTrackingOptio
 builder.Logging.AddFilter("Microsoft.EntityFrameworkCore.Database.Command", LogLevel.Warning);
 builder.Logging.AddFilter("Microsoft.EntityFrameworkCore.Update", LogLevel.None);
 builder.Services.AddOptions<TourLab.Azure.Receipts.ReceiptBusSettings>()
-    .Configure<IConfiguration>( (o, c) => o.ConnectionString = c["ReceiptBus"] ?? "")
-    .Validate(o => TourLab.Azure.Receipts.ReceiptBusSettings.Safe(o.ConnectionString, builder.Environment.IsDevelopment()), "Only the explicitly enabled local receipt broker is supported until cloud configuration is verified.")
+    .Configure<IConfiguration>( (o, c) => { o.ConnectionString = c["ReceiptBus"] ?? ""; o.Cloud = TourLab.Azure.Infrastructure.Security.AzureSecurity.Cloud(c); })
+    .Validate(o => TourLab.Azure.Receipts.ReceiptBusSettings.Safe(o.ConnectionString, builder.Environment.IsDevelopment()) || o.Cloud, "Receipt binding requires validated local emulator or explicit managed identity settings.")
     .ValidateOnStart();
 builder.Services.AddRuntimeDatabase("notifications");
 builder.Services.AddDbContext<NotificationsDb>((services, options) => options.UseSqlServer(

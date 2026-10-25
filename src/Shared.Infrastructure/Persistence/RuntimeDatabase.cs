@@ -13,6 +13,8 @@ public sealed class RuntimeDatabase
 {
     public string ConnectionString { get; set; } = "";
     public string Schema { get; set; } = "";
+    public bool ManagedIdentity { get; set; }
+    public string PrincipalName { get; set; } = "";
     public bool Development { get; set; }
 }
 
@@ -28,7 +30,19 @@ public static class SqlRules
         {
             Schema(settings.Schema);
             var value = new SqlConnectionStringBuilder(settings.ConnectionString);
-            if (value.IntegratedSecurity || value.UserID != $"tourlab_azure_{settings.Schema}" ||
+            if (settings.ManagedIdentity)
+            {
+                var server=value.DataSource.StartsWith("tcp:",StringComparison.OrdinalIgnoreCase)?value.DataSource[4..]:value.DataSource;
+                return !settings.Development && !value.IntegratedSecurity && string.IsNullOrEmpty(value.UserID) && string.IsNullOrEmpty(value.Password) &&
+                    value.Authentication==SqlAuthenticationMethod.ActiveDirectoryManagedIdentity &&
+                    System.Text.RegularExpressions.Regex.IsMatch(server,@"^tourlabazure[a-z0-9-]*\.database\.windows\.net,1433$") &&
+                    System.Text.RegularExpressions.Regex.IsMatch(value.InitialCatalog,@"^tourlab_azure(?:_[a-zA-Z0-9]+)*$") &&
+                    value.Encrypt==SqlConnectionEncryptOption.Strict && !value.TrustServerCertificate &&
+                    value.Pooling && value.MaxPoolSize is >=1 and <=5 && value.ConnectTimeout is >=1 and <=5 &&
+                    string.IsNullOrEmpty(value.AttachDBFilename) && string.IsNullOrEmpty(value.FailoverPartner) && string.IsNullOrEmpty(value.HostNameInCertificate) && string.IsNullOrEmpty(value.ServerCertificate);
+            }
+            if (!settings.Development) return false;
+            if (value.Authentication is not (SqlAuthenticationMethod.NotSpecified or SqlAuthenticationMethod.SqlPassword) || value.IntegratedSecurity || value.UserID != $"tourlab_azure_{settings.Schema}" ||
                 !value.InitialCatalog.StartsWith("tourlab_azure", StringComparison.Ordinal) ||
                 !value.Pooling || value.MaxPoolSize is < 1 or > 5 || value.ConnectTimeout is < 1 or > 5)
                 return false;
@@ -41,7 +55,7 @@ public static class SqlRules
                 value.DataSource.StartsWith("np:", StringComparison.OrdinalIgnoreCase))) return false;
             if (settings.Development && (localDb || localTcp))
                 return localDb || value.Encrypt != SqlConnectionEncryptOption.Optional;
-            return value.Encrypt != SqlConnectionEncryptOption.Optional && !value.TrustServerCertificate;
+            return false; // Development is limited to the two isolated local SQL endpoints.
         }
         catch (ArgumentException) { return false; }
     }
@@ -59,6 +73,8 @@ public static class RuntimeDatabaseRegistration
             {
                 options.ConnectionString = config.GetConnectionString("Runtime") ?? "";
                 options.Schema = schema;
+                options.ManagedIdentity = TourLab.Azure.Infrastructure.Security.AzureSecurity.Cloud(config);
+                options.PrincipalName = config["AzureSecurity:Workload"]=="receipts" ? "tourlab_azure_receipts" : $"tourlab_azure_{schema}";
                 options.Development = environment.IsDevelopment();
             })
             .Validate(SqlRules.RuntimeSafe, "Runtime SQL configuration must use its bounded schema principal; local exceptions are Development-only.")
@@ -76,7 +92,7 @@ public static class RuntimeDatabaseRegistration
                 await connection.OpenAsync(ct);
                 await using var command = new SqlCommand(
                     "SELECT CASE WHEN USER_NAME()=@user AND IS_ROLEMEMBER(@role)=1 THEN 1 ELSE 0 END", connection) { CommandTimeout = 3 };
-                command.Parameters.AddWithValue("@user", $"tourlab_azure_{settings.Value.Schema}");
+                command.Parameters.AddWithValue("@user", settings.Value.PrincipalName);
                 command.Parameters.AddWithValue("@role", $"tourlab_azure_{settings.Value.Schema}_runtime");
                 var ready = (int)(await command.ExecuteScalarAsync(ct) ?? 0) == 1;
                 var messaging=http.RequestServices.GetService<IOptions<MessagingOptions>>()?.Value.Enabled==true;
