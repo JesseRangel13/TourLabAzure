@@ -64,3 +64,23 @@ Fresh relational/live profiles have separate credentials, SQL databases and Rese
 certificate/key ring; Gateway Identity keys are not reused by Dashboard.
 Real cloud account/container-scoped roles, composite-index enforcement and emulator restart
 durability remain separate evidence. No cloud resources or unrestricted endpoints were provisioned.
+
+## AZ-008 receipt ownership
+
+Notifications owns ReceiptJobs/ReceiptAttempts/snapshots and their unique reservation/kind/sourceVersion
+key in its own SQL schema. Receipts.Functions shares this owner and receives only that runtime
+principal, never migrator, Catalog, Payments, Reservations or Identity credentials.
+
+The only GenerateBookingReceipt effect handler is the actual isolated Functions trigger on existing
+tourlab-azure-receipt-jobs. Native Core Tools binds127.0.0.1:9450; API ports remain9443..9447.
+No broker/container topology restart or recreation was performed.
+
+Business UTF8 documents use private tourlab-azure-booking-receipts in existing Azurite on10010.
+Functions AzureWebJobsStorage is separately configured for standard azure-webjobs host coordination
+containers using loopback10010/10011/10012. The existing dedicated local account is shared; its key
+does not prove container-scoped RBAC. No business metadata is stored in host storage, no source S3
+objects/credentials are used, and no Blob credentials reach Angular.
+
+Fresh receipts-* and receiptshost-* SQL databases/private profiles and their data are retained.
+The host profile is separate from regression Outbox staging. Only verification-owned process trees
+are killed/restarted; the existing broker, broker SQL, Azurite and Cosmos containers/data remain.

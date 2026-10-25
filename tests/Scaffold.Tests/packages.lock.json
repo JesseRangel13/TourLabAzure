@@ -863,6 +863,8 @@
       "notifications.api": {
         "type": "Project",
         "dependencies": {
+          "Azure.Identity": "[1.21.0, )",
+          "Azure.Storage.Blobs": "[12.30.1, )",
           "Shared.Infrastructure": "[1.0.0, )"
         }
       },

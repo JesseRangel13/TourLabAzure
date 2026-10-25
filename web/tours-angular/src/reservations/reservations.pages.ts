@@ -1,3 +1,4 @@
+import { ReceiptsPanel } from '../receipts/receipts.panel';
 import { Component, DestroyRef, inject, input } from '@angular/core';
 import { CurrencyPipe, DatePipe } from '@angular/common';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
@@ -65,13 +66,14 @@ export class ReservationsPage {
   load(page = 1) { this.store.dispatch(new LoadReservations(page,this.status,this.owner)).subscribe({ error: () => {} }); }
 }
 @Component({
-  standalone: true, imports: [ReactiveFormsModule, RouterLink, CurrencyPipe, DatePipe],
+  standalone: true, imports: [ReceiptsPanel, ReactiveFormsModule, RouterLink, CurrencyPipe, DatePipe],
   template: `<main><a routerLink="/reservations">My bookings</a><h1>Booking details</h1>
     <button (click)="load()" [disabled]="vm().loading">Refresh booking</button>
     @if (vm().loading) { <p role="status">Loading booking…</p> }
     @if (vm().error) { <p role="alert">{{ vm().error }}</p> }
     @if (vm().detail; as booking) {
       <p>{{ booking.id }}</p><h2>{{ booking.status }}</h2>
+      <app-receipts [reservation]="booking.id" [currentStatus]="booking.status" />
       <p>{{ booking.participants }} participants · {{ booking.startsAtUtc | date:'medium':'UTC' }} UTC</p>
       <p>Accepted total: {{ booking.totalAmountMinor / 100 | currency:'MXN' }}</p>
       @if (booking.reason) { <p>{{ booking.reason }}</p> }

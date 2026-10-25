@@ -233,3 +233,39 @@ D49 — Preserve existing broker/Azurite data and containers. Isolate relational
 fresh live SQL profile before broker/host tests. Consume retained legitimate lab events through the
 normal projection path, never discard/purge. Keep poison in built-in dashboard DLQ and support repair
 through explicit version-safe rebuild. Stop/restart only helper-owned API process trees.
+
+D50 — AZ-008 extends version1 ReservationConfirmed additively with optional ConfirmationSnapshot.
+All new producer confirmations include accepted name/departure/participants/MXN cents, confirmed UTC
+and the exact next Reservation.Version committed by the same transition. Legacy events remain valid
+for durable simulated notification delivery, record LegacyConfirmationWithoutSnapshot once, and do
+not fabricate historical receipt data. This resolves the pre-AZ008 contract gap explicitly; no
+cross-schema lookup or weakening of existing delivery assertions. Snapshot contradictions are poison.
+
+D51 — ReceiptJob, immutable snapshot, normal notification and GenerateBookingReceipt Outbox commit
+with Notifications Inbox acceptance. Unique reservation/kind/sourceVersion protects the logical job.
+Functions belongs to Notifications and references only its owned receipt application/SQL model.
+No business EF entities or rules move into Shared.Contracts/Shared.Infrastructure.
+
+D52 — Explicit SQL lease owner/version/expiry brackets conditional Blob creation outside transactions.
+Deterministic UTF8/key/SHA256, bounded size/MIME/ETag-bound actual-byte verification protect duplicates.
+Ready commits before manual broker Complete; conflict preserves the object and persists safe audit.
+Transient failure leaves durable retry work; no Inbox-before-Blob shortcut or delivery exactly-once claim.
+The60s SQL lease and renewed broker lock permit bounded90s busy-owner wait after crash.
+
+D53 — Use real Core Tools4.16.0/runtime4.1054.250.26428, existing SDK1.0.1/Worker2.52.0 and pinned
+ServiceBus extension5.24.0. Worker indexing means functions.metadata is not required. Functions uses
+separately configured AzureWebJobsStorage in the existing lab Azurite account, standard host containers,
+and a distinct private booking-receipts business container. Runtime sees Notifications SQL only.
+Local account-key/ServiceBus connection settings are Development-only; cloud identity is AZ009/012.
+
+D54 — Owner/Admin Notifications receipt status/download plus Gateway attachment enforce independent
+backend authorization, other-owner404, no-store/nosniff and bounded verified bytes. Angular/NGXS keeps
+status metadata only, resets on user changes/401 and ignores stale loads/downloads; transient browser
+URLs are revoked. Historical confirmation and current authoritative SQL state are visibly separate.
+Documents are simulated educational confirmations, not actual payment or legal tax receipts.
+
+D55 — Actual private Development-only crash barrier pauses one selected job after Blob verification,
+with no HTTP crash endpoint. Verification kills only its own Functions child tree and tests actual
+redelivery, ETag preservation, duplicate and poison/conflict DLQ. Fresh retained profiles separate
+SQL regression staging from live workers. Existing broker/Azurite/Cosmos/source resources stay intact.
+No cloud deployment, data purge, browser TLS bypass, commit/push or independent AZ008 review claim.

@@ -237,7 +237,9 @@ public sealed class ReservationConsumer(
                             new ReservationConfirmed(
                                 reservation.Id,
                                 reservation.UserId,
-                                "Seats confirmed after a successful simulated payment."),
+                                "Seats confirmed after a successful simulated payment.",
+                                new ConfirmationSnapshot(checked(reservation.Version + 1), reservation.TourName, reservation.StartsAtUtc,
+                                    reservation.Participants, reservation.TotalAmountMinor, reservation.Currency, now)),
                             "confirmed",
                             cause,
                             token);

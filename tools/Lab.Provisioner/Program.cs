@@ -12,6 +12,11 @@ try
 
         Console.WriteLine("Fresh Azure-only credentials and signing/Data Protection keys generated privately.");
     }
+    else if (args.Length == 2 && args[0] == "receipts-local")
+    {
+        await LocalReceipts.InitializeAsync(Directory.GetCurrentDirectory(), args[1], shutdown.Token);
+        Console.WriteLine("Private receipt container, Notifications runtime and Functions host storage configured.");
+    }
     else if (args.Length == 2 && args[0] == "dashboard-local")
     {
         await LocalDashboard.InitializeAsync(Directory.GetCurrentDirectory(), args[1], shutdown.Token);

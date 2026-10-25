@@ -21,6 +21,10 @@ public partial class Program
             sql => { sql.MigrationsHistoryTable("__EFMigrationsHistory", "notifications"); sql.CommandTimeout(5); }), ServiceLifetime.Scoped);
         builder.Services.AddBackendSecurity("Notifications");
 
+        builder.Services.AddOptions<TourLab.Azure.Notifications.Receipts.ReceiptStorageOptions>()
+            .Bind(builder.Configuration.GetSection("ReceiptStorage"))
+            .Validate(o => TourLab.Azure.Notifications.Receipts.BlobReceiptStorage.Safe(o, builder.Environment.IsDevelopment()), "Unsafe receipt storage").ValidateOnStart();
+        builder.Services.AddSingleton<TourLab.Azure.Notifications.Receipts.IReceiptStorage, TourLab.Azure.Notifications.Receipts.BlobReceiptStorage>();
         builder.Services.AddSingleton(TimeProvider.System);
         builder.Services.AddServiceOperations(builder.Configuration,builder.Environment,"notifications");
         builder.Services.Configure<MessagingOptions>(builder.Configuration.GetSection("Messaging"));
@@ -40,6 +44,7 @@ public partial class Program
         app.MapBackendBoundary("Notifications");
 
         app.MapNotifications();
+        TourLab.Azure.Notifications.Receipts.ReceiptEndpoints.MapReceipts(app);
         await app.RunAsync();
     }
 }

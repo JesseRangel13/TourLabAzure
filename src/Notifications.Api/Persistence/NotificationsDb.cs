@@ -31,6 +31,8 @@ public sealed class InboxEntry
 
 public sealed class NotificationsDb(DbContextOptions<NotificationsDb> options) : DbContext(options)
 {
+    public DbSet<TourLab.Azure.Notifications.Receipts.ReceiptJob> ReceiptJobs => Set<TourLab.Azure.Notifications.Receipts.ReceiptJob>();
+    public DbSet<TourLab.Azure.Notifications.Receipts.ReceiptAttempt> ReceiptAttempts => Set<TourLab.Azure.Notifications.Receipts.ReceiptAttempt>();
     public DbSet<Notification> Notifications => Set<Notification>();
     public DbSet<DeliveryReceipt> Receipts => Set<DeliveryReceipt>();
     public DbSet<NotificationFault> Faults => Set<NotificationFault>();
@@ -45,6 +47,7 @@ public sealed class NotificationsDb(DbContextOptions<NotificationsDb> options) :
         model.HasDefaultSchema("notifications");
         model.UseCollation("Latin1_General_100_BIN2");
         BookingModel.Configure(model);
+        TourLab.Azure.Notifications.Receipts.ReceiptModel.Configure(model);
         model.Entity<OutboxEntry>(b =>
         {
             b.ToTable("Outbox", table => table.HasCheckConstraint("CK_Outbox_Json", "ISJSON([EnvelopeJson])=1"));

@@ -127,6 +127,9 @@ public sealed class NotificationConsumer(NotificationsDb db, TimeProvider clock)
         {
             await SqlOperationLocks.AcquireAsync(db, "notifications", "notification/" + reservation + "/" + envelope.Type, token);
 
+            if (envelope.Type == "ReservationConfirmed")
+                await TourLab.Azure.Notifications.Receipts.ReceiptAcceptance.AcceptAsync(db, MessageCodec.Payload<ReservationConfirmed>(envelope), envelope, token);
+
             var existing = await db.Notifications.SingleOrDefaultAsync(n => n.ReservationId == reservation && n.Kind == envelope.Type, token);
             if (existing is not null)
             {

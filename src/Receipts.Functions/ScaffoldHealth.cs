@@ -4,7 +4,7 @@ using Microsoft.Azure.Functions.Worker.Http;
 
 namespace TourLab.Azure.Receipts;
 
-// Host-only scaffold. Receipt processing is AZ-008; this never claims a receipt was generated.
+// Process liveness only; individual job readiness remains in Notifications SQL.
 public sealed class ScaffoldHealth
 {
     [Function("ScaffoldHealth")]
@@ -13,7 +13,7 @@ public sealed class ScaffoldHealth
         CancellationToken cancellationToken)
     {
         var response = request.CreateResponse(HttpStatusCode.OK);
-        await response.WriteAsJsonAsync(new { service = "Receipts", status = "Alive", stage = "AZ-001" }, cancellationToken);
+        await response.WriteAsJsonAsync(new { service = "Receipts", status = "Alive", stage = "AZ-008" }, cancellationToken);
         return response;
     }
 }

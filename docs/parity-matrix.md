@@ -54,8 +54,8 @@ Source paths below are relative to the original repository (Gateway UI paths abb
 | My booking projection point read: Bookings/BookingProjection.cs; MyBookings.razor | AZ-007 | GET /api/reservations/v1/my-bookings/{id} | Eventually consistent; authoritative detail link | AC-A24/26 | No; scheduled | NOT VERIFIED | NOT VERIFIED | Pending |
 | Admin projection rebuild: Bookings/BookingProjection.cs; MyBookings.razor | AZ-007 | POST /api/reservations/v1/admin/my-bookings/rebuild | Bounded SQL snapshots; ETag guard | AC-A26 | No; scheduled | NOT VERIFIED | NOT VERIFIED | Pending |
 | Image recovery diagnostics: Images/TourImages.cs (worker; no dedicated source HTTP recovery action) | AZ-006 | Admin image status/recovery control design in006 | Do not invent source endpoint; exact-key worker recovery | AC-A23 | No; scheduled | NOT VERIFIED | NOT VERIFIED | Pending |
-| Receipt status (new): Absent; source sender receipts are internal durable effects | AZ-008 | Notifications owned receipt status; reservation detail control | New immutable educational confirmation | AC-A27/29 | No; scheduled | NOT VERIFIED | NOT VERIFIED | Pending |
-| Receipt download (new): Absent | AZ-008 | Authorized Notifications download; reservation detail control | Private Blob; owner404; simulated text | AC-A27/28/29 | No; scheduled | NOT VERIFIED | NOT VERIFIED | Pending |
+| Receipt status (new): Absent; source sender receipts are internal durable effects | AZ-008 | GET /api/notifications/v1/receipts/reservation/{id}; booking detail | Immutable historical simulated confirmation | AC-A27/29 | Yes | Real SQL/Functions/HTTPS and NGXS checks; Chromium NOT VERIFIED | NOT VERIFIED | Awaiting AZ-008 review |
+| Receipt download (new): Absent | AZ-008 | GET /api/notifications/v1/receipts/{id}/content; booking detail | Private Blob; owner404; simulated attachment | AC-A27/28/29 | Yes | Actual Functions crash/restart, Blob ETag and HTTPS download | NOT VERIFIED | Awaiting AZ-008 review |
 | Session expiry/account change/navigation: Gateway Identity and Blazor; frontend/angular/src/app | AZ-002/010 | Angular auth state and routes | No cross-user state or stored JWT | AC-A20/21 | Yes; baseline guards/reset/loading and navigation controls | HTTP/NGXS verified; full Chromium navigation NOT VERIFIED (AZ-010) | NOT VERIFIED | AZ-002 PASS; AZ-005 extension awaiting review |
 ## Foundation delivered now
 
@@ -63,7 +63,7 @@ Source paths below are relative to the original repository (Gateway UI paths abb
 |---|---|---|---|---|---|---|
 | Five process hosts; unavailable dependency readiness | src/*.Api, Shared.Infrastructure | AC-A02 | Yes | Release build;11 host/routing tests | NOT VERIFIED | Pending |
 | Angular21/NGXS shell/status/error/cancellation | web/tours-angular | AC-A02; foundation subset of20 | Yes | Production build;3 NGXS tests | NOT VERIFIED | Pending |
-| Isolated Functions scaffold | src/Receipts.Functions | AC-A02 | Yes | net10 build/metadata; host NOT VERIFIED | NOT VERIFIED | Pending |
+| Isolated Functions receipt worker | src/Receipts.Functions | AC-A02/27/28 | Yes | Actual Core Tools, broker/Azurite, crash/restart and DLQ | NOT VERIFIED | Awaiting AZ-008 review |
 | Source audit/isolation evidence | docs/source-*.md/json, scripts/Record-SourceSnapshot.ps1 | AC-A01 | Yes | Before/after comparison in task evidence | Not applicable | Pending |
 
 Later-task business acceptance IDs are mappings, not passes. Foundational browser smoke does not establish
@@ -139,3 +139,19 @@ Cosmos/SQL, broker settlement, HTTPS booking/cancel/rebuild/poison/restart and b
 separate in evidence/AZ-007.md. Normal reads never cross partitions or silently fall back to SQL.
 Actual Azure index enforcement/RBAC/authentication and Chromium remain NOT VERIFIED.
 AZ-006 has independent PASS; independent AZ-007 review is pending. Receipts/Functions remain AZ-008.
+
+## AZ-008 evidence boundary
+
+| New capability | Azure implementation | Acceptance/evidence |
+|---|---|---|
+| Immutable confirmation job | Notifications Inbox + ReceiptJob/snapshot + Outbox in one SQL transaction | AC-A27/28; real SQL uniqueness, rollback, source-version checks |
+| Receipt generation | .NET10 isolated GenerateBookingReceipt Service Bus trigger + private Blob | AC-A27; actual Core Tools/broker/Azurite |
+| Crash/duplicate/concurrency recovery | Durable SQL lease/version + deterministic conditional Blob create/byte verification | AC-A28; actual host kill/restart, same ETag, duplicate and conflict DLQ |
+| Status/download authorization | Notifications owner/Admin status and verified bounded attachment via Gateway | AC-A06/29; other owner404, anonymous401, real HTTPS download |
+| Historical confirmation UI | Booking detail ReceiptsPanel, ReceiptsState, typed API/download actions | AC-A19/20/29; Angular stale/reset/error/render checks |
+| Later cancellation | Current authoritative booking state shown separately; same historical document bytes retained | AC-A29; actual HTTPS booking/cancel plus normal simulated notifications |
+
+AZ-006 and AZ-007 have actual independent PASS reviews. AZ-008 is Implemented Awaiting Review.
+Legacy version1 events without accepted snapshot retain simulated notification behavior and a durable
+legacy audit; no historical receipt is invented. All new confirmed booking events carry the snapshot.
+Full Chromium execution and real Azure managed-identity/RBAC/Functions hosting remain NOT VERIFIED.

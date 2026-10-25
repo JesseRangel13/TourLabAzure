@@ -1,3 +1,4 @@
+import { ReceiptsState } from './receipts/receipts.state';
 import { DashboardState } from './dashboard/dashboard.state';
 import { DashboardPageComponent, DashboardDetailComponent } from './dashboard/dashboard.pages';
 import { ImagesState } from './catalog/images.state';
@@ -28,7 +29,7 @@ import { AccountPage } from './auth/account.page';
     <p>EDUCATIONAL LAB</p>
     <h1>TourLab Azure</h1>
     <p>An independent Angular 21 and .NET 10 microservices companion.</p>
-    <p>Sign in to browse tours, sessions and availability. Booking and simulated payment/notification workflows are available locally. Receipt downloads arrive in a later task.
+    <p>Sign in to browse tours, sessions and availability. Booking and simulated payment/notification workflows are available locally. Historical simulated confirmations are available on booking details.
        All payments, notifications and booking confirmations are simulated.</p>
     <section class="status" aria-live="polite">
       <h2>Gateway process</h2>
@@ -67,7 +68,7 @@ class App {
 bootstrapApplication(App, {
   providers: [
     provideHttpClient(withXsrfConfiguration({ cookieName: 'AZURELAB-XSRF-TOKEN', headerName: 'X-AZURELAB-XSRF-TOKEN' }), withInterceptors([sessionExpiryInterceptor])),
-    provideStore([ScaffoldState, AuthState, CatalogState, ReservationsState, AdminState, EffectsState, ImagesState, DashboardState]),
+    provideStore([ReceiptsState,ScaffoldState, AuthState, CatalogState, ReservationsState, AdminState, EffectsState, ImagesState, DashboardState]),
     provideRouter([{path:'dashboard',component:DashboardPageComponent,canActivate:[authGuard]},{path:'dashboard/:id',component:DashboardDetailComponent,canActivate:[authGuard]}, { path: '', component: FoundationPage }, { path: 'login', component: LoginPage },
       {path:'admin/sagas',component:SagasPage,canActivate:[authGuard,adminGuard]}, {path:'simulations',component:SimulationsPage,canActivate:[authGuard,adminGuard]}, {path:'operations',component:OperationsPage,canActivate:[authGuard,adminGuard]}, {path:'tour-projections',component:ProjectionsPage,canActivate:[authGuard]}, {path:'payments/:id',component:EffectDetailPage,canActivate:[authGuard],data:{kind:'payments'}}, {path:'notifications/:id',component:EffectDetailPage,canActivate:[authGuard],data:{kind:'notifications'}}, { path: 'reservations', component: ReservationsPage, canActivate: [authGuard] }, { path: 'reservations/:id', component: ReservationDetailPage, canActivate: [authGuard] }, { path: 'payments', component: PersonalEffectsPage, canActivate: [authGuard], data: { kind: 'payments' } }, { path: 'notifications', component: PersonalEffectsPage, canActivate: [authGuard], data: { kind: 'notifications' } }, { path: 'tours', component: CatalogListPage, canActivate: [authGuard] }, { path: 'tours/:id', component: CatalogDetailPage, canActivate: [authGuard] }, { path: 'admin/catalog', component: CatalogListPage, canActivate: [authGuard, adminGuard] }, { path: 'account', component: AccountPage, canActivate: [authGuard] }, { path: '**', redirectTo: '' }]),
     provideAppInitializer(() => firstValueFrom(inject(Store).dispatch(new LoadCurrentUser())).catch(() => undefined))

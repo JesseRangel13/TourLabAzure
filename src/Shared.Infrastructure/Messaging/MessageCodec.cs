@@ -121,6 +121,7 @@ public static class MessageRoutes
     public const string Topic = "tourlab-azure-domain-events";
     public static string[] Destinations(string type) => type switch
     {
+        "GenerateBookingReceipt" => ["tourlab-azure-receipt-jobs"],
         "HoldSeats" or "ConfirmSeats" or "ReleaseSeats" => ["tourlab-azure-catalog-commands"],
         "ProcessPayment" or "ReconcilePayment" or "RefundPayment" => ["tourlab-azure-payments-commands"],
         "SeatsHeld" or "SeatsHoldRejected" or "SeatsConfirmed" or "SeatsConfirmationRejected" or

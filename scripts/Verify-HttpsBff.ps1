@@ -1,5 +1,5 @@
 [CmdletBinding()]
-param([string]$ConfigurationDirectory = '.local/sql', [switch]$IncludeBooking, [switch]$IncludeRecovery, [switch]$IncludeImages, [switch]$IncludeDashboard)
+param([string]$ConfigurationDirectory = '.local/sql', [switch]$IncludeBooking, [switch]$IncludeRecovery, [switch]$IncludeImages, [switch]$IncludeDashboard, [switch]$IncludeReceipts)
 $ErrorActionPreference = 'Stop'
 . "$PSScriptRoot/Use-Toolchain.ps1"
 $root = Split-Path $PSScriptRoot
@@ -75,6 +75,10 @@ try {
         Start-LabHost 'Reservations'
         & dotnet test tests/Scaffold.Tests -c Release --no-build --filter 'FullyQualifiedName~LiveDashboardTests.Restarted' --logger 'trx;LogFileName=AZ-007-dashboard-restart.trx'
         if ($LASTEXITCODE -ne 0) { throw 'Dashboard cursor restart check failed.' }
+    }
+    if ($IncludeReceipts) {
+        & dotnet test tests/Scaffold.Tests -c Release --no-build --filter 'FullyQualifiedName~LiveReceiptTests' --logger 'trx;LogFileName=AZ-008-https-receipts.trx'
+        if ($LASTEXITCODE -ne 0) { throw 'Actual Functions/HTTPS receipt roundtrip failed.' }
     }
     Stop-LabHost $processes['Gateway']
     Start-LabHost 'Gateway'

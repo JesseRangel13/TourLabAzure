@@ -20,4 +20,6 @@ public sealed record RefundPayment(Guid RefundOperationId, Guid PaymentOperation
 public sealed record PaymentRefunded(Guid RefundOperationId, Guid PaymentOperationId);
 public sealed record RefundNeedsReview(Guid RefundOperationId, string Reason);
 public sealed record ReservationCancelled(Guid ReservationId, string UserId, string Summary);
-public sealed record ReservationConfirmed(Guid ReservationId, string UserId, string Summary);
+public sealed record ReservationConfirmed(Guid ReservationId, string UserId, string Summary, ConfirmationSnapshot? Confirmation = null);
+public sealed record ConfirmationSnapshot(long SourceBusinessVersion, string TourName, DateTimeOffset DepartureUtc, int Participants, long AmountMinor, string Currency, DateTimeOffset ConfirmedAtUtc);
+public sealed record GenerateBookingReceipt(Guid JobId);

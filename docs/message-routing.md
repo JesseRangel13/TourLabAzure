@@ -49,3 +49,17 @@ Use manual PeekLock settlement after durable local commit, leases outside send t
 logical Inbox/effect idempotency, MaxDeliveryCount5 and bounded renewal.
 Each queue/subscription uses its built-in DLQ. Replay preserves logical IDs, may use a fresh transport ID,
 and topic replay can affect other subscribers. Emulator reset and IAM are separate limitations.
+
+## AZ-008 implemented contract extension
+
+ReservationConfirmed remains version1 with an additive optional ConfirmationSnapshot. Every new
+successful producer includes SourceBusinessVersion, TourName, DepartureUtc, Participants, AmountMinor,
+Currency and ConfirmedAtUtc. Notifications consumes that immutable data without cross-schema reads.
+Legacy events still deliver simulated notification work and record a missing-snapshot audit; no
+historical document is fabricated. Contradictory snapshots are rejected.
+
+GenerateBookingReceipt(JobId) is a required typed command. It preserves the real SagaId and inherited
+correlation/causation/trace context, and routes only to tourlab-azure-receipt-jobs. Its sole active
+handler is Receipts.Functions GenerateBookingReceipt, with explicit manual settlement after Ready.
+BookingSnapshotChanged already routes through the domain-events topic to the active AZ007 dashboard
+worker; the earlier bootstrap/reserved descriptions above are historical.

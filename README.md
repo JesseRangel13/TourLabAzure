@@ -25,17 +25,18 @@ AZ-001 isolation/scaffold; AZ-002 SQL Server/Identity; AZ-003 Catalog + Angular/
 
 Read specs/07-acceptance.md and tasks/implementation-plan.md for scope and gates. Local functionality comes before cloud spending. All payments, notification deliveries, and booking receipts are explicitly simulated.
 
-## Current implementation — AZ-007 (2026-10-24)
+## Current implementation — AZ-008 (2026-10-24)
 
-AZ-006 has an independent PASS. AZ-007 is **Implemented Awaiting Review**:
-Cosmos booking dashboard, transactional versioned snapshots, conditional ETag projection, protected
-partition pagination, bounded audited rebuild, and Angular/NGXS eventual-consistency/recovery controls.
-Start with [dashboard execution](docs/dashboard-execution.md), [learning](docs/dashboard-learning.md)
-and [actual AZ-007 evidence](docs/evidence/AZ-007.md).
-Real SQL/Cosmos, broker redelivery and HTTPS booking/cancellation/restart checks pass.
-Chromium and actual Azure index/auth/RBAC enforcement remain NOT VERIFIED.
+AZ-006/AZ-007 have actual independent PASS reviews. AZ-008 is **Implemented Awaiting Review**:
+Notifications-owned immutable simulated confirmations, actual .NET10 isolated Service Bus Functions,
+private Blob output, durable SQL lease/crash recovery, owner/Admin download and Angular/NGXS controls.
+Start with [receipt execution](docs/receipts-execution.md), [learning](docs/receipts-learning.md)
+and [actual AZ-008 evidence](docs/evidence/AZ-008.md).
+Real SQL/Azurite regression, actual Functions kill/restart/duplicate/DLQ and HTTPS booking/download/
+cancellation checks pass. Historical confirmation and current authoritative booking status are separate.
+Chromium and actual Azure identity/RBAC/hosting remain NOT VERIFIED.
 The original AWS/Blazor repository is unchanged; existing lab data/containers are retained.
-Next: independent Antigravity AZ-007 review, then AZ-008 receipt Functions.
+Next: independent Antigravity AZ-008 review, then AZ-009 managed identity/Key Vault readiness.
 ## AZ-001 implementation status (2026-10-23)
 
 The independent scaffold is now present: five API processes, isolated Functions, Angular21/NGXS,

@@ -1,7 +1,7 @@
 namespace TourLab.Azure.Infrastructure.Messaging;
 public static class BusTopology
 {
-    public static readonly string[] Commands = ["HoldSeats","ConfirmSeats","ReleaseSeats","ProcessPayment","ReconcilePayment","RefundPayment"];
+    public static readonly string[] Commands = ["HoldSeats","ConfirmSeats","ReleaseSeats","ProcessPayment","ReconcilePayment","RefundPayment","GenerateBookingReceipt"];
     public static readonly IReadOnlyDictionary<string, string[]> Subscriptions = new Dictionary<string, string[]>
     {
         ["catalog-events"] = [],

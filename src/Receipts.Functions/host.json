@@ -1,1 +1,17 @@
-{ "version": "2.0", "logging": { "logLevel": { "default": "Warning", "Function": "Information" } } }
+{
+  "version": "2.0",
+  "functionTimeout": "00:02:00",
+  "logging": {
+    "logLevel": { "default": "Warning", "Function": "Information", "Worker": "Information", "TourLab.Azure": "Information" },
+    "applicationInsights": { "samplingSettings": { "isEnabled": false } }
+  },
+  "extensions": {
+    "serviceBus": {
+      "autoCompleteMessages": false,
+      "prefetchCount": 0,
+      "maxConcurrentCalls": 4,
+      "maxAutoLockRenewalDuration": "00:02:00",
+      "clientRetryOptions": { "mode": "fixed", "tryTimeout": "00:00:05", "delay": "00:00:01", "maxDelay": "00:00:01", "maxRetries": 1 }
+    }
+  }
+}
