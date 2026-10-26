@@ -341,3 +341,26 @@ backend. A document becoming Ready cannot authorize cancellation: the browser re
 refresh and assert the authoritative Confirmed status before clicking the existing guarded action.
 Pacing metadata persists timestamps across worker recycling, never authentication material. Every
 browser assertion and business timeout remains; no rejected request is retried to hide a failure.
+
+
+D68 — AZ-011 prepares code deployment on five .NET10 Linux Web Apps/shared paid B2 plan and a
+separate .NET10 isolated Flex FC1 app. One measured local idle observation is labelled Windows,
+workers-disabled and not cloud capacity. Public network ingress retains mandatory backend auth;
+private endpoints/VNet or SKU changes need separate design/cost approval. No cloud resource exists.
+
+D69 — Use actual platform defaultHostName outputs and TenantReuse unique hostnames. Extend only
+App Service hostname validation for the documented regional label; preserve lab prefix, exact origin,
+HTTPS/default-port/no-query/userinfo checks. Reject foreign/deceptive hosts. Do not auto-trust forwarded
+headers or relax the existing explicit proxy/capacity review gates to make a template deployable.
+
+D70 — Release manifests bind six app ZIPs, one privileged tool ZIP and five idempotent schema scripts
+to content hashes/version/commit/dirty flag. Dirty local builds are reviewable but cannot deploy.
+Separate protected OIDC identities perform schema jobs with runtimes stopped; separate delivery has
+site-only Website Contributor plus lab metadata Reader. No runtime gains DDL or developer fallback.
+Reapply SQL history/receipt restrictions and verify seed/effective permissions before attesting delivery.
+
+D71 — Infrastructure and app delivery are separate explicit operations. Local commands default to
+no Azure calls; cloud mutations require AZ-012 marker plus actual user authorization and ownership/
+cost/proxy/capacity review. Dispatch-only CD remains dormant. Stop retains billable plans/services;
+removal requires exact tagged inventory hash and confirmation, preserves data by default and never
+purges a vault/deletes a group. Estimate public East US/USD retail with no assumed credits/free tiers.

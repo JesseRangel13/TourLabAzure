@@ -1,0 +1,161 @@
+{
+  "retrievedDate": "2026-10-25",
+  "source": "https://prices.azure.com/api/retail/prices",
+  "currency": "USD",
+  "region": "eastus",
+  "pricingType": "Consumption; public retail; no credits, reservations or free-tier offsets assumed",
+  "meters": [
+    {
+      "serviceName": "Azure App Service",
+      "productName": "Azure App Service Basic Plan - Linux",
+      "skuName": "B2",
+      "meterName": "B2",
+      "retailPrice": 0.034,
+      "unitOfMeasure": "1 Hour",
+      "armRegionName": "eastus",
+      "effectiveStartDate": "2019-06-01T00:00:00Z"
+    },
+    {
+      "serviceName": "Service Bus",
+      "productName": "Service Bus",
+      "skuName": "Standard",
+      "meterName": "Standard Base Unit",
+      "retailPrice": 0.013441,
+      "unitOfMeasure": "1/Hour",
+      "armRegionName": "eastus",
+      "effectiveStartDate": "2018-05-01T00:00:00Z"
+    },
+    {
+      "serviceName": "Service Bus",
+      "productName": "Service Bus",
+      "skuName": "Standard",
+      "meterName": "Standard Messaging Operations",
+      "retailPrice": 0.8,
+      "unitOfMeasure": "1M",
+      "armRegionName": "eastus",
+      "effectiveStartDate": "2017-08-15T00:00:00Z"
+    },
+    {
+      "serviceName": "Azure Cosmos DB",
+      "productName": "Azure Cosmos DB",
+      "skuName": "RUs",
+      "meterName": "100 RU/s",
+      "retailPrice": 0.008,
+      "unitOfMeasure": "1/Hour",
+      "armRegionName": "eastus",
+      "effectiveStartDate": "2016-04-01T00:00:00Z"
+    },
+    {
+      "serviceName": "Azure Cosmos DB",
+      "productName": "Azure Cosmos DB",
+      "skuName": "RUm",
+      "meterName": "Data Stored",
+      "retailPrice": 0.25,
+      "unitOfMeasure": "1 GB/Month",
+      "armRegionName": "eastus",
+      "effectiveStartDate": "2016-04-01T00:00:00Z"
+    },
+    {
+      "serviceName": "SQL Database",
+      "productName": "SQL Database General Purpose - Serverless - Compute Gen5",
+      "skuName": "1 vCore",
+      "meterName": "vCore",
+      "retailPrice": 0.521758,
+      "unitOfMeasure": "1 Hour",
+      "armRegionName": "eastus",
+      "effectiveStartDate": "2020-01-01T00:00:00Z"
+    },
+    {
+      "serviceName": "SQL Database",
+      "productName": "SQL Database Single/Elastic Pool General Purpose - Storage",
+      "skuName": "General Purpose",
+      "meterName": "General Purpose Data Stored",
+      "retailPrice": 0.115,
+      "unitOfMeasure": "1 GB/Month",
+      "armRegionName": "eastus",
+      "effectiveStartDate": "2018-07-15T00:00:00Z"
+    },
+    {
+      "serviceName": "SQL Database",
+      "productName": "SQL Database Single/Elastic Pool General Purpose - Storage",
+      "skuName": "General Purpose",
+      "meterName": "General Purpose IO Rate Operations",
+      "retailPrice": 0.2,
+      "unitOfMeasure": "1M",
+      "armRegionName": "eastus",
+      "effectiveStartDate": "2018-08-01T00:00:00Z"
+    },
+    {
+      "serviceName": "Storage",
+      "productName": "General Block Blob v2",
+      "skuName": "Hot LRS",
+      "meterName": "Hot LRS Data Stored",
+      "retailPrice": 0.0208,
+      "unitOfMeasure": "1 GB/Month",
+      "armRegionName": "eastus",
+      "effectiveStartDate": "2017-02-03T00:00:00Z"
+    },
+    {
+      "serviceName": "Storage",
+      "productName": "General Block Blob v2",
+      "skuName": "Hot LRS",
+      "meterName": "Hot LRS Write Operations",
+      "retailPrice": 0.05,
+      "unitOfMeasure": "10K",
+      "armRegionName": "eastus",
+      "effectiveStartDate": "2016-11-01T00:00:00Z"
+    },
+    {
+      "serviceName": "Storage",
+      "productName": "General Block Blob v2",
+      "skuName": "Hot LRS",
+      "meterName": "Hot Read Operations",
+      "retailPrice": 0.004,
+      "unitOfMeasure": "10K",
+      "armRegionName": "eastus",
+      "effectiveStartDate": "2016-11-01T00:00:00Z"
+    },
+    {
+      "serviceName": "Key Vault",
+      "productName": "Key Vault",
+      "skuName": "Standard",
+      "meterName": "Operations",
+      "retailPrice": 0.03,
+      "unitOfMeasure": "10K",
+      "armRegionName": "eastus",
+      "effectiveStartDate": "2015-08-01T00:00:00Z"
+    },
+    {
+      "serviceName": "Functions",
+      "productName": "Flex Consumption",
+      "skuName": "On Demand",
+      "meterName": "On Demand Execution Time",
+      "retailPrice": 2.6e-05,
+      "unitOfMeasure": "1 GB Second",
+      "armRegionName": "eastus",
+      "effectiveStartDate": "2024-12-01T00:00:00Z"
+    },
+    {
+      "serviceName": "Functions",
+      "productName": "Flex Consumption",
+      "skuName": "On Demand",
+      "meterName": "On Demand Total Executions",
+      "retailPrice": 4e-06,
+      "unitOfMeasure": "10",
+      "armRegionName": "eastus",
+      "effectiveStartDate": "2024-12-01T00:00:00Z"
+    },
+    {
+      "serviceName": "Bandwidth",
+      "productName": "Rtn Preference: MGN",
+      "skuName": "Standard",
+      "meterName": "Standard Data Transfer Out",
+      "retailPrice": 0.087,
+      "unitOfMeasure": "1 GB",
+      "armRegionName": "eastus",
+      "effectiveStartDate": "2022-05-01T00:00:00Z"
+    }
+  ],
+  "logAnalyticsIngestionUsdPerGb": 2.3,
+  "logAnalyticsSource": "https://azure.microsoft.com/en-us/pricing/details/monitor/"
+}

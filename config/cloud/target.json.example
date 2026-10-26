@@ -1,0 +1,21 @@
+{
+  "subscriptionId": "REPLACE_SUBSCRIPTION_GUID",
+  "tenantId": "REPLACE_TENANT_GUID",
+  "resourceGroup": "tourlab-azure-REPLACE",
+  "suffix": "REPLACE",
+  "location": "eastus",
+  "owner": "REPLACE_OWNER",
+  "costReviewed": false,
+  "proxyTopologyReviewed": false,
+  "capacityReviewed": false,
+  "quotaReviewed": false,
+  "sqlEgressReviewed": false,
+  "oidcReviewed": false,
+  "migratorObjectIds": {
+    "identity": "REPLACE_DISTINCT_OBJECT_GUID",
+    "catalog": "REPLACE_DISTINCT_OBJECT_GUID",
+    "reservations": "REPLACE_DISTINCT_OBJECT_GUID",
+    "payments": "REPLACE_DISTINCT_OBJECT_GUID",
+    "notifications": "REPLACE_DISTINCT_OBJECT_GUID"
+  }
+}

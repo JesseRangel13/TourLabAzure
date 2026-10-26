@@ -1,0 +1,14 @@
+{
+  "releaseManifestSha256": "REPLACE_VERIFIED_RELEASE_MANIFEST_SHA256",
+  "subscriptionId": "REPLACE_SUBSCRIPTION_GUID",
+  "resourceGroup": "tourlab-azure-REPLACE",
+  "schemas": [
+    "identity",
+    "catalog",
+    "reservations",
+    "payments",
+    "notifications"
+  ],
+  "runtimePermissionsRevalidated": false,
+  "seedVerified": false
+}

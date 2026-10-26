@@ -1,0 +1,39 @@
+name: Prepare Azure release
+on:
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: azure-release-${{ github.ref }}
+  cancel-in-progress: false
+jobs:
+  package:
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    defaults:
+      run: { shell: pwsh }
+    steps:
+      - uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5
+        with: { persist-credentials: false }
+      - uses: actions/setup-dotnet@d4c94342e560b34958eacfc5d055d21461ed1c5d
+        with: { global-json-file: global.json }
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020
+        with: { node-version-file: web/tours-angular/.nvmrc }
+      - name: Locked dependencies
+        run: |
+          Push-Location web/tours-angular
+          npm ci --ignore-scripts
+          if ($LASTEXITCODE -ne 0) { throw 'Locked client restore failed.' }
+          Pop-Location
+      - name: Offline infrastructure and guards
+        run: ./scripts/Verify-Infrastructure.ps1
+      - name: Versioned code and SQL only; no credentials or provisioning
+        run: ./scripts/Build-Release.ps1 -Version "run-${{ github.run_id }}"
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: azure-release-${{ github.run_id }}
+          path: .local/releases/run-${{ github.run_id }}/
+          include-hidden-files: true
+          if-no-files-found: error
+          retention-days: 7

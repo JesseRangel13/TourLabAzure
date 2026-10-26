@@ -1,0 +1,88 @@
+name: Manual Azure delivery (AZ-012 only)
+on:
+  workflow_dispatch:
+    inputs:
+      authorization:
+        description: Enter AZ-012 only after explicit cloud authorization and review
+        required: true
+        type: string
+      release_run_id:
+        description: Successful Prepare Azure release run from main
+        required: true
+        type: string
+      release_commit:
+        description: Exact 40-character package commit SHA
+        required: true
+        type: string
+      operation:
+        description: One reviewed phase; infrastructure is never applied here
+        required: true
+        type: choice
+        options: [migrate, deploy]
+      schema:
+        description: For migrate, select the separate schema identity/environment
+        required: true
+        type: choice
+        options: [identity, catalog, reservations, payments, notifications]
+permissions:
+  contents: read
+  actions: read
+concurrency:
+  group: tourlab-azure-cloud-study
+  cancel-in-progress: false
+jobs:
+  delivery:
+    if: github.ref == 'refs/heads/main' && vars.AZURELAB_CD_ENABLED == 'true' && inputs.authorization == 'AZ-012'
+    environment: ${{ inputs.operation == 'migrate' && format('azure-study-migrate-{0}', inputs.schema) || 'azure-study-deploy' }}
+    permissions:
+      contents: read
+      actions: read
+      id-token: write
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    defaults:
+      run: { shell: pwsh }
+    steps:
+      - uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5
+        with: { persist-credentials: false }
+      - uses: actions/setup-dotnet@d4c94342e560b34958eacfc5d055d21461ed1c5d
+        with: { global-json-file: global.json }
+      - name: Download exact approved package and validate provenance
+        env:
+          GH_TOKEN: ${{ github.token }}
+          RELEASE_RUN_ID: ${{ inputs.release_run_id }}
+          RELEASE_COMMIT: ${{ inputs.release_commit }}
+        run: ./scripts/Get-AzureRelease.ps1 -RunId $env:RELEASE_RUN_ID -Commit $env:RELEASE_COMMIT
+      - name: Private reviewed metadata only
+        env:
+          TARGET_JSON: ${{ secrets.AZURELAB_TARGET_JSON }}
+          SEED_JSON: ${{ secrets.AZURELAB_SYNTHETIC_USERS_JSON }}
+          ATTESTATION_JSON: ${{ secrets.AZURELAB_MIGRATION_ATTESTATION_JSON }}
+        run: |
+          $env:SEED_JSON | Set-Content .local/seed-users.json
+          $env:TARGET_JSON | Set-Content .local/cloud-target.json
+          $env:ATTESTATION_JSON | Set-Content .local/migration-attestation.json
+          chmod 600 .local/cloud-target.json .local/migration-attestation.json .local/seed-users.json
+          if ($LASTEXITCODE -ne 0) { throw 'Private metadata permissions failed.' }
+      - name: Pin Azure CLI locally on the runner
+        shell: bash
+        run: |
+          python3 -m venv .local/azure-cli
+          .local/azure-cli/bin/pip install --disable-pip-version-check azure-cli==2.91.0
+          echo "$GITHUB_WORKSPACE/.local/azure-cli/bin" >> "$GITHUB_PATH"
+      - uses: azure/login@a457da9ea143d694b1b9c7c869ebb04ebe844ef5
+        with:
+          client-id: ${{ vars.AZURE_CLIENT_ID }}
+          tenant-id: ${{ vars.AZURE_TENANT_ID }}
+          subscription-id: ${{ vars.AZURE_SUBSCRIPTION_ID }}
+      - name: One schema migration; runtimes must already be stopped
+        if: inputs.operation == 'migrate'
+        env:
+          RELEASE_RUN_ID: ${{ inputs.release_run_id }}
+          MIGRATION_SCHEMA: ${{ inputs.schema }}
+        run: ./scripts/Invoke-AzureMigration.ps1 -Target .local/cloud-target.json -Release ".local/releases/run-$env:RELEASE_RUN_ID" -Schema $env:MIGRATION_SCHEMA -SeedFile .local/seed-users.json -Execute -Authorization AZ-012 -Confirm:$false
+      - name: Deliver without provisioning; require post-migration permission/seed attestation
+        if: inputs.operation == 'deploy'
+        env:
+          RELEASE_RUN_ID: ${{ inputs.release_run_id }}
+        run: ./scripts/Deploy-AzureRelease.ps1 -Target .local/cloud-target.json -Release ".local/releases/run-$env:RELEASE_RUN_ID" -MigrationAttestation .local/migration-attestation.json -Execute -Authorization AZ-012 -Confirm:$false

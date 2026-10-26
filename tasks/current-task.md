@@ -1,30 +1,28 @@
 # Current task
 
-AZ-010 — **Verified** (2026-10-25).
-Branch: codex/az010-automation. Baseline: fad0d4e.
-Independent review completed: PASS in docs/reviews/AZ-010.md.
-Next: commit and push codex/az010-automation, then begin AZ-011.
+AZ-011 — **Verified** (2026-10-26).
+Branch: codex/az011-infrastructure. Baseline: 44ea5d2892c846773ff31a31884c3fa1393b36bb.
+Independent review completed: PASS in docs/reviews/AZ-011.md.
+Next: commit and push codex/az011-infrastructure, then await explicit authorization for AZ-012.
 
-Delivered: real SQL/storage and isolated broker profiles, explicit test-category filters and zero-skip
-checks, bounded own-probe selection, dedicated run-specific broker5674/5302 with fresh SQL/credentials,
-full-stack Functions/five-HTTPS-API/Chromium orchestration, private reports and count-only CI artifacts,
-explicit license-gated CI, complete NGXS session-boundary tests, browser coverage, Angular19/21 notes,
-study map and interview demo. Normal transport defaults and cloud identity/security guards remain.
+Delivered: resource-group Bicep modules for five Linux .NET10 APIs/shared B2 plan, separate Flex
+Functions, SQL/Cosmos/Service Bus/storage/vault/RBAC/monitoring/budget; non-secret parameter validation;
+immutable hashed code/SQL release artifacts; bounded one-shot schema migrations and private synthetic
+seed; offline-default preflight/provision/deploy/smoke/stop/retention-aware removal procedures; dormant
+manual protected-environment OIDC CD; official-source East US/USD cost estimate and execution guide.
+Mandatory proxy/capacity review gates and runtime SQL/auth/TLS/isolation invariants remain enforced.
 
-Executed: final183 SQL/storage/unit cases plus7 actual broker cases =190 .NET passes/0skips.
-Final12 Chromium passes/0failed/0errors/0skips against actual SQL/Service Bus/Azurite/Cosmos/Functions,
-including authenticated readiness, strict TLS, concurrent users/navigation/401/CSRF, booking/cancel,
-Admin, images, dashboard and immutable historical receipt download/owner404. Browser trace verified
-in actual Functions output.74 Angular unit tests/14files passed;0npm vulnerabilities;418.29kB SPA.
-Five pinned application image builds, Functions package, final build, CI lint and script parsing pass.
-Focused43 security cases overlap the190 totals. Foundation ran in Windows PowerShell5.1; full-stack
-ran in PowerShell7.6.5. The user explicitly accepted the generated CA security prompt.
+Executed: Bicep0.48.1build/lint clean;51PowerShell scripts parse; offline cloud/path guards pass in
+PowerShell7.6.5and Windows5.1; foundation build0warnings/errors,115.NET+74Angular tests/0skips,
+0npmvulnerabilities,418.29kB SPA;17targeted real SQL checks/0skips including twice-rerun five-schema
+release migrations and identity/permission tests. Final selected distinct .NET total132passes.
+Release004:12hashed payloads,7ZIPs/646entries, actual SPA/Functions layout, private-key/name checks
+and tampered-copy rejection passed. Dirty local release is explicitly blocked from cloud delivery.
+50strict-CA local liveness requests supported a limited483.53MiB five-process observation; no cloud
+capacity claim. All data retained; owned measurement processes stopped.
 
-Original commit/status/all416 tracked hashes match before/after, including pre-existing source CI edit.
-Only owned verification process trees and test broker projects stopped; normal lab dependencies,
-all volumes/databases/private profiles/reports/certificates/rings remain. No purge or source mutation.
-Read docs/evidence/AZ-010.md for observed failures, exact commands/profiles and final verification.
-
-NOT VERIFIED: remote GitHub hosted execution, Linux/Windows5.1 full-stack execution, real Azure
-identity/RBAC/Key Vault/hosting/quotas/lifecycle/costs. No cloud authentication/provisioning/deployment,
-image publish, commit/push or independent review PASS. Next: Antigravity review, then AZ-011.
+Read docs/evidence/AZ-011.md, docs/cloud-execution.md, docs/cloud-lifecycle.md and docs/cost-estimate.md.
+Original source immutability:before/after commit,status and all416tracked hashes recorded/compared.
+No commit/push/publish, Azure login/provision/deploy/cloud SQL operation, paid activation or data purge.
+Actual Azure/OIDC/what-if/RBAC/hosting/capacity/lifecycle/billing remain NOT VERIFIED.
+Next:independent Antigravity AZ-011 review, then separately and explicitly authorized AZ-012.

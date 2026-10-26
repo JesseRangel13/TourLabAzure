@@ -25,20 +25,21 @@ AZ-001 isolation/scaffold; AZ-002 SQL Server/Identity; AZ-003 Catalog + Angular/
 
 Read specs/07-acceptance.md and tasks/implementation-plan.md for scope and gates. Local functionality comes before cloud spending. All payments, notification deliveries, and booking receipts are explicitly simulated.
 
-## Current implementation â€” AZ-010 (2026-10-24)
+## Current implementation — AZ-011 (2026-10-25)
 
-AZ-001 through AZ-009 have actual independent PASS reviews. AZ-010 is **Implemented Awaiting Review**.
-The full Chromium suite now executes against real SQL Server, Service Bus, Azurite, Cosmos, five HTTPS
-APIs and the actual receipt Functions listener:12passes/0skips. Final selected .NET categories pass190
-cases/0skips; Angular passes74tests. Five images and an isolated Functions package build locally.
-The user accepted the generated lab CA; TLS validation remains enabled. No cloud deployment occurred.
+AZ-001 through AZ-010 have actual independent PASS reviews. AZ-011 is **Implemented Awaiting Review**.
+It prepares Bicep, hashed code/SQL releases, schema migrations, guarded lifecycle scripts, dormant
+manual OIDC CD and an official-source cost estimate. No Azure authentication or cloud mutation occurred.
 
-Start with [testing execution](docs/testing-execution.md), [browser coverage](docs/browser-coverage.md),
-[study map](docs/study-map.md), [Angular19/21 comparison](docs/angular19-to21.md),
-[interview demo](docs/interview-demo.md) and [actual AZ-010 evidence](docs/evidence/AZ-010.md).
-The original AWS/Blazor repository is unchanged. Raw authenticated reports stay private; CI exports
-only count summaries after explicit local emulator license gates. Remote hosted CI and actual Azure
-identity/RBAC/hosting remain NOT VERIFIED. Next: independent Antigravity AZ-010 review, then AZ-011.
+Read [cloud execution](docs/cloud-execution.md), [lifecycle and retention](docs/cloud-lifecycle.md),
+[cost estimate](docs/cost-estimate.md) and [actual AZ-011 evidence](docs/evidence/AZ-011.md).
+Bicep/lint and local checks passed:115nonrelational .NET+17real SQL tests,74Angular tests, actual
+release layout/hashes/tamper rejection and50strict-CA local liveness requests. Prior full-stack browser
+proof remains in [AZ-010 evidence](docs/evidence/AZ-010.md); no new cloud/browser pass is claimed.
+
+The original AWS repository is unchanged. Cloud topology/capacity/identity, hosted CI/OIDC and billing
+remain NOT VERIFIED. Next: independent AZ-011 review; AZ-012 needs separate explicit cloud authorization.
+
 ## AZ-001 implementation status (2026-10-23)
 
 The independent scaffold is now present: five API processes, isolated Functions, Angular21/NGXS,

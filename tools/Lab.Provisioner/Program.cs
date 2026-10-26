@@ -12,6 +12,17 @@ try
 
         Console.WriteLine("Fresh Azure-only credentials and signing/Data Protection keys generated privately.");
     }
+    else if(args.Length==6 && args[0]=="apply-cloud-sql")
+    {
+        if(args[5]!="AZ-012")throw new ArgumentException("Cloud authorization missing.");
+        await CloudMigration.ApplyAsync(args[1],args[2],"tourlab_azure_study",args[3],Guid.Parse(args[4]),shutdown.Token);
+        Console.WriteLine("One schema migration completed. Runtime permission revalidation remains required.");
+    }
+    else if(args.Length==2 && args[0]=="validate-infrastructure")
+    {
+        InfrastructureParameters.ValidateFile(args[1]);
+        Console.WriteLine("Offline infrastructure parameter validation passed; no credentials or Azure access.");
+    }
     else if(args.Length==3 && args[0]=="validate-cloud")
     {
         AzureSecurityPlan.ValidateFile(args[2],args[1]);

@@ -121,3 +121,22 @@ workers on the SQL regression database: it deliberately contains staged crash/ou
 Full-stack owns only its recorded five API/Functions child process trees. Chromium package/runtime,
 private HTML/JUnit, logs, downloaded synthetic files, certificates and rings stay under ignored or
 framework-managed private directories. No auth state or private trace is uploaded to CI.
+
+
+## AZ-011 planned Azure resource map — none provisioned
+
+All group names are tourlab-azure-<4..6lowercase-suffix>; named resources start tourlabazure-<suffix>.
+Project=TourLabAzure,Environment=Study,Owner and ManagedBy=Bicep tags distinguish the exact lab.
+There are five API sites and shared -apis B2 plan; -receipts site and -flex FC1 plan; -sql server/
+tourlab_azure_study; -bus namespace with versioned tourlab-azure entities; -cosmos account/database/
+bookings; -kv vault and two wrapping keys; -logs/-insights; five -migrate-<schema> identities and a
+separate -deliver identity with exact GitHub environment subjects. Storage names remove dashes:
+tourlabazure<suffix>img/rcp/key/hst, each with dedicated private containers. Host/deployment storage
+is separate from business receipt storage. All resource IDs, identities, proxies, IPs and quota are
+future reviewed metadata, never copied from AWS. See cloud-execution.md and infra/main.bicep.
+
+Actual AZ-011 local additions are ignored .local/releases/az011-local-001..004 (failed versions
+retained), unique release-build/tamper/hosting-measure folders and a fresh SQL database/profile
+recorded in evidence. Only owned five-process liveness measurement hosts were stopped; no volumes,
+SQL databases, queue messages or Blob data were purged. Official public pricing and sanitized local
+memory evidence are versioned; credentials/configs/packages/raw reports stay private.

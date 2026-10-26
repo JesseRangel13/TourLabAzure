@@ -1,0 +1,12 @@
+{
+  "bicep": "0.48.1",
+  "azureCli": "2.91.0",
+  "bicepWinX64Sha256": "398AF294CF16AC4BECDBD008A77D148D0E8E91492309A6B60EC911B7E1CAB082",
+  "bicepLinuxX64Sha256": "B09EC25A9D376C1F8E33EDE6ED22B587F915AD68488D5DB77A6F9541748C7F6E",
+  "apiRuntime": "DOTNETCORE|10.0",
+  "functionsRuntime": "dotnet-isolated 10.0",
+  "functionsPlan": "FC1",
+  "apiSku": "B2",
+  "region": "eastus",
+  "currency": "USD"
+}

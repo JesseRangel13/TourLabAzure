@@ -188,3 +188,14 @@ retroactively make every historic UI fault permutation or real Azure deployment 
 No original resource was used as a writable fixture. Before/after commit, status and all416tracked
 source hashes match. No test assertion, business deadline, authorization policy or TLS validation
 was relaxed. See decisionsD64..67 for fixture isolation and the observed corrections.
+
+
+## AZ-011 hosting preparation boundary
+
+AC-A31 artifacts now include Bicep/App Service/Flex modules, exact runtime/data roles, hashed code/SQL
+packages, one-shot migration/seed and guarded lifecycle/manual OIDC procedures with official cost
+model. Offline Bicep/lint,132selected .NET cases,74Angular tests and actual release validation passed.
+Original business/API/UI parity remains as recorded above. Public authenticated network exposure,
+unknown platform proxy topology, Linux/B2 capacity, real identity/permission and cloud lifecycle
+proof are explicitly NOT VERIFIED. No prepared resource is represented as deployed. Independent
+AZ-011 review is pending; AC-A35/36 remain AZ-012 after explicit authorization.

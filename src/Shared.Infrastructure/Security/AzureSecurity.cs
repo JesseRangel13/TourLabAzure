@@ -27,7 +27,7 @@ public static partial class AzureSecurity
     public static bool Endpoint(string? value, string suffix, string path = "/")
     {
         return Uri.TryCreate(value,UriKind.Absolute,out var uri) && uri.Scheme=="https" && uri.IsDefaultPort &&
-            Regex.IsMatch(uri.Host,"^tourlabazure[a-z0-9-]*\\."+Regex.Escape(suffix)+"$",RegexOptions.CultureInvariant) &&
+            Regex.IsMatch(uri.Host,"^tourlabazure[a-z0-9-]*"+(suffix=="azurewebsites.net"?"(?:\\.[a-z0-9]+-[0-9]{2})?":"")+"\\."+Regex.Escape(suffix)+"$",RegexOptions.CultureInvariant) &&
             uri.AbsolutePath==path && string.IsNullOrEmpty(uri.Query) && string.IsNullOrEmpty(uri.Fragment) && string.IsNullOrEmpty(uri.UserInfo);
     }
     public static bool Namespace(string? value) => value is not null &&

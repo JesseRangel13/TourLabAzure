@@ -1,0 +1,50 @@
+{
+  "currency": "USD",
+  "noFreeAllowancesAssumed": true,
+  "scenarios": [
+    {
+      "window": "day",
+      "retainedHours": 24,
+      "studySessions": 1,
+      "sqlBillableHours": 3,
+      "nonSqlComputeAndUsageUsd": 2.3,
+      "sqlAtHalfVcoreUsd": 0.78,
+      "sqlAtOneVcoreUsd": 1.57,
+      "estimatedTotalLowUsd": 3.09,
+      "estimatedTotalHighUsd": 3.87
+    },
+    {
+      "window": "week",
+      "retainedHours": 168,
+      "studySessions": 5,
+      "sqlBillableHours": 15,
+      "nonSqlComputeAndUsageUsd": 16.12,
+      "sqlAtHalfVcoreUsd": 3.91,
+      "sqlAtOneVcoreUsd": 7.83,
+      "estimatedTotalLowUsd": 20.04,
+      "estimatedTotalHighUsd": 23.95
+    },
+    {
+      "window": "study-month",
+      "retainedHours": 730,
+      "studySessions": 20,
+      "sqlBillableHours": 60,
+      "nonSqlComputeAndUsageUsd": 70.02,
+      "sqlAtHalfVcoreUsd": 15.65,
+      "sqlAtOneVcoreUsd": 31.31,
+      "estimatedTotalLowUsd": 85.67,
+      "estimatedTotalHighUsd": 101.32
+    },
+    {
+      "window": "continuous-month",
+      "retainedHours": 730,
+      "studySessions": null,
+      "sqlBillableHours": 730,
+      "nonSqlComputeAndUsageUsd": 70.02,
+      "sqlAtHalfVcoreUsd": 190.44,
+      "sqlAtOneVcoreUsd": 380.88,
+      "estimatedTotalLowUsd": 260.46,
+      "estimatedTotalHighUsd": 450.9
+    }
+  ]
+}

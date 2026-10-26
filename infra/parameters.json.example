@@ -1,0 +1,88 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentParameters.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "suffix": {
+      "value": "REPLACE"
+    },
+    "location": {
+      "value": "eastus"
+    },
+    "owner": {
+      "value": "REPLACE_OWNER"
+    },
+    "sqlAdminObjectId": {
+      "value": "REPLACE_ENTRA_GROUP_OBJECT_GUID"
+    },
+    "sqlAdminTenantId": {
+      "value": "REPLACE_TENANT_GUID"
+    },
+    "sqlFirewall": {
+      "value": []
+    },
+    "knownProxies": {
+      "value": {
+        "gateway": [
+          "REPLACE_EXACT_PLATFORM_PROXY_IP"
+        ],
+        "catalog": [
+          "REPLACE_EXACT_PLATFORM_PROXY_IP"
+        ],
+        "reservations": [
+          "REPLACE_EXACT_PLATFORM_PROXY_IP"
+        ],
+        "payments": [
+          "REPLACE_EXACT_PLATFORM_PROXY_IP"
+        ],
+        "notifications": [
+          "REPLACE_EXACT_PLATFORM_PROXY_IP"
+        ]
+      }
+    },
+    "humanPublicKeys": {
+      "value": [
+        "REPLACE_PUBLIC_SPKI_PEM"
+      ]
+    },
+    "quotePublicKeys": {
+      "value": [
+        "REPLACE_PUBLIC_SPKI_PEM"
+      ]
+    },
+    "humanSigningFingerprint": {
+      "value": "REPLACE_SHA256_UPPERCASE"
+    },
+    "quoteSigningFingerprint": {
+      "value": "REPLACE_SHA256_UPPERCASE"
+    },
+    "humanSecretVersion": {
+      "value": "REPLACE_EXACT_32_HEX_SECRET_VERSION"
+    },
+    "quoteSecretVersion": {
+      "value": "REPLACE_EXACT_32_HEX_SECRET_VERSION"
+    },
+    "githubRepository": {
+      "value": "REPLACE_OWNER/REPLACE_REPOSITORY"
+    },
+    "apiSku": {
+      "value": "B2"
+    },
+    "cosmosFreeTier": {
+      "value": false
+    },
+    "budgetUsd": {
+      "value": 500
+    },
+    "budgetEmails": {
+      "value": [
+        "REPLACE_ALERT_ADDRESS"
+      ]
+    },
+    "budgetStartDate": {
+      "value": "2026-10-01T00:00:00Z"
+    },
+    "configureApplications": {
+      "value": false
+    }
+  }
+}

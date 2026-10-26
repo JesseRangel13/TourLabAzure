@@ -114,13 +114,18 @@ public static class DatabaseProvisioner
             sql.CommandTimeout(10);
         }).Options;
 
-    private static async Task SeedAsync(ProvisioningConfiguration config, CancellationToken ct)
+    private static Task SeedAsync(ProvisioningConfiguration config, CancellationToken ct) => SeedUsersAsync(config.Users,
+        options => options.UseSqlServer(config.Migrator["identity"],sql => sql.MigrationsHistoryTable("__EFMigrationsHistory","identity")),ct);
+
+    internal static async Task SeedUsersAsync(SeedUser[] seeds, Action<DbContextOptionsBuilder> configure, CancellationToken ct)
     {
+        if(seeds.Length!=3 || !seeds.Select(x=>x.UserName).Order().SequenceEqual(new[]{"Admin","Alice","Bob"}) ||
+            seeds.Any(x=>x.Role!=(x.UserName=="Admin"?"Admin":"Tourist") || x.Password.Length<12))
+            throw new ArgumentException("Exactly three privately provisioned synthetic users required.");
         var services = new ServiceCollection();
         services.AddLogging(logs => logs.SetMinimumLevel(LogLevel.None));
         services.AddSingleton(new ProvisioningCancellation(ct));
-        services.AddDbContext<IdentityDb>(options => options.UseSqlServer(config.Migrator["identity"],
-            sql => sql.MigrationsHistoryTable("__EFMigrationsHistory", "identity")));
+        services.AddDbContext<IdentityDb>(configure);
         services.AddIdentityCore<LabUser>(options => options.Password.RequiredLength = 12)
             .AddRoles<IdentityRole>().AddEntityFrameworkStores<IdentityDb>().AddUserManager<SeedUserManager>().AddRoleManager<SeedRoleManager>();
         await using var provider = services.BuildServiceProvider();
@@ -132,7 +137,7 @@ public static class DatabaseProvisioner
             ct.ThrowIfCancellationRequested();
             if (!await roles.RoleExistsAsync(name)) Check(await roles.CreateAsync(new IdentityRole(name)));
         }
-        foreach (var seed in config.Users)
+        foreach (var seed in seeds)
         {
             ct.ThrowIfCancellationRequested();
             var user = await users.FindByNameAsync(seed.UserName);

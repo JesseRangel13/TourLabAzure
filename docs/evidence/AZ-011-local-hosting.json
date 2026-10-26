@@ -1,0 +1,45 @@
+{
+  "schemaVersion": 1,
+  "environment": "Windows local Development; five APIs; workers disabled; no business load or Functions",
+  "httpsLivenessRequests": 50,
+  "cloudCapacityVerified": false,
+  "processes": [
+    {
+      "service": "Gateway",
+      "workingSetBytes": 117858304,
+      "peakWorkingSetBytes": 122179584,
+      "privateBytes": 37466112,
+      "totalProcessorSeconds": 2.765625
+    },
+    {
+      "service": "Catalog",
+      "workingSetBytes": 122032128,
+      "peakWorkingSetBytes": 124653568,
+      "privateBytes": 39788544,
+      "totalProcessorSeconds": 3.3125
+    },
+    {
+      "service": "Reservations",
+      "workingSetBytes": 88104960,
+      "peakWorkingSetBytes": 91971584,
+      "privateBytes": 30019584,
+      "totalProcessorSeconds": 1.859375
+    },
+    {
+      "service": "Payments",
+      "workingSetBytes": 87490560,
+      "peakWorkingSetBytes": 91320320,
+      "privateBytes": 30040064,
+      "totalProcessorSeconds": 1.875
+    },
+    {
+      "service": "Notifications",
+      "workingSetBytes": 91533312,
+      "peakWorkingSetBytes": 91533312,
+      "privateBytes": 33153024,
+      "totalProcessorSeconds": 1.796875
+    }
+  ],
+  "totalWorkingSetBytes": 507019264,
+  "totalPeakWorkingSetBytes": 521658368
+}
